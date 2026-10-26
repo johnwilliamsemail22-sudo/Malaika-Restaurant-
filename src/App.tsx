@@ -1,0 +1,325 @@
+import { useEffect, useMemo, useRef, useState } from 'react'
+import { ArrowDown, ArrowLeft, ArrowRight, ChevronDown, MapPin, MessageCircle, MoveHorizontal } from 'lucide-react'
+import Lenis from 'lenis'
+
+type Theme = { bg: string; ink: string; muted: string; accent: string }
+type Pointer = { x: number; y: number }
+type Topping = 'Fresh Basil' | 'Fior di Latte' | 'Extra Chilies'
+
+type Dish = {
+  number: string
+  kind: 'pizza' | 'burger' | 'seafood' | 'pasta' | 'dessert'
+  kicker: string
+  title: string
+  description: string
+  price: string
+  asset: string
+  theme: Theme
+  menu: { name: string; price: string }[]
+}
+
+const imageBase = '/manus-storage/async-images/jHaGQJhk20LEUCvS76pbcv/'
+
+const dishes: Dish[] = [
+  {
+    number: '01',
+    kind: 'pizza',
+    kicker: 'Malaika wood-fired',
+    title: 'Heat, the old way.',
+    description: 'A slow-fermented dough, a rich tomato base, and the open flame doing what it does best.',
+    price: 'From 1,400 KSh',
+    asset: `${imageBase}image-1.webp`,
+    theme: { bg: '#F9F8F6', ink: '#3E2723', muted: '#80746F', accent: '#D96B43' },
+    menu: [{ name: 'Sauce + sea salt', price: 'included' }, { name: 'Fresh basil', price: '+ 120 KSh' }, { name: 'Fior di Latte', price: '+ 250 KSh' }],
+  },
+  {
+    number: '02',
+    kind: 'burger',
+    kicker: 'Charcoal & brioche',
+    title: 'Smoke & salt.',
+    description: 'The kind of grilled burger that leaves the room quieter for a moment.',
+    price: '1,650 KSh',
+    asset: `${imageBase}image-2.webp`,
+    theme: { bg: '#0E4C5E', ink: '#F6F0E5', muted: '#A7C0BE', accent: '#D8A46A' },
+    menu: [{ name: 'Grilled beef + brioche', price: '1,650 KSh' }, { name: 'Charred onion', price: 'included' }, { name: 'Malaika fries', price: '+ 300 KSh' }],
+  },
+  {
+    number: '03',
+    kind: 'seafood',
+    kicker: 'Indian Ocean catch',
+    title: 'Tide on a plate.',
+    description: 'Citrus, herbs, and the bright edge of the sea, made for long afternoons by the coast.',
+    price: 'From 1,200 KSh',
+    asset: `${imageBase}image-3.webp`,
+    theme: { bg: '#D96B43', ink: '#FFF6EA', muted: '#F2C3A7', accent: '#0E4C5E' },
+    menu: [{ name: 'Seafood Salad', price: '1,200 KSh' }, { name: 'Grilled Octopus', price: '2,400 KSh' }, { name: 'Citrus catch of the day', price: 'market' }],
+  },
+  {
+    number: '04',
+    kind: 'pasta',
+    kicker: 'Handmade pasta',
+    title: 'A little luxury.',
+    description: 'Silk-soft pasta, lobster, and cashew: generous, coastal, and quietly indulgent.',
+    price: 'From 2,200 KSh',
+    asset: `${imageBase}image-4.webp`,
+    theme: { bg: '#FCF3CF', ink: '#3E2723', muted: '#8E8171', accent: '#D96B43' },
+    menu: [{ name: 'Lobster Ravioli', price: '2,600 KSh' }, { name: 'Prawn Pasta with Cashewnut', price: '2,200 KSh' }, { name: 'Brown butter + lime', price: 'included' }],
+  },
+  {
+    number: '05',
+    kind: 'dessert',
+    kicker: 'Last light',
+    title: 'End on sweetness.',
+    description: 'A chilled scoop, a soft coffee finish, and the table not quite ready to leave.',
+    price: 'From 600 KSh',
+    asset: `${imageBase}image-5.webp`,
+    theme: { bg: '#2C3E50', ink: '#F7F1E7', muted: '#B7C0C5', accent: '#FCF3CF' },
+    menu: [{ name: 'Artisanal Gelato', price: '600 KSh' }, { name: 'Classic Tiramisu', price: '900 KSh' }, { name: 'Espresso', price: '350 KSh' }],
+  },
+]
+
+const themes = dishes.map((dish) => dish.theme.bg)
+
+function hexToRgb(hex: string) {
+  const normalized = hex.replace('#', '')
+  const value = normalized.length === 3 ? normalized.split('').map((char) => char + char).join('') : normalized
+  return { r: parseInt(value.slice(0, 2), 16), g: parseInt(value.slice(2, 4), 16), b: parseInt(value.slice(4, 6), 16) }
+}
+
+function mixColor(a: string, b: string, amount: number) {
+  const first = hexToRgb(a)
+  const second = hexToRgb(b)
+  const mix = (key: 'r' | 'g' | 'b') => Math.round(first[key] + (second[key] - first[key]) * amount)
+  return `rgb(${mix('r')}, ${mix('g')}, ${mix('b')})`
+}
+
+function ToppingVisual({ topping }: { topping: Topping }) {
+  if (topping === 'Fresh Basil') {
+    return <span className="topping-visual basil-visual" aria-hidden="true"><i /><i /><i /></span>
+  }
+  if (topping === 'Fior di Latte') {
+    return <span className="topping-visual cheese-visual" aria-hidden="true"><i /><i /><i /><i /></span>
+  }
+  return <span className="topping-visual chili-visual" aria-hidden="true"><i /><i /></span>
+}
+
+function App() {
+  const carouselRef = useRef<HTMLDivElement>(null)
+  const lenisRef = useRef<Lenis | null>(null)
+  const scrollRafRef = useRef<number | null>(null)
+  const [activeIndex, setActiveIndex] = useState(0)
+  const [pizzaToppings, setPizzaToppings] = useState<{ topping: Topping; id: number }[]>([])
+  const [pointer, setPointer] = useState<Pointer>({ x: 0, y: 0 })
+  const [reducedMotion, setReducedMotion] = useState(false)
+
+  const activeDish = dishes[activeIndex]
+  const orderText = useMemo(() => {
+    const additions = pizzaToppings.length ? ` with ${pizzaToppings.map(({ topping }) => topping).join(', ')}` : ''
+    return `Hello Malaika, I would like to order ${activeDish.title.replace('.', '')}${additions}. Please confirm availability.`
+  }, [activeDish.title, pizzaToppings])
+
+  useEffect(() => {
+    const media = window.matchMedia('(prefers-reduced-motion: reduce)')
+    setReducedMotion(media.matches)
+    const onChange = () => setReducedMotion(media.matches)
+    media.addEventListener('change', onChange)
+    if (!media.matches) {
+      const lenis = new Lenis({ duration: 1.15, smoothWheel: true, syncTouch: true })
+      lenisRef.current = lenis
+      let frame = 0
+      const raf = (time: number) => {
+        lenis.raf(time)
+        frame = window.requestAnimationFrame(raf)
+      }
+      frame = window.requestAnimationFrame(raf)
+      return () => {
+        media.removeEventListener('change', onChange)
+        window.cancelAnimationFrame(frame)
+        lenis.destroy()
+      }
+    }
+    return () => media.removeEventListener('change', onChange)
+  }, [])
+
+  useEffect(() => {
+    document.documentElement.style.setProperty('--page-bg', activeDish.theme.bg)
+    document.documentElement.style.setProperty('--page-ink', activeDish.theme.ink)
+    document.documentElement.style.setProperty('--page-muted', activeDish.theme.muted)
+    document.documentElement.style.setProperty('--page-accent', activeDish.theme.accent)
+  }, [activeDish])
+
+  const handleCarouselScroll = () => {
+    const carousel = carouselRef.current
+    if (!carousel) return
+    if (scrollRafRef.current) return
+    scrollRafRef.current = window.requestAnimationFrame(() => {
+      const width = window.innerWidth
+      const progress = width ? carousel.scrollLeft / width : 0
+      const lower = Math.max(0, Math.min(dishes.length - 1, Math.floor(progress)))
+      const upper = Math.min(dishes.length - 1, lower + 1)
+      const local = Math.max(0, Math.min(1, progress - lower))
+      const bg = mixColor(themes[lower], themes[upper], local)
+      document.documentElement.style.setProperty('--page-bg', bg)
+      const nextIndex = Math.round(progress)
+      if (nextIndex !== activeIndex) setActiveIndex(nextIndex)
+      scrollRafRef.current = null
+    })
+  }
+
+  const scrollToDish = (index: number) => {
+    const carousel = carouselRef.current
+    if (!carousel) return
+    carousel.scrollTo({ left: index * carousel.clientWidth, behavior: reducedMotion ? 'auto' : 'smooth' })
+  }
+
+  const addTopping = (topping: Topping) => {
+    setPizzaToppings((current) => [...current, { topping, id: Date.now() + Math.random() }])
+  }
+
+  const openWhatsApp = (message = orderText) => {
+    const currentY = window.scrollY
+    const phone = '254700000000'
+    const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`
+    window.open(url, '_blank', 'noopener,noreferrer')
+    window.requestAnimationFrame(() => window.scrollTo({ top: currentY, behavior: 'auto' }))
+  }
+
+  const handleDishPointer = (event: React.PointerEvent<HTMLElement>) => {
+    const rect = event.currentTarget.getBoundingClientRect()
+    const x = (event.clientX - rect.left) / rect.width - 0.5
+    const y = (event.clientY - rect.top) / rect.height - 0.5
+    setPointer({ x, y })
+  }
+
+  const resetPointer = () => setPointer({ x: 0, y: 0 })
+
+  return (
+    <main className="site-shell" style={{ backgroundColor: activeDish.theme.bg }}>
+      <header className="topbar">
+        <a className="wordmark" href="#top" aria-label="Malaika home"><span>M</span>ALAiKA</a>
+        <div className="topbar-right">
+          <a className="toplink" href="#menu">The menu</a>
+          <button className="top-order" type="button" onClick={() => openWhatsApp('Hello Malaika, I would like to make a reservation. Please share availability.')}>Reserve a table</button>
+        </div>
+      </header>
+
+      <section className="hero" id="top" aria-labelledby="hero-title">
+        <img className="hero-image" src="/images/malaika-room.webp" alt="The leafy open-air dining room at Malaika Restaurant in Malindi" />
+        <div className="hero-scrim" />
+        <div className="hero-content">
+          <p className="eyebrow hero-eyebrow"><span className="eyebrow-line" /> Malindi, Kenya</p>
+          <h1 id="hero-title">The coast,<br /><em>served slowly.</em></h1>
+          <div className="hero-bottomline">
+            <p>Wood fire, Indian Ocean produce,<br />and long tables on Silver Sand Road.</p>
+            <a className="scroll-cue" href="#menu"><span>Scroll to the table</span><ArrowDown size={16} strokeWidth={1.8} /></a>
+          </div>
+        </div>
+        <div className="hero-index" aria-hidden="true">01 <span>/</span> 05</div>
+      </section>
+
+      <section className="intro" aria-labelledby="intro-title">
+        <div className="intro-mark" aria-hidden="true">M</div>
+        <div className="intro-copy">
+          <p className="eyebrow">A table near the tide</p>
+          <h2 id="intro-title">Come for the <em>light.</em><br />Stay for the fire.</h2>
+          <p className="intro-body">Malaika is an open-air restaurant shaped by Malindi's generous rhythms. Nothing is rushed here. Not the dough. Not the catch. Not the last conversation of the evening.</p>
+        </div>
+        <div className="intro-location"><MapPin size={16} strokeWidth={1.5} /><span>Silver Sand Road<br />Malindi, Kenya</span></div>
+      </section>
+
+      <section className="menu-stage" id="menu" aria-labelledby="menu-title">
+        <div className="menu-header">
+          <div>
+            <p className="eyebrow">The menu / 05 chapters</p>
+            <h2 id="menu-title">Follow the <em>flame.</em></h2>
+          </div>
+          <p className="menu-instruction"><MoveHorizontal size={16} strokeWidth={1.5} /> Drag or use the arrows</p>
+        </div>
+
+        <div className="carousel-wrap">
+          <div
+            className="dish-carousel"
+            ref={carouselRef}
+            onScroll={handleCarouselScroll}
+            tabIndex={0}
+            onKeyDown={(event) => {
+              if (event.key === 'ArrowRight') { event.preventDefault(); scrollToDish(Math.min(dishes.length - 1, activeIndex + 1)) }
+              if (event.key === 'ArrowLeft') { event.preventDefault(); scrollToDish(Math.max(0, activeIndex - 1)) }
+            }}
+            aria-label="Malaika menu dishes"
+          >
+            {dishes.map((dish, index) => (
+              <article
+                className={`dish-slide dish-${dish.kind} ${activeIndex === index ? 'is-active' : ''}`}
+                key={dish.number}
+                style={{ '--pointer-x': pointer.x, '--pointer-y': pointer.y } as React.CSSProperties}
+                onPointerMove={dish.kind === 'burger' || dish.kind === 'seafood' ? handleDishPointer : undefined}
+                onPointerLeave={dish.kind === 'burger' || dish.kind === 'seafood' ? resetPointer : undefined}
+                aria-label={`${dish.title} menu slide`}
+              >
+                <div className="slide-index">{dish.number} <span>/</span> 05</div>
+                <div className="slide-copy">
+                  <p className="eyebrow">{dish.kicker}</p>
+                  <h3>{dish.title}</h3>
+                  <p className="slide-description">{dish.description}</p>
+                  <p className="slide-price">{dish.price}</p>
+                  <button className="whatsapp-button" type="button" onClick={() => openWhatsApp(`Hello Malaika, I would like to order ${dish.title.replace('.', '')}. ${dish.menu.map((item) => `${item.name} (${item.price})`).join('; ')} Please confirm availability.`)}><MessageCircle size={17} strokeWidth={1.8} /> Order via WhatsApp</button>
+                </div>
+                <div className="dish-art" aria-hidden="true">
+                  <div className="art-label"><span>From the kitchen</span><strong>{dish.kind === 'pizza' ? 'Fired to order' : dish.kind === 'dessert' ? 'A soft landing' : 'Made by the tide'}</strong></div>
+                  <img src={dish.asset} alt="" />
+                  {dish.kind === 'pizza' && (
+                    <div className="pizza-build">
+                      <div className="topping-rain" aria-hidden="true">
+                        {pizzaToppings.map(({ topping, id }, toppingIndex) => <span className={`dropped-topping topping-${toppingIndex % 3}`} key={id}><ToppingVisual topping={topping} /></span>)}
+                      </div>
+                    </div>
+                  )}
+                </div>
+                {dish.kind === 'burger' && <div className="parallax-note">Move across the dish</div>}
+                {(dish.kind === 'seafood' || dish.kind === 'burger') && <div className="pointer-orb" aria-hidden="true" />}
+                <div className="slide-menu-list">
+                  {dish.menu.map((item) => <div className="menu-line" key={item.name}><span>{item.name}</span><span>{item.price}</span></div>)}
+                </div>
+              </article>
+            ))}
+          </div>
+          <div className="edge-fade edge-fade-left" aria-hidden="true" />
+          <div className="edge-fade edge-fade-right" aria-hidden="true" />
+          <div className="carousel-arrows">
+            <button type="button" aria-label="Previous dish" onClick={() => scrollToDish(Math.max(0, activeIndex - 1))}><ArrowLeft size={18} strokeWidth={1.5} /></button>
+            <div className="carousel-progress"><span style={{ width: `${((activeIndex + 1) / dishes.length) * 100}%` }} /></div>
+            <button type="button" aria-label="Next dish" onClick={() => scrollToDish(Math.min(dishes.length - 1, activeIndex + 1))}><ArrowRight size={18} strokeWidth={1.5} /></button>
+          </div>
+        </div>
+
+        <div className="pizza-console" aria-label="Pizza topping builder">
+          <div className="console-intro"><span>Make it yours</span><strong>Drop a topping</strong></div>
+          <div className="topping-tray">
+            {(['Fresh Basil', 'Fior di Latte', 'Extra Chilies'] as Topping[]).map((topping) => <button className="topping-button" type="button" key={topping} onClick={() => { scrollToDish(0); addTopping(topping) }}><ToppingVisual topping={topping} /><span>{topping}</span><ChevronDown size={13} strokeWidth={1.5} /></button>)}
+          </div>
+          <div className="console-order"><span>{pizzaToppings.length} added</span><button type="button" onClick={() => openWhatsApp()}><MessageCircle size={15} strokeWidth={1.7} /> Send this order</button></div>
+        </div>
+      </section>
+
+      <section className="closing" aria-labelledby="closing-title">
+        <div className="closing-quote">
+          <p className="eyebrow">After the last course</p>
+          <h2 id="closing-title">Leave a little<br /><em>room for wonder.</em></h2>
+        </div>
+        <div className="closing-aside">
+          <p>Open daily from noon until the tide turns. Walk-ins are welcome; for the best table, send a note ahead.</p>
+          <button className="whatsapp-button" type="button" onClick={() => openWhatsApp('Hello Malaika, I would like to reserve a table. Please share availability.') }><MessageCircle size={17} strokeWidth={1.8} /> Reserve via WhatsApp</button>
+        </div>
+      </section>
+
+      <footer className="footer">
+        <a className="wordmark footer-mark" href="#top"><span>M</span>ALAiKA</a>
+        <div className="footer-meta"><span>Silver Sand Road, Malindi</span><span>12° 11′ S / 40° 07′ E</span><span>© 2026 Malaika</span></div>
+        <a className="footer-top" href="#top">Back to top <ArrowDown size={15} /></a>
+      </footer>
+    </main>
+  )
+}
+
+export default App
