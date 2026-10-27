@@ -316,3 +316,15 @@ h1 em, h2 em, h3 em { font-style: italic; }
 
 .dish-carousel { scroll-behavior: smooth; scroll-snap-stop: always; -webkit-overflow-scrolling: touch; }
 @media (prefers-reduced-motion: reduce) { .dish-carousel { scroll-behavior: auto; } }
+
+/* Pizza-specific coordinate system: toppings land inside the actual pizza surface */
+.pizza-stage { position: relative; display: grid; width: min(66vw, 650px); aspect-ratio: 1; place-items: center; }
+.pizza-stage > img { width: 100%; height: auto; object-fit: contain; filter: drop-shadow(0 34px 28px rgba(29,22,18,.24)); }
+.pizza-stage .topping-rain { position: absolute; inset: 29% 27% 31%; z-index: 4; pointer-events: none; overflow: visible; }
+.pizza-stage .dropped-topping:nth-child(3n + 1) { top: 18%; left: 24%; }
+.pizza-stage .dropped-topping:nth-child(3n + 2) { top: 56%; left: 55%; }
+.pizza-stage .dropped-topping:nth-child(3n) { top: 31%; left: 57%; }
+@media (max-width: 699px) {
+  .pizza-stage { width: 84vw; }
+  .pizza-stage .topping-rain { inset: 29% 27% 31%; }
+}
