@@ -196,7 +196,7 @@ h1 em, h2 em, h3 em { font-style: italic; }
 .menu-header { padding-bottom: 25px; }
 .menu-header h2 { font-size: clamp(48px, 10vw, 100px); }
 .dish-carousel { gap: 2.4vw; padding-inline: 6vw; }
-.dish-slide { flex-basis: 87.5vw; min-height: 720px; height: 82svh; max-height: 900px; padding-inline: 3.3vw; scroll-snap-align: center; border-radius: 28px; }
+.dish-slide { flex-basis: 87.5vw; min-height: 720px; height: 82svh; max-height: 900px; padding-inline: 3.3vw; scroll-snap-align: center; }
 .dish-art { right: 2%; left: 22%; bottom: 16%; height: 64%; }
 .dish-art img { width: min(74vw, 760px); }
 .dish-burger .dish-art { right: 0; left: 20%; bottom: 14%; }
@@ -246,7 +246,7 @@ h1 em, h2 em, h3 em { font-style: italic; }
   .hero-bottomline { display: grid; gap: 0; }
   .hero-bottomline p { max-width: 240px; }
   .dish-carousel { gap: 12px; padding-inline: 6vw; }
-  .dish-slide { flex-basis: 88vw; min-height: 675px; height: 78svh; padding-inline: 18px; border-radius: 22px; }
+  .dish-slide { flex-basis: 88vw; min-height: 675px; height: 78svh; padding-inline: 18px; }
   .slide-copy { width: 79vw; padding-top: 38px; }
   .slide-copy .slide-description { max-width: 210px; }
   .dish-art { right: -9%; left: 8%; bottom: 21%; height: 55%; }
@@ -344,3 +344,24 @@ html { scroll-behavior: smooth; }
 .pizza-stage .dropped-topping:nth-child(3n + 1) { top: 39%; left: 31%; }
 .pizza-stage .dropped-topping:nth-child(3n + 2) { top: 53%; left: 55%; }
 .pizza-stage .dropped-topping:nth-child(3n) { top: 35%; left: 56%; }
+
+/* Asset and performance cleanup: raw transparent food, no framed slide clipping */
+.dish-slide { border-radius: 0; overflow: visible; }
+.dish-art, .pizza-stage { overflow: visible; }
+.dish-art img, .topping-visual img { background: transparent; border: 0; box-shadow: none; }
+.dish-art img { will-change: transform; }
+.pizza-stage > img { display: block; }
+.topping-button.is-selected { background: color-mix(in srgb, var(--page-accent) 22%, var(--page-bg)); box-shadow: 0 12px 22px rgba(62,39,35,.14), inset 0 1px 0 rgba(255,255,255,.72); }
+
+/* Keep snap math predictable: equal edge gutters center the first and last dish. */
+.dish-carousel { scroll-snap-type: x mandatory; scroll-padding-inline: 9vw; }
+.dish-slide { scroll-snap-align: center; }
+@media (max-width: 699px) {
+  .dish-carousel { padding-inline: 9vw; }
+  .dish-slide { flex-basis: 82vw; }
+}
+@media (pointer: coarse) {
+  .pointer-orb { display: none; }
+  .dish-art img { will-change: auto; }
+}
+.closing, .footer { content-visibility: auto; contain-intrinsic-size: 760px; }
