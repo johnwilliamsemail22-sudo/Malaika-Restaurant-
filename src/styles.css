@@ -383,3 +383,13 @@ html { scroll-behavior: smooth; }
 .pizza-stage .dropped-topping:nth-child(3n + 1) { top: 44%; left: 45%; }
 .pizza-stage .dropped-topping:nth-child(3n + 2) { top: 54%; left: 53%; }
 .pizza-stage .dropped-topping:nth-child(3n) { top: 48%; left: 60%; }
+
+/* Live-render correction: pull the resting cutouts well inside the visible sauce, away from the stage edge. */
+.pizza-stage .dropped-topping:nth-child(3n + 1) { top: 48%; left: 18%; }
+.pizza-stage .dropped-topping:nth-child(3n + 2) { top: 55%; left: 42%; }
+.pizza-stage .dropped-topping:nth-child(3n) { top: 43%; left: 59%; }
+
+/* Keep every topping inside the sauce; stagger only vertically so none can land beside the pizza. */
+.pizza-stage .dropped-topping:nth-child(3n + 1) { top: 43%; left: 18%; }
+.pizza-stage .dropped-topping:nth-child(3n + 2) { top: 55%; left: 18%; }
+.pizza-stage .dropped-topping:nth-child(3n) { top: 66%; left: 18%; }
