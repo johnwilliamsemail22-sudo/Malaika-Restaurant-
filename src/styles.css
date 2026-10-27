@@ -150,7 +150,7 @@ h1 em, h2 em, h3 em { font-style: italic; }
 .footer-top svg { transform: rotate(180deg); }
 
 @keyframes nudge { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(5px); } }
-@keyframes toppingDrop { 0% { opacity: 0; transform: translate3d(16px, -190px, 0) rotate(-45deg) scale(.72); } 68% { opacity: 1; transform: translate3d(0, 10px, 0) rotate(12deg) scale(1.12); } 86% { transform: translate3d(0, -4px, 0) rotate(-5deg) scale(.96); } 100% { opacity: 1; transform: translate3d(0, 0, 0) rotate(0) scale(1); } }
+@keyframes toppingDrop { 0% { opacity: 0; transform: translate3d(calc(-50% + 16px), calc(-50% - 190px), 0) rotate(-45deg) scale(.72); } 68% { opacity: 1; transform: translate3d(-50%, calc(-50% + 10px), 0) rotate(12deg) scale(1.12); } 86% { transform: translate3d(-50%, calc(-50% - 4px), 0) rotate(-5deg) scale(.96); } 100% { opacity: 1; transform: translate3d(-50%, -50%, 0) rotate(0) scale(1); } }
 
 @media (min-width: 700px) {
   .topbar { padding: 26px 34px; }
@@ -365,3 +365,21 @@ html { scroll-behavior: smooth; }
   .dish-art img { will-change: auto; }
 }
 .closing, .footer { content-visibility: auto; contain-intrinsic-size: 760px; }
+
+/* Final pizza landing geometry: the inner box follows the visible tomato sauce, not the transparent image canvas. */
+.pizza-stage .topping-rain { inset: 20% 20% 20%; }
+.pizza-stage .dropped-topping { transform-origin: center; }
+.pizza-stage .dropped-topping:nth-child(3n + 1) { top: 24%; left: 27%; }
+.pizza-stage .dropped-topping:nth-child(3n + 2) { top: 60%; left: 51%; }
+.pizza-stage .dropped-topping:nth-child(3n) { top: 38%; left: 70%; }
+
+/* Keep the pizza image and its topping layer in one transform coordinate system. */
+.pizza-stage { transform: translate3d(0, 0, 0) rotate(0); transition: transform 360ms cubic-bezier(.2,.7,.2,1); }
+.dish-slide.is-active .pizza-stage { transform: translate3d(0, -7px, 0) rotate(-3deg); }
+.pizza-stage > img { transform: none !important; transition: none !important; }
+
+/* Robust final landing: direct percentages on the same full-size stage as the pizza base. */
+.pizza-stage .topping-rain { inset: 0; }
+.pizza-stage .dropped-topping:nth-child(3n + 1) { top: 44%; left: 45%; }
+.pizza-stage .dropped-topping:nth-child(3n + 2) { top: 54%; left: 53%; }
+.pizza-stage .dropped-topping:nth-child(3n) { top: 48%; left: 60%; }
