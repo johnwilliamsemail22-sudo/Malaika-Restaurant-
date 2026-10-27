@@ -298,3 +298,21 @@ h1 em, h2 em, h3 em { font-style: italic; }
   .dish-slide { opacity: .32; }
   .dish-slide.is-active { opacity: 1; }
 }
+
+/* Live interaction reliability and burger assembly motion */
+.topping-button { touch-action: manipulation; user-select: none; }
+.pizza-count { min-width: 74px; text-align: right; }
+.dish-art .burger-image { position: absolute; inset: 0; width: min(66vw, 650px); height: auto; margin: auto; transition: opacity 520ms cubic-bezier(.2,.8,.2,1), transform 850ms cubic-bezier(.18,.88,.2,1); }
+.dish-art .burger-exploded { opacity: 0; transform: translate3d(0, 18px, 0) scale(.94); }
+.dish-art .burger-assembled { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+.dish-slide.burger-open .dish-art .burger-exploded { opacity: 1; transform: translate3d(calc(var(--pointer-x) * 22px), calc(var(--pointer-y) * 18px - 7px), 0) scale(1.04); }
+.dish-slide.burger-open .dish-art .burger-assembled { opacity: 0; transform: translate3d(0, 24px, 0) scale(.9); }
+.burger-interaction { transition: transform 500ms cubic-bezier(.2,.8,.2,1); }
+.burger-open .burger-interaction { transform: translateY(-5px); }
+@media (max-width: 699px) {
+  .dish-art .burger-image { width: 84vw; }
+  .pizza-count { display: block; min-width: 0; font-size: 7px; }
+}
+
+.dish-carousel { scroll-behavior: smooth; scroll-snap-stop: always; -webkit-overflow-scrolling: touch; }
+@media (prefers-reduced-motion: reduce) { .dish-carousel { scroll-behavior: auto; } }
