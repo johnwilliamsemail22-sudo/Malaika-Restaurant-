@@ -75,7 +75,8 @@ function App() {
     setReducedMotion(media.matches)
     const onChange = () => setReducedMotion(media.matches)
     media.addEventListener('change', onChange)
-    if (!media.matches) {
+    const touchDevice = window.matchMedia('(pointer: coarse)').matches
+    if (!media.matches && !touchDevice) {
       const lenis = new Lenis({ duration: 1.35, lerp: .075, smoothWheel: true, syncTouch: false, wheelMultiplier: .8, touchMultiplier: .85 })
       let frame = 0
       const raf = (time: number) => { lenis.raf(time); frame = window.requestAnimationFrame(raf) }

@@ -328,3 +328,19 @@ h1 em, h2 em, h3 em { font-style: italic; }
   .pizza-stage { width: 84vw; }
   .pizza-stage .topping-rain { inset: 29% 27% 31%; }
 }
+
+/* Native touch track: avoid scroll hijacking and show the next meal clearly */
+html { scroll-behavior: smooth; }
+.dish-carousel { overflow-x: scroll; scroll-snap-type: x mandatory; scroll-padding-inline: 6vw; overscroll-behavior-x: contain; }
+@media (max-width: 699px) {
+  .dish-carousel { gap: 14px; padding-inline: 6vw; touch-action: pan-x; }
+  .dish-slide { flex-basis: 82vw; }
+  .dish-art img { width: 76vw; }
+  .pizza-stage { width: 76vw; }
+  .dish-slide:not(.is-active) { opacity: .22; }
+}
+/* Land on the visible pizza, not on the stage edges */
+.pizza-stage .topping-rain { inset: 0; }
+.pizza-stage .dropped-topping:nth-child(3n + 1) { top: 39%; left: 31%; }
+.pizza-stage .dropped-topping:nth-child(3n + 2) { top: 53%; left: 55%; }
+.pizza-stage .dropped-topping:nth-child(3n) { top: 35%; left: 56%; }
