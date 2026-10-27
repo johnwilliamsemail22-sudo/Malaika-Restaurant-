@@ -183,3 +183,92 @@ h1 em, h2 em, h3 em { font-style: italic; }
   *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
   .dish-carousel { scroll-snap-type: x proximity; }
 }
+
+/* Refinement pass: clearer actions, centered dishes, and tactile controls */
+.liquid-glass { background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.38); box-shadow: inset 0 1px 0 rgba(255,255,255,.22), 0 12px 26px rgba(16,12,10,.12); backdrop-filter: blur(14px) saturate(130%); }
+.top-order.liquid-glass { border: 1px solid rgba(255,255,255,.32); }
+.hero-actions { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 9px; }
+.hero-cta { display: inline-flex; min-height: 44px; align-items: center; gap: 8px; padding: 0 16px; border-radius: 999px; font-family: var(--sans); font-size: 10px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; transition: transform 240ms ease, background-color 240ms ease; }
+.hero-cta:hover { transform: translateY(-2px); }
+.hero-cta-light { background: #fff9f1; color: var(--espresso); }
+.hero-bottomline { align-items: flex-end; }
+.hero-bottomline p { flex: 1 1 160px; }
+.menu-header { padding-bottom: 25px; }
+.menu-header h2 { font-size: clamp(48px, 10vw, 100px); }
+.dish-carousel { gap: 2.4vw; padding-inline: 6vw; }
+.dish-slide { flex-basis: 87.5vw; min-height: 720px; height: 82svh; max-height: 900px; padding-inline: 3.3vw; scroll-snap-align: center; border-radius: 28px; }
+.dish-art { right: 2%; left: 22%; bottom: 16%; height: 64%; }
+.dish-art img { width: min(74vw, 760px); }
+.dish-burger .dish-art { right: 0; left: 20%; bottom: 14%; }
+.dish-seafood .dish-art { right: 0; left: 17%; bottom: 13%; }
+.dish-pasta .dish-art, .dish-dessert .dish-art { right: 0; left: 19%; bottom: 13%; }
+.slide-copy { width: min(400px, 68vw); padding-top: 39px; }
+.slide-copy .slide-description { max-width: 310px; margin-top: 12px; }
+.slide-footer { position: absolute; right: 3.3vw; bottom: 28px; left: 3.3vw; z-index: 6; display: grid; grid-template-columns: 1.1fr 1fr auto; align-items: end; gap: 22px; }
+.dish-nameplate { display: grid; gap: 3px; }
+.dish-nameplate span { color: var(--page-muted); font-family: var(--mono); font-size: 8px; letter-spacing: .08em; text-transform: uppercase; }
+.dish-nameplate strong { color: var(--page-ink); font-family: var(--serif); font-size: clamp(29px, 4vw, 54px); font-weight: 700; letter-spacing: -.03em; line-height: .85; }
+.slide-footer .slide-menu-list { position: static; width: auto; }
+.slide-footer .whatsapp-button { justify-self: end; white-space: nowrap; }
+.pizza-controls { position: absolute; right: 3.3vw; bottom: 116px; left: 3.3vw; z-index: 7; display: flex; align-items: center; gap: 15px; padding: 8px 10px; color: var(--page-ink); }
+.pizza-controls-label, .pizza-count { color: var(--page-muted); font-family: var(--mono); font-size: 8px; letter-spacing: .06em; text-transform: uppercase; white-space: nowrap; }
+.pizza-controls .topping-tray { gap: 3px; flex: 1; }
+.pizza-controls .topping-button { min-height: 37px; padding-inline: 8px; }
+.pizza-controls .topping-button + .topping-button { border-left: 1px solid color-mix(in srgb, var(--page-ink) 18%, transparent); }
+.pizza-controls .topping-visual { width: 25px; height: 25px; flex-basis: 25px; }
+.pizza-controls .topping-button:hover { transform: translateY(-3px); }
+.topping-visual img { display: block; width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 6px 4px rgba(62,39,35,.16)); transition: transform 240ms cubic-bezier(.2,.8,.2,1); }
+.topping-button:hover .topping-visual img { transform: scale(1.18) rotate(-5deg); }
+.dropped-topping .topping-visual { width: 42px; height: 42px; }
+.dropped-topping .topping-visual img { filter: drop-shadow(0 8px 5px rgba(62,39,35,.22)); }
+.burger-interaction { position: absolute; right: 3.3vw; bottom: 35%; z-index: 7; display: grid; justify-items: end; gap: 9px; }
+.micro-toggle { padding: 0 12px; min-height: 31px; border-radius: 999px; background: rgba(255,255,255,.14); color: var(--page-ink); font-family: var(--mono); font-size: 8px; letter-spacing: .06em; text-transform: uppercase; box-shadow: inset 0 1px 0 rgba(255,255,255,.3); backdrop-filter: blur(12px); }
+.burger-inside { display: grid; max-height: 0; overflow: hidden; gap: 5px; color: var(--page-muted); font-family: var(--mono); font-size: 8px; letter-spacing: .05em; text-transform: uppercase; text-align: right; transition: max-height 450ms cubic-bezier(.2,.8,.2,1), opacity 250ms ease; opacity: 0; }
+.burger-open .burger-inside { max-height: 120px; opacity: 1; }
+.burger-open .dish-art img { transform: translate3d(calc(var(--pointer-x) * 22px), calc(var(--pointer-y) * 18px - 10px), 0) rotate(4deg) scale(1.12); }
+.edge-fade { width: 9vw; opacity: .48; }
+.carousel-arrows { right: 6vw; bottom: 90px; }
+.reservation { display: grid; grid-template-columns: .95fr 1.05fr; gap: 7vw; min-height: 86svh; padding: 120px 7vw 110px; background: #f3ede4; color: var(--espresso); }
+.reservation-intro { align-self: center; max-width: 520px; }
+.reservation h2 { font-size: clamp(68px, 12vw, 145px); line-height: .78; }
+.reservation-intro > p:last-child { max-width: 300px; margin: 30px 0 0; color: #85756c; font-size: 12px; line-height: 1.7; }
+.reservation-form { display: grid; align-content: center; gap: 21px; max-width: 520px; }
+.reservation-form label { display: grid; gap: 8px; color: #776961; font-family: var(--mono); font-size: 8px; letter-spacing: .07em; text-transform: uppercase; }
+.reservation-form label span { opacity: .6; }
+.reservation-form input, .reservation-form select, .reservation-form textarea { width: 100%; border: 0; border-bottom: 1px solid rgba(62,39,35,.28); border-radius: 0; padding: 8px 0 11px; outline: 0; background: transparent; color: var(--espresso); font-family: var(--sans); font-size: 14px; font-weight: 600; }
+.reservation-form textarea { resize: vertical; line-height: 1.5; }
+.reservation-form input:focus, .reservation-form select:focus, .reservation-form textarea:focus { border-color: var(--espresso); }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+.reservation-submit { justify-self: start; margin-top: 8px; }
+
+@media (max-width: 699px) {
+  .hero-actions { justify-content: flex-start; width: 100%; margin-top: 16px; }
+  .hero-bottomline { display: grid; gap: 0; }
+  .hero-bottomline p { max-width: 240px; }
+  .dish-carousel { gap: 12px; padding-inline: 6vw; }
+  .dish-slide { flex-basis: 88vw; min-height: 675px; height: 78svh; padding-inline: 18px; border-radius: 22px; }
+  .slide-copy { width: 79vw; padding-top: 38px; }
+  .slide-copy .slide-description { max-width: 210px; }
+  .dish-art { right: -9%; left: 8%; bottom: 21%; height: 55%; }
+  .dish-art img { width: 86vw; }
+  .dish-burger .dish-art, .dish-seafood .dish-art, .dish-pasta .dish-art, .dish-dessert .dish-art { right: -9%; left: 3%; bottom: 20%; }
+  .slide-footer { right: 18px; bottom: 17px; left: 18px; grid-template-columns: 1fr auto; gap: 8px 16px; }
+  .dish-nameplate { grid-column: 1 / -1; }
+  .dish-nameplate strong { font-size: 33px; }
+  .slide-footer .slide-menu-list { display: none; }
+  .slide-footer .whatsapp-button { grid-column: 1 / -1; justify-self: start; }
+  .pizza-controls { right: 18px; bottom: 105px; left: 18px; display: grid; gap: 5px; padding: 0; }
+  .pizza-controls .topping-tray { width: 100%; }
+  .pizza-controls .topping-button { font-size: 8px; padding-inline: 5px; }
+  .pizza-controls-label { font-size: 7px; }
+  .pizza-count { display: none; }
+  .burger-interaction { right: 18px; bottom: 43%; }
+  .carousel-arrows { right: 8vw; bottom: 70px; }
+  .reservation { grid-template-columns: 1fr; gap: 54px; min-height: auto; padding: 95px 22px 90px; }
+  .reservation h2 { font-size: clamp(70px, 19vw, 115px); }
+  .reservation-form { gap: 19px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .topping-button:hover .topping-visual img, .hero-cta:hover, .whatsapp-button:hover { transform: none; }
+}
