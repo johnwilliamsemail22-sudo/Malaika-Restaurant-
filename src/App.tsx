@@ -90,6 +90,16 @@ function App() {
     document.documentElement.style.setProperty('--page-accent', activeDish.theme.accent)
   }, [activeDish])
 
+  useEffect(() => {
+    if (activeIndex !== 1 || reducedMotion) {
+      setBurgerOpen(false)
+      return
+    }
+    setBurgerOpen(true)
+    const settleTimer = window.setTimeout(() => setBurgerOpen(false), 1550)
+    return () => window.clearTimeout(settleTimer)
+  }, [activeIndex, reducedMotion])
+
   const handleCarouselScroll = () => {
     const carousel = carouselRef.current
     if (!carousel || scrollRafRef.current) return

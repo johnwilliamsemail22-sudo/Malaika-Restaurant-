@@ -272,3 +272,29 @@ h1 em, h2 em, h3 em { font-style: italic; }
 @media (prefers-reduced-motion: reduce) {
   .topping-button:hover .topping-visual img, .hero-cta:hover, .whatsapp-button:hover { transform: none; }
 }
+
+/* Centered slide correction */
+.dish-slide { opacity: .38; transition: opacity 520ms ease; }
+.dish-slide.is-active { opacity: 1; }
+.dish-art, .dish-burger .dish-art, .dish-seafood .dish-art, .dish-pasta .dish-art, .dish-dessert .dish-art { right: 0; left: 0; }
+.dish-art img { width: min(66vw, 650px); max-height: 100%; object-position: center; }
+.carousel-arrows { top: 22px; right: 6vw; bottom: auto; }
+.slide-index { left: 3.3vw; right: auto; }
+.pizza-controls { align-items: center; }
+.pizza-controls .topping-button { min-height: 42px; border: 1px solid color-mix(in srgb, var(--page-ink) 18%, transparent); border-radius: 999px; background: color-mix(in srgb, var(--page-bg) 70%, white); box-shadow: 0 8px 18px rgba(62,39,35,.08), inset 0 1px 0 rgba(255,255,255,.58); transition: transform 220ms cubic-bezier(.2,.8,.2,1), box-shadow 220ms ease, background-color 220ms ease; }
+.pizza-controls .topping-button:hover, .pizza-controls .topping-button:active { transform: translateY(-3px) scale(1.03); box-shadow: 0 12px 22px rgba(62,39,35,.14), inset 0 1px 0 rgba(255,255,255,.72); background: color-mix(in srgb, var(--page-bg) 52%, white); }
+.pizza-controls .topping-button + .topping-button { border-left: 1px solid color-mix(in srgb, var(--page-ink) 18%, transparent); padding-left: 8px; }
+.dropped-topping { filter: drop-shadow(0 9px 7px rgba(62,39,35,.18)); }
+
+@media (max-width: 699px) {
+  .dish-art, .dish-burger .dish-art, .dish-seafood .dish-art, .dish-pasta .dish-art, .dish-dessert .dish-art { right: 0; left: 0; bottom: 22%; height: 49%; }
+  .dish-art img { width: 84vw; }
+  .carousel-arrows { top: 18px; right: 18px; bottom: auto; }
+  .slide-index { top: 21px; left: 18px; right: auto; }
+  .pizza-controls { right: 18px; bottom: 112px; left: 18px; }
+  .pizza-controls .topping-tray { gap: 5px; }
+  .pizza-controls .topping-button { min-height: 39px; padding: 0 9px; font-size: 8px; }
+  .pizza-controls .topping-button + .topping-button { padding-left: 9px; }
+  .dish-slide { opacity: .32; }
+  .dish-slide.is-active { opacity: 1; }
+}
