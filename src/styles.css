@@ -454,3 +454,60 @@ html { scroll-behavior: smooth; }
 @media (prefers-reduced-motion:reduce) {
   .pizza-stage .dropped-topping .topping-visual { animation:none!important; opacity:1; transform:none; }
 }
+
+
+/* Interaction fixes: allow vertical page scrolling from anywhere over the menu carousel. */
+.dish-carousel { touch-action: auto !important; overscroll-behavior-x: contain; }
+.dish-slide { touch-action: auto; }
+
+/* Larger, more visible ingredients with a clearer toss-and-settle effect. */
+.pizza-stage .dropped-topping {
+  width: clamp(44px, 6.2vw, 68px);
+  height: clamp(44px, 6.2vw, 68px);
+  z-index: 6;
+  pointer-events: none;
+  filter: drop-shadow(0 8px 7px rgba(38, 22, 13, .28));
+}
+.pizza-stage .dropped-topping .topping-visual {
+  animation: toppingFlightFromControl 820ms cubic-bezier(.16,.88,.22,1.12) both;
+  transform-origin: center;
+  will-change: transform, opacity;
+}
+.pizza-stage .dropped-topping .topping-visual img {
+  filter: drop-shadow(0 7px 5px rgba(35, 20, 12, .3)) saturate(1.08) contrast(1.03);
+}
+@keyframes toppingFlightFromControl {
+  0% {
+    opacity: 0;
+    transform: translate(var(--fly-x, 0px), var(--fly-y, -180px)) rotate(-38deg) scale(.35);
+  }
+  58% {
+    opacity: 1;
+    transform: translate(calc(var(--fly-x, 0px) * .18), calc(var(--fly-y, 0px) * .18)) rotate(16deg) scale(1.22);
+  }
+  78% {
+    opacity: 1;
+    transform: translate(0, 0) rotate(-7deg) scale(.93);
+  }
+  90% {
+    transform: translate(0, 0) rotate(3deg) scale(1.05);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(0, 0) rotate(0) scale(1);
+  }
+}
+@media (max-width:699px) {
+  .pizza-stage .dropped-topping {
+    width: clamp(38px, 10vw, 52px);
+    height: clamp(38px, 10vw, 52px);
+  }
+}
+/* Reduced-motion users still get the topping instantly, without a flight animation. */
+@media (prefers-reduced-motion: reduce) {
+  .pizza-stage .dropped-topping .topping-visual {
+    animation: none !important;
+    opacity: 1;
+    transform: none;
+  }
+}
