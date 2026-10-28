@@ -79,7 +79,7 @@ function App() {
     const extraTotal = pizzaToppings.reduce((sum, item) => sum + toppingPrices[item.topping], 0)
     const notes = pizzaInstructions.trim() ? ` Special instructions: ${pizzaInstructions.trim()}.` : ''
     return `Hello Malaika, I would like to order ${activeDish.title}${additions}. Extra toppings total: ${extraTotal} KSh.${notes} Please confirm availability.`
-  }, [activeDish.title, pizzaToppings])
+  }, [activeDish.title, pizzaToppings, pizzaInstructions])
 
   useEffect(() => {
     const media = window.matchMedia('(prefers-reduced-motion: reduce)')
