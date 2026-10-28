@@ -436,3 +436,21 @@ html { scroll-behavior: smooth; }
 }
 @media (min-width:700px) { .dish-pizza .pizza-controls { bottom:132px; width:min(530px,calc(100% - 70px)); } }
 @media (prefers-reduced-motion:reduce) { .pizza-stage .dropped-topping .topping-visual { animation:none; } .pizza-controls .topping-button { transition:none; } }
+
+
+/* Final ingredient flight: start at the tapped control and settle at the chosen pizza position. */
+.pizza-stage .dropped-topping { overflow:visible; }
+.pizza-stage .dropped-topping .topping-visual {
+  animation:toppingFlightFromControl 720ms cubic-bezier(.18,.82,.22,1.04) both;
+  transform-origin:center;
+  will-change:transform,opacity;
+}
+@keyframes toppingFlightFromControl {
+  0% { opacity:0; transform:translate(var(--fly-x,0px),var(--fly-y,-150px)) rotate(-32deg) scale(.48); }
+  64% { opacity:1; transform:translate(calc(var(--fly-x,0px)*.12),calc(var(--fly-y,0px)*.12)) rotate(9deg) scale(1.08); }
+  82% { opacity:1; transform:translate(0,0) rotate(-4deg) scale(.96); }
+  100% { opacity:1; transform:translate(0,0) rotate(0) scale(1); }
+}
+@media (prefers-reduced-motion:reduce) {
+  .pizza-stage .dropped-topping .topping-visual { animation:none!important; opacity:1; transform:none; }
+}
