@@ -20,13 +20,13 @@ type Dish = {
 
 const toppingAssets: Record<Topping, string> = {
   'Fior di Latte': '/images/toppings/fior-di-latte.webp',
-  'Prosciutto': '/images/toppings/prosciutto.webp',
-  'Wild Rocket': '/images/toppings/wild-rocket.webp',
-  'Spicy Salami': '/images/toppings/spicy-salami.webp',
-  'Coast Prawns': '/images/toppings/coast-prawns.webp',
-  'Mushrooms': '/images/toppings/mushrooms.webp',
-  'Chilli Honey': '/images/toppings/chilli-honey.webp',
-  'Olives': '/images/toppings/olives.webp',
+  'Prosciutto': '/images/toppings/prosciutto.svg',
+  'Wild Rocket': '/images/toppings/wild-rocket.svg',
+  'Spicy Salami': '/images/toppings/spicy-salami.svg',
+  'Coast Prawns': '/images/toppings/coast-prawns.svg',
+  'Mushrooms': '/images/toppings/mushrooms.svg',
+  'Chilli Honey': '/images/toppings/chilli-honey.svg',
+  'Olives': '/images/toppings/olives.svg',
 }
 const toppingPrices: Record<Topping, number> = {
   'Fior di Latte': 200, 'Prosciutto': 350, 'Wild Rocket': 120, 'Spicy Salami': 300,
