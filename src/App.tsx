@@ -3,7 +3,7 @@ import { ArrowDown, ArrowLeft, ArrowRight, MapPin, MessageCircle } from 'lucide-
 import Lenis from 'lenis'
 
 type Theme = { bg: string; ink: string; muted: string; accent: string }
-type Topping = 'Fresh Basil' | 'Fior di Latte' | 'Extra Chilies'
+type Topping = 'Fior di Latte' | 'Prosciutto' | 'Wild Rocket' | 'Spicy Salami' | 'Coast Prawns' | 'Mushrooms' | 'Chilli Honey' | 'Olives'
 type Reservation = { name: string; date: string; time: string; guests: string; notes: string }
 
 type Dish = {
@@ -19,10 +19,20 @@ type Dish = {
 }
 
 const toppingAssets: Record<Topping, string> = {
-  'Fresh Basil': '/images/toppings/fresh-basil.webp',
   'Fior di Latte': '/images/toppings/fior-di-latte.webp',
-  'Extra Chilies': '/images/toppings/extra-chilies.webp',
+  'Prosciutto': '/images/toppings/prosciutto.webp',
+  'Wild Rocket': '/images/toppings/wild-rocket.webp',
+  'Spicy Salami': '/images/toppings/spicy-salami.webp',
+  'Coast Prawns': '/images/toppings/coast-prawns.webp',
+  'Mushrooms': '/images/toppings/mushrooms.webp',
+  'Chilli Honey': '/images/toppings/chilli-honey.webp',
+  'Olives': '/images/toppings/olives.webp',
 }
+const toppingPrices: Record<Topping, number> = {
+  'Fior di Latte': 200, 'Prosciutto': 350, 'Wild Rocket': 120, 'Spicy Salami': 300,
+  'Coast Prawns': 450, 'Mushrooms': 150, 'Chilli Honey': 100, 'Olives': 120,
+}
+const availableToppings = Object.keys(toppingPrices) as Topping[];
 const assembledBurgerAsset = '/images/dishes/burger-assembled.webp'
 
 const dishes: Dish[] = [
@@ -48,7 +58,8 @@ function mixColor(a: string, b: string, amount: number) {
 }
 
 function ToppingVisual({ topping }: { topping: Topping }) {
-  return <span className="topping-visual" aria-hidden="true"><img src={toppingAssets[topping]} alt="" width="512" height="512" loading="lazy" decoding="async" /></span>
+  const slug = topping.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
+  return <span className={`topping-visual topping-visual-${slug}`} aria-hidden="true"><img src={toppingAssets[topping]} alt="" width="512" height="512" loading="lazy" decoding="async" /></span>
 }
 
 function App() {
@@ -56,15 +67,18 @@ function App() {
   const scrollRafRef = useRef<number | null>(null)
   const lastTouchAtRef = useRef(0)
   const [activeIndex, setActiveIndex] = useState(0)
-  const [pizzaToppings, setPizzaToppings] = useState<{ topping: Topping; id: number }[]>([])
+  const [pizzaToppings, setPizzaToppings] = useState<{ topping: Topping; id: number; x: number; y: number }[]>([])
+  const [pizzaInstructions, setPizzaInstructions] = useState('')
   const [reducedMotion, setReducedMotion] = useState(false)
   const [burgerOpen, setBurgerOpen] = useState(false)
   const [reservation, setReservation] = useState<Reservation>({ name: '', date: '', time: '', guests: '2', notes: '' })
 
   const activeDish = dishes[activeIndex]
   const orderText = useMemo(() => {
-    const additions = pizzaToppings.length ? ` with ${pizzaToppings.map(({ topping }) => topping).join(', ')}` : ''
-    return `Hello Malaika, I would like to order ${activeDish.title}${additions}. Please confirm availability.`
+    const additions = pizzaToppings.length ? ` with ${pizzaToppings.map(({ topping }) => `${topping} (+${toppingPrices[topping]} KSh)`).join(', ')}` : ''
+    const extraTotal = pizzaToppings.reduce((sum, item) => sum + toppingPrices[item.topping], 0)
+    const notes = pizzaInstructions.trim() ? ` Special instructions: ${pizzaInstructions.trim()}.` : ''
+    return `Hello Malaika, I would like to order ${activeDish.title}${additions}. Extra toppings total: ${extraTotal} KSh.${notes} Please confirm availability.`
   }, [activeDish.title, pizzaToppings])
 
   useEffect(() => {
@@ -126,11 +140,18 @@ function App() {
   const [lastAddedTopping, setLastAddedTopping] = useState<Topping | null>(null)
   const toggleTopping = (topping: Topping) => {
     const selected = pizzaToppings.some(({ topping: current }) => current === topping)
-    setPizzaToppings((current) => selected ? current.filter(({ topping: currentTopping }) => currentTopping !== topping) : [...current, { topping, id: Date.now() + Math.random() }])
-    setLastAddedTopping(selected ? null : topping)
+    if (selected) {
+      setPizzaToppings((current) => current.filter(({ topping: currentTopping }) => currentTopping !== topping))
+      setLastAddedTopping(null)
+      return
+    }
+    const spots = [{ x: 35, y: 32 }, { x: 57, y: 28 }, { x: 68, y: 45 }, { x: 49, y: 48 }, { x: 31, y: 56 }, { x: 60, y: 65 }, { x: 43, y: 72 }, { x: 73, y: 59 }, { x: 25, y: 43 }, { x: 53, y: 38 }]
+    const used = new Set(pizzaToppings.map((item) => `${item.x}-${item.y}`))
+    const available = spots.filter((spot) => !used.has(`${spot.x}-${spot.y}`))
+    const spot = available[Math.floor(Math.random() * available.length)] ?? { x: 50, y: 50 }
+    setPizzaToppings((current) => [...current, { topping, id: Date.now() + Math.random(), ...spot }])
+    setLastAddedTopping(topping)
   }
-  const handleToppingPointerUp = (topping: Topping, event: React.PointerEvent<HTMLButtonElement>) => { if (event.pointerType === 'touch' || event.pointerType === 'pen') { lastTouchAtRef.current = Date.now(); toggleTopping(topping) } }
-  const handleToppingClick = (topping: Topping) => { if (Date.now() - lastTouchAtRef.current > 500) toggleTopping(topping) }
   const openWhatsApp = (message = orderText) => {
     const currentY = window.scrollY; const url = `https://wa.me/254700000000?text=${encodeURIComponent(message)}`
     window.open(url, '_blank', 'noopener,noreferrer'); window.requestAnimationFrame(() => window.scrollTo({ top: currentY, behavior: 'auto' }))
@@ -176,11 +197,11 @@ function App() {
               <article className={`dish-slide dish-${dish.kind} ${activeIndex === index ? 'is-active' : ''} ${dish.kind === 'burger' && burgerOpen ? 'burger-open' : ''}`} key={dish.number} style={{ '--pointer-x': 0, '--pointer-y': 0 } as React.CSSProperties} onPointerMove={dish.kind === 'burger' || dish.kind === 'seafood' ? handleDishPointer : undefined} onPointerLeave={dish.kind === 'burger' || dish.kind === 'seafood' ? resetDishPointer : undefined}>
                 <div className="slide-index">{dish.number} <span>/</span> 05</div>
                 <div className="slide-copy"><p className="eyebrow">{dish.kicker}</p><p className="slide-description">{dish.description}</p></div>
-                <div className="dish-art" aria-hidden="true">{dish.kind === 'pizza' ? <div className="pizza-stage"><img src={dish.asset} alt="" width="1024" height="1024" fetchPriority="high" decoding="async" /><div className="topping-rain">{pizzaToppings.map(({ topping, id }, toppingIndex) => <span className={`dropped-topping topping-${toppingIndex % 3}`} key={id}><ToppingVisual topping={topping} /></span>)}</div></div> : dish.kind === 'burger' ? <><img className="burger-image burger-exploded" src={dish.asset} alt="" width="1024" height="1024" loading="lazy" decoding="async" /><img className="burger-image burger-assembled" src={assembledBurgerAsset} alt="" width="1024" height="1024" loading="lazy" decoding="async" /></> : <img src={dish.asset} alt="" width="1024" height="1024" loading="lazy" decoding="async" />}</div>
+                <div className="dish-art" aria-hidden="true">{dish.kind === 'pizza' ? <div className="pizza-stage"><img src={dish.asset} alt="" width="1024" height="1024" fetchPriority="high" decoding="async" /><div className="topping-rain">{pizzaToppings.map(({ topping, id, x, y }) => <span className="dropped-topping" key={id} style={{ left: `${x}%`, top: `${y}%` }}><ToppingVisual topping={topping} /></span>)}</div></div> : dish.kind === 'burger' ? <><img className="burger-image burger-exploded" src={dish.asset} alt="" width="1024" height="1024" loading="lazy" decoding="async" /><img className="burger-image burger-assembled" src={assembledBurgerAsset} alt="" width="1024" height="1024" loading="lazy" decoding="async" /></> : <img src={dish.asset} alt="" width="1024" height="1024" loading="lazy" decoding="async" />}</div>
                 {dish.kind === 'burger' && <div className="burger-interaction"><button type="button" className="micro-toggle" onClick={() => setBurgerOpen((value) => !value)}>{burgerOpen ? 'Close the stack' : 'Open the stack'}</button><div className="burger-inside"><span>Charcoal beef</span><span>Aged cheddar</span><span>Charred onion</span><span>House sauce</span></div></div>}
                 {(dish.kind === 'seafood' || dish.kind === 'burger') && <div className="pointer-orb" aria-hidden="true" />}
-                {dish.kind === 'pizza' && <div className="pizza-controls"><span className="pizza-controls-label">Add to the pizza</span><div className="topping-tray">{(['Fresh Basil', 'Fior di Latte', 'Extra Chilies'] as Topping[]).map((topping) => { const selected = pizzaToppings.some(({ topping: current }) => current === topping); return <button className={`topping-button ${selected ? 'is-selected' : ''}`} type="button" key={topping} aria-pressed={selected} onPointerUp={(event) => handleToppingPointerUp(topping, event)} onClick={() => handleToppingClick(topping)}><ToppingVisual topping={topping} /><span>{topping}</span></button> })}</div><span className="pizza-count" aria-live="polite">{lastAddedTopping ? `${lastAddedTopping} added` : pizzaToppings.length ? 'Tap a topping to remove it' : 'Choose a topping'}</span></div>}
-                <div className="slide-footer"><div className="dish-nameplate"><span>{dish.kicker}</span><strong>{dish.title}</strong></div><div className="slide-menu-list">{dish.menu.map((item) => <div className="menu-line" key={item.name}><span>{item.name}</span><span>{item.price}</span></div>)}</div><button className="whatsapp-button" type="button" onClick={() => openWhatsApp(`Hello Malaika, I would like to order ${dish.title}. ${dish.menu.map((item) => `${item.name} (${item.price})`).join('; ')} Please confirm availability.`)}><MessageCircle size={17} strokeWidth={1.8} /> Order now · {dish.price}</button></div>
+                {dish.kind === 'pizza' && <div className="pizza-controls"><div className="pizza-controls-heading"><span className="pizza-controls-label">Build your pizza</span><span className="pizza-extra-total">+{pizzaToppings.reduce((sum, item) => sum + toppingPrices[item.topping], 0)} KSh</span></div><div className="topping-tray">{availableToppings.map((topping) => { const selected = pizzaToppings.some(({ topping: current }) => current === topping); return <button className={`topping-button ${selected ? 'is-selected' : ''}`} type="button" key={topping} aria-pressed={selected} onClick={() => toggleTopping(topping)}><ToppingVisual topping={topping} /><span className="topping-name">{topping}</span><span className="topping-price">+{toppingPrices[topping]} KSh</span></button> })}</div><textarea className="pizza-instructions" rows={2} value={pizzaInstructions} onChange={(event) => setPizzaInstructions(event.target.value)} placeholder="Special instructions (optional)" aria-label="Special instructions for your pizza" /><span className="pizza-count" aria-live="polite">{lastAddedTopping ? `${lastAddedTopping} added` : pizzaToppings.length ? 'Tap a selected topping to remove it' : 'Choose your toppings'}</span></div>}
+                <div className="slide-footer"><div className="dish-nameplate"><span>{dish.kicker}</span><strong>{dish.title}</strong></div><div className="slide-menu-list">{dish.menu.map((item) => <div className="menu-line" key={item.name}><span>{item.name}</span><span>{item.price}</span></div>)}</div><button className="whatsapp-button" type="button" onClick={() => openWhatsApp(dish.kind === 'pizza' ? orderText : `Hello Malaika, I would like to order ${dish.title}. ${dish.menu.map((item) => `${item.name} (${item.price})`).join('; ')} Please confirm availability.`)}><MessageCircle size={17} strokeWidth={1.8} /> Order now · {dish.price}</button></div>
               </article>
             ))}
           </div>
