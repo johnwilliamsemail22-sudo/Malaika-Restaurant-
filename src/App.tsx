@@ -146,7 +146,11 @@ function App() {
       setLastAddedTopping(null)
       return
     }
-    const spots = [{ x: 35, y: 32 }, { x: 57, y: 28 }, { x: 68, y: 45 }, { x: 49, y: 48 }, { x: 31, y: 56 }, { x: 60, y: 65 }, { x: 43, y: 72 }, { x: 73, y: 59 }, { x: 25, y: 43 }, { x: 53, y: 38 }]
+    const spots = [
+      { x: 35, y: 32 }, { x: 57, y: 28 }, { x: 68, y: 45 }, { x: 49, y: 48 },
+      { x: 31, y: 56 }, { x: 60, y: 65 }, { x: 43, y: 72 }, { x: 73, y: 59 },
+      { x: 25, y: 43 }, { x: 53, y: 38 }, { x: 40, y: 22 }, { x: 65, y: 73 }
+    ]
     const used = new Set(pizzaToppings.map((item) => `${item.x}-${item.y}`))
     const available = spots.filter((spot) => !used.has(`${spot.x}-${spot.y}`))
     const spot = available[Math.floor(Math.random() * available.length)] ?? { x: 50, y: 50 }
