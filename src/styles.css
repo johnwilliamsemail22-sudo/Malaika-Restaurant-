@@ -393,3 +393,46 @@ html { scroll-behavior: smooth; }
 .pizza-stage .dropped-topping:nth-child(3n + 1) { top: 43%; left: 18%; }
 .pizza-stage .dropped-topping:nth-child(3n + 2) { top: 55%; left: 18%; }
 .pizza-stage .dropped-topping:nth-child(3n) { top: 66%; left: 18%; }
+
+
+/* Pizza builder: responsive 2-column topping grid, prices, selection feedback, and ingredient placement */
+.dish-slide.dish-pizza { min-height:900px; height:900px; }
+.dish-pizza .dish-art { top:12%; right:0; bottom:auto; left:0; height:40%; }
+.dish-pizza .pizza-stage { width:min(54vw,470px); max-width:100%; }
+.dish-pizza .pizza-stage > img { width:100%; }
+.dish-pizza .pizza-controls { position:absolute; z-index:7; left:50%; right:auto; bottom:125px; width:min(530px,calc(100% - 48px)); display:grid; gap:9px; padding:0; transform:translateX(-50%); }
+.pizza-controls-heading { display:flex; align-items:center; justify-content:space-between; gap:12px; }
+.pizza-controls-label { color:var(--page-muted); font-family:var(--mono); font-size:9px; letter-spacing:.09em; text-transform:uppercase; }
+.pizza-extra-total { color:var(--page-ink); font-family:var(--mono); font-size:10px; white-space:nowrap; }
+.pizza-controls .topping-tray { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:7px 9px; width:100%; overflow:visible; }
+.pizza-controls .topping-button,.pizza-controls .topping-button + .topping-button { display:grid; grid-template-columns:26px minmax(0,1fr) auto; align-items:center; gap:6px; width:100%; min-width:0; min-height:44px; padding:6px 9px!important; border:1px solid color-mix(in srgb,var(--page-ink) 18%,transparent)!important; border-radius:12px; background:color-mix(in srgb,var(--page-bg) 82%,white); color:var(--page-ink); box-shadow:0 5px 12px rgba(62,39,35,.06),inset 0 1px 0 rgba(255,255,255,.55); font-size:10px; text-align:left; white-space:normal; transition:transform 180ms cubic-bezier(.2,.8,.2,1),background-color 240ms ease,color 240ms ease,border-color 240ms ease,box-shadow 240ms ease; }
+.pizza-controls .topping-button .topping-visual { width:25px; height:25px; flex-basis:25px; }
+.pizza-controls .topping-name { min-width:0; overflow-wrap:anywhere; font-size:9px; font-weight:600; line-height:1.2; }
+.pizza-controls .topping-price { color:var(--page-muted); font-family:var(--mono); font-size:7px; white-space:nowrap; }
+.pizza-controls .topping-button:hover { transform:translateY(-2px); border-color:var(--page-accent)!important; box-shadow:0 9px 18px rgba(62,39,35,.12); }
+.pizza-controls .topping-button:active { transform:translateY(1px) scale(.97); }
+.pizza-controls .topping-button.is-selected,.pizza-controls .topping-button.is-selected:hover { color:#fff7ef; background:#a94727; border-color:#88391f!important; box-shadow:0 7px 15px rgba(124,49,27,.24),inset 0 1px 0 rgba(255,255,255,.18); }
+.pizza-controls .topping-button.is-selected .topping-price { color:rgba(255,247,239,.8); }
+.pizza-instructions { display:block; width:100%; min-height:44px; resize:vertical; border:1px solid color-mix(in srgb,var(--page-ink) 17%,transparent); border-radius:11px; padding:10px 12px; outline:none; background:color-mix(in srgb,var(--page-bg) 80%,white); color:var(--page-ink); font-family:var(--sans); font-size:10px; line-height:1.4; }
+.pizza-instructions::placeholder { color:var(--page-muted); }
+.pizza-instructions:focus { border-color:var(--page-accent); box-shadow:0 0 0 3px color-mix(in srgb,var(--page-accent) 17%,transparent); }
+.dish-pizza .pizza-count { min-width:0; text-align:left; font-size:8px; }
+.pizza-stage .topping-rain { inset:0; z-index:5; }
+.pizza-stage .dropped-topping { top:0; left:0; z-index:5; width:clamp(30px,4vw,44px); height:clamp(30px,4vw,44px); transform:translate(-50%,-50%); transform-origin:center; animation:none; filter:drop-shadow(0 5px 4px rgba(41,27,18,.19)); }
+.pizza-stage .dropped-topping .topping-visual { display:block; width:100%; height:100%; transform:none; animation:toppingFlight 680ms cubic-bezier(.16,.82,.22,1.08) both; }
+.pizza-stage .dropped-topping .topping-visual img { width:100%; height:100%; object-fit:contain; filter:drop-shadow(0 4px 3px rgba(41,27,18,.2)); }
+@keyframes toppingFlight { 0% { opacity:0; transform:translate(0,-150px) rotate(-28deg) scale(.48); } 70% { opacity:1; transform:translate(0,0) rotate(9deg) scale(1.09); } 86% { opacity:1; transform:translate(0,0) rotate(-4deg) scale(.97); } 100% { opacity:1; transform:translate(0,0) rotate(0) scale(1); } }
+@media (max-width:699px) {
+ .dish-slide.dish-pizza { min-height:920px; height:920px; }
+ .dish-pizza .dish-art { top:12%; bottom:auto; height:37%; }
+ .dish-pizza .pizza-stage { width:min(76vw,340px); }
+ .dish-pizza .pizza-controls { left:18px; right:18px; bottom:137px; width:auto; transform:none; gap:8px; }
+ .pizza-controls .topping-tray { grid-template-columns:repeat(2,minmax(0,1fr)); gap:7px; }
+ .pizza-controls .topping-button,.pizza-controls .topping-button + .topping-button { grid-template-columns:23px minmax(0,1fr) auto; min-height:43px; gap:5px; padding:6px 7px!important; }
+ .pizza-controls .topping-button .topping-visual { width:22px; height:22px; flex-basis:22px; }
+ .pizza-controls .topping-name { font-size:8px; }
+ .pizza-controls .topping-price { font-size:7px; }
+ .pizza-stage .dropped-topping { width:clamp(28px,7vw,36px); height:clamp(28px,7vw,36px); }
+}
+@media (min-width:700px) { .dish-pizza .pizza-controls { bottom:132px; width:min(530px,calc(100% - 70px)); } }
+@media (prefers-reduced-motion:reduce) { .pizza-stage .dropped-topping .topping-visual { animation:none; } .pizza-controls .topping-button { transition:none; } }
