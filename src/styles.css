@@ -511,3 +511,59 @@ html { scroll-behavior: smooth; }
     transform: none;
   }
 }
+
+
+/* Minimal half-chevron controls make the horizontal menu discoverable. */
+.carousel-arrows {
+  top: 24px;
+  right: 5vw;
+  bottom: auto;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  z-index: 12;
+}
+.carousel-arrows .dish-arrow {
+  display: grid;
+  width: 29px;
+  height: 30px;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--page-ink);
+  box-shadow: none;
+  opacity: .72;
+  transition: opacity 180ms ease, transform 180ms ease;
+}
+.carousel-arrows .dish-arrow span {
+  display: block;
+  font-family: Arial, sans-serif;
+  font-size: 31px;
+  font-weight: 300;
+  line-height: .8;
+}
+.carousel-arrows .dish-arrow-prev span { transform: translateX(-1px); }
+.carousel-arrows .dish-arrow-next span { transform: translateX(1px); }
+.carousel-arrows .dish-arrow:hover:not(:disabled) {
+  opacity: 1;
+  transform: translateX(2px);
+  background: transparent;
+}
+.carousel-arrows .dish-arrow-prev:hover:not(:disabled) { transform: translateX(-2px); }
+.carousel-arrows .dish-arrow:disabled { opacity: .22; cursor: default; }
+.carousel-arrows .carousel-hint {
+  color: var(--page-muted);
+  font-family: var(--mono);
+  font-size: 8px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+@media (max-width:699px) {
+  .carousel-arrows { top: 14px; right: 14px; gap: 5px; }
+  .carousel-arrows .dish-arrow { width: 25px; height: 28px; }
+  .carousel-arrows .dish-arrow span { font-size: 28px; }
+  .carousel-arrows .carousel-hint { font-size: 7px; }
+}
