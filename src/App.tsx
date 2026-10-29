@@ -217,7 +217,7 @@ function App() {
             ))}
           </div>
           <div className="edge-fade edge-fade-left" aria-hidden="true" /><div className="edge-fade edge-fade-right" aria-hidden="true" />
-          <div className="carousel-arrows"><button type="button" aria-label="Previous dish" onClick={() => scrollToDish(Math.max(0, activeIndex - 1))}><ArrowLeft size={18} strokeWidth={1.5} /></button><div className="carousel-progress"><span style={{ width: `${((activeIndex + 1) / dishes.length) * 100}%` }} /></div><button type="button" aria-label="Next dish" onClick={() => scrollToDish(Math.min(dishes.length - 1, activeIndex + 1))}><ArrowRight size={18} strokeWidth={1.5} /></button></div>
+          <div className="carousel-arrows" aria-label="Browse menu dishes"><button className="dish-arrow dish-arrow-prev" type="button" aria-label="Previous dish" disabled={activeIndex === 0} onClick={() => scrollToDish(Math.max(0, activeIndex - 1))}><span aria-hidden="true">‹</span></button><span className="carousel-hint">Explore the menu</span><button className="dish-arrow dish-arrow-next" type="button" aria-label="Next dish" disabled={activeIndex === dishes.length - 1} onClick={() => scrollToDish(Math.min(dishes.length - 1, activeIndex + 1))}><span aria-hidden="true">›</span></button></div>
         </div>
       </section>
 
