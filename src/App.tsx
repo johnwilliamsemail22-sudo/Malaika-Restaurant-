@@ -76,8 +76,8 @@ function App() {
 
   const activeDish = dishes[activeIndex]
   const orderText = useMemo(() => {
-    const additions = pizzaToppings.length ? ` with ${pizzaToppings.map(({ topping }) => `${topping} (+${toppingPrices[topping]} KSh)`).join(', ')}` : ''
-    const extraTotal = pizzaToppings.reduce((sum, item) => sum + toppingPrices[item.topping], 0)
+    const additions = pizzaToppings.length ? ` with ${Array.from(new Set(pizzaToppings.map(({ topping }) => topping))).map((topping) => `${topping} (+${toppingPrices[topping]} KSh)`).join(', ')}` : ''
+    const extraTotal = Array.from(new Set(pizzaToppings.map((item) => item.topping))).reduce((sum, topping) => sum + toppingPrices[topping], 0)
     const notes = pizzaInstructions.trim() ? ` Special instructions: ${pizzaInstructions.trim()}.` : ''
     return `Hello Malaika, I would like to order ${activeDish.title}${additions}. Extra toppings total: ${extraTotal} KSh.${notes} Please confirm availability.`
   }, [activeDish.title, pizzaToppings, pizzaInstructions])
@@ -146,21 +146,31 @@ function App() {
       setLastAddedTopping(null)
       return
     }
+    // Each selected ingredient scatters several pieces across the sauce, not one small sticker.
     const spots = [
-      { x: 35, y: 32 }, { x: 57, y: 28 }, { x: 68, y: 45 }, { x: 49, y: 48 },
-      { x: 31, y: 56 }, { x: 60, y: 65 }, { x: 43, y: 72 }, { x: 73, y: 59 },
-      { x: 25, y: 43 }, { x: 53, y: 38 }, { x: 40, y: 22 }, { x: 65, y: 73 }
+      { x: 32, y: 31 }, { x: 50, y: 27 }, { x: 66, y: 34 }, { x: 39, y: 44 },
+      { x: 57, y: 45 }, { x: 72, y: 50 }, { x: 28, y: 56 }, { x: 46, y: 60 },
+      { x: 62, y: 66 }, { x: 38, y: 72 }, { x: 54, y: 37 }, { x: 25, y: 43 },
+      { x: 70, y: 39 }, { x: 49, y: 75 }, { x: 34, y: 64 }, { x: 61, y: 53 }
     ]
     const used = new Set(pizzaToppings.map((item) => `${item.x}-${item.y}`))
     const available = spots.filter((spot) => !used.has(`${spot.x}-${spot.y}`))
-    const spot = available[Math.floor(Math.random() * available.length)] ?? { x: 50, y: 50 }
     const stageRect = pizzaStageRef.current?.getBoundingClientRect()
     const buttonRect = button.getBoundingClientRect()
-    const targetX = stageRect ? stageRect.left + stageRect.width * spot.x / 100 : buttonRect.left + buttonRect.width / 2
-    const targetY = stageRect ? stageRect.top + stageRect.height * spot.y / 100 : buttonRect.top
-    const flyX = buttonRect.left + buttonRect.width / 2 - targetX
-    const flyY = buttonRect.top + buttonRect.height / 2 - targetY
-    setPizzaToppings((current) => [...current, { topping, id: Date.now() + Math.random(), ...spot, flyX, flyY }])
+    const newPieces = (available.length ? available : spots).sort(() => Math.random() - .5).slice(0, 4).map((spot, index) => {
+      const targetX = stageRect ? stageRect.left + stageRect.width * spot.x / 100 : buttonRect.left + buttonRect.width / 2
+      const targetY = stageRect ? stageRect.top + stageRect.height * spot.y / 100 : buttonRect.top
+      return {
+        topping,
+        id: Date.now() + Math.random() + index,
+        ...spot,
+        flyX: buttonRect.left + buttonRect.width / 2 - targetX,
+        flyY: buttonRect.top + buttonRect.height / 2 - targetY,
+        size: 0.82 + Math.random() * 0.42,
+        rotation: Math.round(Math.random() * 50 - 25)
+      }
+    })
+    setPizzaToppings((current) => [...current, ...newPieces])
     setLastAddedTopping(topping)
   }
   const openWhatsApp = (message = orderText) => {
@@ -208,7 +218,7 @@ function App() {
               <article className={`dish-slide dish-${dish.kind} ${activeIndex === index ? 'is-active' : ''} ${dish.kind === 'burger' && burgerOpen ? 'burger-open' : ''}`} key={dish.number} style={{ '--pointer-x': 0, '--pointer-y': 0 } as React.CSSProperties} onPointerMove={dish.kind === 'burger' || dish.kind === 'seafood' ? handleDishPointer : undefined} onPointerLeave={dish.kind === 'burger' || dish.kind === 'seafood' ? resetDishPointer : undefined}>
                 <div className="slide-index">{dish.number} <span>/</span> 05</div>
                 <div className="slide-copy"><p className="eyebrow">{dish.kicker}</p><p className="slide-description">{dish.description}</p></div>
-                <div className="dish-art" aria-hidden="true">{dish.kind === 'pizza' ? <div className="pizza-stage" ref={pizzaStageRef}><img src={dish.asset} alt="" width="1024" height="1024" fetchPriority="high" decoding="async" /><div className="topping-rain">{pizzaToppings.map(({ topping, id, x, y, flyX, flyY }) => <span className="dropped-topping" key={id} style={{ left: `${x}%`, top: `${y}%`, '--fly-x': `${flyX}px`, '--fly-y': `${flyY}px` } as React.CSSProperties}><ToppingVisual topping={topping} /></span>)}</div></div> : dish.kind === 'burger' ? <><img className="burger-image burger-exploded" src={dish.asset} alt="" width="1024" height="1024" loading="lazy" decoding="async" /><img className="burger-image burger-assembled" src={assembledBurgerAsset} alt="" width="1024" height="1024" loading="lazy" decoding="async" /></> : <img src={dish.asset} alt="" width="1024" height="1024" loading="lazy" decoding="async" />}</div>
+                <div className="dish-art" aria-hidden="true">{dish.kind === 'pizza' ? <div className="pizza-stage" ref={pizzaStageRef}><img src={dish.asset} alt="" width="1024" height="1024" fetchPriority="high" decoding="async" /><div className="topping-rain">{pizzaToppings.map(({ topping, id, x, y, flyX, flyY, size, rotation }) => <span className="dropped-topping" key={id} style={{ left: `${x}%`, top: `${y}%`, '--fly-x': `${flyX}px`, '--fly-y': `${flyY}px`, '--piece-scale': size ?? 1, '--piece-rotation': `${rotation ?? 0}deg` } as React.CSSProperties}><ToppingVisual topping={topping} /></span>)}</div></div> : dish.kind === 'burger' ? <><img className="burger-image burger-exploded" src={dish.asset} alt="" width="1024" height="1024" loading="lazy" decoding="async" /><img className="burger-image burger-assembled" src={assembledBurgerAsset} alt="" width="1024" height="1024" loading="lazy" decoding="async" /></> : <img src={dish.asset} alt="" width="1024" height="1024" loading="lazy" decoding="async" />}</div>
                 {dish.kind === 'burger' && <div className="burger-interaction"><button type="button" className="micro-toggle" onClick={() => setBurgerOpen((value) => !value)}>{burgerOpen ? 'Close the stack' : 'Open the stack'}</button><div className="burger-inside"><span>Charcoal beef</span><span>Aged cheddar</span><span>Charred onion</span><span>House sauce</span></div></div>}
                 {(dish.kind === 'seafood' || dish.kind === 'burger') && <div className="pointer-orb" aria-hidden="true" />}
                 {dish.kind === 'pizza' && <div className="pizza-controls"><div className="pizza-controls-heading"><span className="pizza-controls-label">Build your pizza</span><span className="pizza-extra-total">+{pizzaToppings.reduce((sum, item) => sum + toppingPrices[item.topping], 0)} KSh</span></div><div className="topping-tray">{availableToppings.map((topping) => { const selected = pizzaToppings.some(({ topping: current }) => current === topping); return <button className={`topping-button ${selected ? 'is-selected' : ''}`} type="button" key={topping} aria-pressed={selected} onClick={(event) => toggleTopping(topping, event.currentTarget)}><ToppingVisual topping={topping} /><span className="topping-name">{topping}</span><span className="topping-price">+{toppingPrices[topping]} KSh</span></button> })}</div><textarea className="pizza-instructions" rows={2} value={pizzaInstructions} onChange={(event) => setPizzaInstructions(event.target.value)} placeholder="Special instructions (optional)" aria-label="Special instructions for your pizza" /><span className="pizza-count" aria-live="polite">{lastAddedTopping ? `${lastAddedTopping} added` : pizzaToppings.length ? 'Tap a selected topping to remove it' : 'Choose your toppings'}</span></div>}
