@@ -567,3 +567,25 @@ html { scroll-behavior: smooth; }
   .carousel-arrows .dish-arrow span { font-size: 28px; }
   .carousel-arrows .carousel-hint { font-size: 7px; }
 }
+
+
+/* Natural topping placement: larger ingredient pieces, scattered across the pizza, no springy bounce. */
+.pizza-stage .dropped-topping {
+  width: clamp(48px, 7.4vw, 78px);
+  height: clamp(48px, 7.4vw, 78px);
+  overflow: visible;
+  filter: drop-shadow(0 5px 5px rgba(37,22,13,.25));
+}
+.pizza-stage .dropped-topping .topping-visual {
+  animation: ingredientFall 560ms cubic-bezier(.22,.62,.35,1) both;
+  transform-origin:center;
+}
+@keyframes ingredientFall {
+  0% { opacity:0; transform:translate(var(--fly-x,0px),var(--fly-y,-180px)) rotate(var(--piece-rotation,-12deg)) scale(calc(var(--piece-scale,1) * .86)); }
+  72% { opacity:1; transform:translate(0,0) rotate(calc(var(--piece-rotation,0deg) + 3deg)) scale(var(--piece-scale,1)); }
+  88% { opacity:1; transform:translate(0,0) rotate(calc(var(--piece-rotation,0deg) - 1deg)) scale(var(--piece-scale,1)); }
+  100% { opacity:1; transform:translate(0,0) rotate(var(--piece-rotation,0deg)) scale(var(--piece-scale,1)); }
+}
+@media (max-width:699px) {
+ .pizza-stage .dropped-topping { width:clamp(42px,10vw,58px); height:clamp(42px,10vw,58px); }
+}
