@@ -150,11 +150,6 @@ function App() {
     return () => { window.removeEventListener('pointermove', move); window.removeEventListener('pointerover', over); document.documentElement.removeEventListener('pointerleave', leave); window.cancelAnimationFrame(frame) }
   }, [reducedMotion])
 
-  return () => { media.removeEventListener('change', onChange); window.cancelAnimationFrame(frame); lenis.destroy() }
-    }
-    return () => media.removeEventListener('change', onChange)
-  }, [])
-
   useEffect(() => {
     document.documentElement.style.setProperty('--page-bg', activeDish.theme.bg)
     document.documentElement.style.setProperty('--page-ink', activeDish.theme.ink)
