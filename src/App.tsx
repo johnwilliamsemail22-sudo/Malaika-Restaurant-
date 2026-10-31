@@ -245,7 +245,7 @@ function App() {
   const updateReservation = (field: keyof Reservation, value: string) => setReservation((current) => ({ ...current, [field]: value }))
   const submitReservation = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    const message = `Hello Lo Sfizio, I would like to enquire about a table reservation. Name: ${reservation.name}. Date: ${reservation.date}. Time: ${reservation.time}. Guests: ${reservation.guests}.${reservation.notes ? ` Notes: ${reservation.notes}.` : ''} Please confirm availability.`
+    const message = `Hello Lo Sfizio! 👋\n\nI'd like to request a table reservation.\n\nName: ${reservation.name}\nDate: ${reservation.date}\nTime: ${reservation.time}\nNumber of guests: ${reservation.guests}${reservation.notes ? `\nAdditional notes: ${reservation.notes}` : ''}\n\nPlease confirm whether a table is available. Thank you!`
     openWhatsApp(message)
   }
   const handleDishPointer = (event: React.PointerEvent<HTMLElement>) => { const rect = event.currentTarget.getBoundingClientRect(); event.currentTarget.style.setProperty('--pointer-x', String((event.clientX - rect.left) / rect.width - .5)); event.currentTarget.style.setProperty('--pointer-y', String((event.clientY - rect.top) / rect.height - .5)) }
@@ -296,7 +296,7 @@ function App() {
                 <div className="sf-card-topline"><span>CHAPTER {dish.number}</span><span className="sf-card-spark">✳</span></div>
                 <div className="sf-card-image"><img src={dish.asset} alt={dish.title} loading="lazy" decoding="async" /></div>
                 <div className="sf-card-content"><p className="sf-card-kicker">{dish.kicker}</p><h3>{dish.title}</h3><p className="sf-card-description">{dish.description}</p>
-                  <ul>{dish.menu.map((item) => <li key={item.name}><span>{item.name}</span><span>{item.price}</span></li>)}</ul>
+                  <ul>{dish.menu.map((item) => <li key={item.name}><span>{item.name}</span><span>{item.price}</span><button className="sf-item-order" type="button" onClick={() => openWhatsApp(`Hello Lo Sfizio! 👋\n\nI'd like to order:\n\nDish: ${item.name}\nMenu category: ${dish.title}\nPrice: ${item.price}\nQuantity: 1\n\nPlease confirm availability and let me know the next steps. Thank you!`)}>Order <ArrowRight size={13}/></button></li>)}</ul>
                   <button className="sf-card-order" type="button" onClick={(event) => { event.stopPropagation(); openWhatsApp(`Hello Lo Sfizio, I would like to enquire about ${dish.title}: ${dish.menu.map((item) => item.name).join(', ')}. Please confirm availability.`) }}>Ask about this menu <ArrowRight size={15} /></button>
                 </div>
               </article>)}
@@ -307,7 +307,7 @@ function App() {
           <div className="sf-menu-bottom-cta"><span>Looking for something specific?</span><button type="button" onClick={() => setShowFullMenu(true)}>See the complete menu <ArrowRight size={16}/></button></div>
         </> : <>
           <div className="sf-full-menu-heading"><button className="sf-back-menu" type="button" onClick={() => setShowFullMenu(false)}><ArrowLeft size={16}/> Back to the experience</button><p className="eyebrow">Benvenuti · Lo Sfizio, Malindi</p><h2 id="menu-title">The full <em>menu.</em></h2><p>Take your time. Find your favourite.</p></div>
-          <div className="sf-full-menu-grid">{dishes.map((dish) => <article className="sf-full-menu-card" key={dish.number}><div className="sf-full-menu-photo"><img src={dish.asset} alt={dish.title} loading="lazy" /></div><div className="sf-full-menu-copy"><p className="sf-card-kicker">{dish.kicker}</p><h3>{dish.title}</h3><p>{dish.description}</p><ul>{dish.menu.map((item) => <li key={item.name}><span>{item.name}</span><span>{item.price}</span></li>)}</ul><button className="sf-card-order" type="button" onClick={() => openWhatsApp(`Hello Lo Sfizio, I would like to enquire about ${dish.title}: ${dish.menu.map((item) => item.name).join(', ')}. Please confirm availability.`)}>Ask about this menu <ArrowRight size={15}/></button></div></article>)}</div>
+          <div className="sf-full-menu-grid">{dishes.map((dish) => <article className="sf-full-menu-card" key={dish.number}><div className="sf-full-menu-photo"><img src={dish.asset} alt={dish.title} loading="lazy" /></div><div className="sf-full-menu-copy"><p className="sf-card-kicker">{dish.kicker}</p><h3>{dish.title}</h3><p>{dish.description}</p><ul>{dish.menu.map((item) => <li key={item.name}><span>{item.name}</span><span>{item.price}</span><button className="sf-item-order" type="button" onClick={() => openWhatsApp(`Hello Lo Sfizio! 👋\n\nI'd like to order:\n\nDish: ${item.name}\nMenu category: ${dish.title}\nPrice: ${item.price}\nQuantity: 1\n\nPlease confirm availability and let me know the next steps. Thank you!`)}>Order <ArrowRight size={13}/></button></li>)}</ul><button className="sf-card-order" type="button" onClick={() => openWhatsApp(`Hello Lo Sfizio, I would like to enquire about ${dish.title}: ${dish.menu.map((item) => item.name).join(', ')}. Please confirm availability.`)}>Ask about this menu <ArrowRight size={15}/></button></div></article>)}</div>
           <p className="sf-menu-note">Demo menu and illustrative prices for presentation only. Final items and prices will be confirmed by Lo Sfizio.</p>
         </>}
       </section>
