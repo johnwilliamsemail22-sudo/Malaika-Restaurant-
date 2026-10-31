@@ -190,7 +190,15 @@ function App() {
     <main className="site-shell" style={{ backgroundColor: activeDish.theme.bg }}>
       <header className="topbar sf-topbar">
         <a className="wordmark sf-wordmark" href="#top" aria-label="Lo Sfizio home">Lo Sfizio<span>·</span></a>
-        <div className="topbar-right"><a className="toplink" href="#menu">Menu</a><a className="top-order sf-order" href="#reserve">Order Now</a><button className="sf-menu-toggle" type="button"       <section className="sf-hero" id="top" aria-labelledby="hero-title">
+        <div className="topbar-right">
+          <a className="toplink" href="#menu">Menu</a>
+          <a className="top-order sf-order" href="#reserve">Order Now</a>
+          <button className="sf-menu-toggle" type="button" aria-label="Explore the menu" onClick={() => document.getElementById("menu")?.scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth" })}>
+            <span></span><span></span>
+          </button>
+        </div>
+      </header>
+      <section className="sf-hero" id="top" aria-labelledby="hero-title">
         <div className="sf-hero-copy">
           <p className="sf-kicker">ITALIAN COFFEE · FOOD · GOOD COMPANY · MALINDI</p>
           <h1 id="hero-title">Lo Sfizio</h1>
@@ -205,9 +213,9 @@ function App() {
       </section>
 
       <section className="intro" aria-labelledby="intro-title">
-        <div className="intro-mark" aria-hidden="true">M</div>
-        <div className="intro-copy"><p className="eyebrow">A table near the tide</p><h2 id="intro-title">Come for the <em>light.</em><br />Stay for the fire.</h2><p className="intro-body">Lo Sfizio is an open-air restaurant shaped by Malindi's generous rhythms. Fire, tide, and good company set the pace.</p></div>
-        <div className="intro-location"><MapPin size={16} strokeWidth={1.5} /><span>Malindi, Kenya<br />Malindi, Kenya</span></div>
+        <div className="intro-mark" aria-hidden="true">L</div>
+        <div className="intro-copy"><p className="eyebrow">Benvenuti a Lo Sfizio</p><h2 id="intro-title">Italian flavour.<br /><em>Coastal soul.</em></h2><p className="intro-body">Good coffee, fresh pastries and much-loved Italian favourites, served with a warm welcome in the heart of Malindi's generous rhythms. Fire, tide, and good company set the pace.</p></div>
+        <div className="intro-location"><MapPin size={16} strokeWidth={1.5} /><span>Blue Marlin Shopping Arcade<br />Lamu Road, Malindi</span></div>
       </section>
 
       <section className="menu-stage" id="menu" aria-labelledby="menu-title">
@@ -234,7 +242,7 @@ function App() {
       <section className="reservation" id="reserve" aria-labelledby="reserve-title"><div className="reservation-intro"><p className="eyebrow">A seat by the garden</p><h2 id="reserve-title">Reserve<br /><em>your table.</em></h2><p>Tell us when you are coming. We will confirm the best table for your evening on WhatsApp.</p></div><form className="reservation-form" onSubmit={submitReservation}><label>Name<input required value={reservation.name} onChange={(event) => updateReservation('name', event.target.value)} placeholder="Your name" /></label><div className="form-row"><label>Date<input required type="date" value={reservation.date} onChange={(event) => updateReservation('date', event.target.value)} /></label><label>Time<input required type="time" value={reservation.time} onChange={(event) => updateReservation('time', event.target.value)} /></label></div><label>Guests<select value={reservation.guests} onChange={(event) => updateReservation('guests', event.target.value)}>{['1', '2', '3', '4', '5', '6+'].map((count) => <option key={count} value={count}>{count} guest{count === '1' ? '' : 's'}</option>)}</select></label><label>Notes <span>(optional)</span><textarea rows={3} value={reservation.notes} onChange={(event) => updateReservation('notes', event.target.value)} placeholder="A birthday, a favourite table, anything we should know" /></label><button className="whatsapp-button reservation-submit" type="submit"><MessageCircle size={17} strokeWidth={1.8} /> Continue to WhatsApp</button></form></section>
 
       <section className="closing" aria-labelledby="closing-title"><div className="closing-quote"><p className="eyebrow">After the last course</p><h2 id="closing-title">Leave a little<br /><em>room for wonder.</em></h2></div><div className="closing-aside"><p>Open daily from noon until the tide turns. Walk-ins are welcome; for the best table, send a note ahead.</p><button className="whatsapp-button" type="button" onClick={scrollToReservation}><MessageCircle size={17} strokeWidth={1.8} /> Reserve a table</button></div></section>
-      <footer className="footer"><a className="wordmark footer-mark" href="#top"><span>M</span>ALAiKA</a><div className="footer-meta"><span>Silver Sand Road, Malindi</span><span>12° 11′ S / 40° 07′ E</span><span>© 2026 Lo Sfizio</span></div><a className="footer-top" href="#top">Back to top <ArrowDown size={15} /></a></footer>
+      <footer className="footer"><a className="wordmark footer-mark" href="#top">Lo Sfizio<span>·</span></a><div className="footer-meta"><span>Lamu Road, Malindi</span><span>Italian coffee · Food · Good company</span><span>© 2026 Lo Sfizio</span></div><a className="footer-top" href="#top">Back to top <ArrowDown size={15} /></a></footer>
     </main>
   )
 }
