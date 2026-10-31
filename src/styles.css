@@ -773,3 +773,29 @@ html, body { background:#FAF6EE; color:#321B14; }
 .sf-order-modal .whatsapp-button:disabled { opacity:.45; cursor:not-allowed; }
 .sf-order-modal-close { position:absolute; top:13px; right:16px; width:34px; height:34px; border:0; border-radius:50%; background:rgba(50,27,20,.08); color:#321B14; font-size:24px; cursor:pointer; }
 @media(max-width:520px) { .sf-order-modal { padding:29px 23px; } }
+
+
+/* sapori handwritten hero wordmark */
+.sf-hero h1 {
+  font-family: 'Kalam', cursive;
+  font-size: clamp(112px, 19vw, 250px);
+  font-weight: 700;
+  line-height: .98;
+  letter-spacing: -.045em;
+  transform-origin: center;
+  text-shadow: 0 2px 0 rgba(50,27,20,.025);
+  animation: sf-handwritten-name 2.15s .18s both cubic-bezier(.42,0,.25,1);
+}
+@keyframes sf-handwritten-name {
+  0% { opacity: 0; clip-path: inset(0 100% 0 0); transform: rotate(-2deg) translateY(9px); }
+  12% { opacity: 1; }
+  100% { opacity: 1; clip-path: inset(0 0 0 0); transform: rotate(0) translateY(0); }
+}
+.sf-wordmark { font-family: 'Kalam', cursive!important; font-size: clamp(30px, 3vw, 42px)!important; font-weight: 700!important; letter-spacing: -.055em!important; }
+@media(max-width:699px) {
+  .sf-hero h1 { font-size: clamp(92px, 23vw, 158px); line-height: 1; }
+  .sf-wordmark { font-size: 32px!important; }
+}
+@media(prefers-reduced-motion:reduce) {
+  .sf-hero h1 { animation: none; clip-path: none; opacity: 1; transform: none; }
+}
