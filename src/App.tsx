@@ -264,7 +264,7 @@ function App() {
     <main className="site-shell" style={{ backgroundColor: activeDish.theme.bg }}>
       <div className="sf-cursor" aria-hidden="true"><span>VIEW</span></div>
       <header className="topbar sf-topbar">
-        <a className="wordmark sf-wordmark" href="#top" aria-label="SAPORI home">SAPORI<span>·</span></a>
+        <a className="wordmark sf-wordmark" href="#top" aria-label="sapori home">sapori<span>·</span></a>
         <div className="topbar-right">
           <a className="toplink" href="#menu">Menu</a>
           <a className="top-order sf-order" href="#reserve">Order Now</a>
@@ -276,7 +276,7 @@ function App() {
       <section className="sf-hero" id="top" aria-labelledby="hero-title">
         <div className="sf-hero-copy">
           <p className="sf-kicker">ITALIAN CUISINE · ETHIOPIAN FLAVOURS · MALINDI</p>
-          <h1 id="hero-title">SAPORI</h1>
+          <h1 id="hero-title">sapori</h1>
           <p className="sf-hero-subtitle">Discover contemporary Italian cuisine with a distinctive Ethiopian touch, warm hospitality and relaxed open-air dining beneath Malindi’s majestic baobab trees.</p>
           <div className="sf-hero-actions"><a className="sf-primary-button" href="#menu">Order Now</a><a className="sf-secondary-button" href="#menu">View Menu</a></div>
         </div>
@@ -325,7 +325,7 @@ function App() {
 
       <section className="closing" aria-labelledby="closing-title"><div className="closing-quote"><p className="eyebrow">After the last course</p><h2 id="closing-title">Leave a little<br /><em>room for wonder.</em></h2></div><div className="closing-aside"><p><span className="sf-live-dot" aria-hidden="true"></span>Open daily from 12 noon to 10 PM. Walk-ins are welcome; contact us on WhatsApp to enquire or reserve your table.</p><button className="whatsapp-button" type="button" onClick={scrollToReservation}><MessageCircle size={17} strokeWidth={1.8} /> Reserve a table</button></div></section>
       {orderLocationDish && <div className="sf-order-modal-backdrop" role="presentation" onClick={() => setOrderLocationDish(null)}><section className="sf-order-modal" role="dialog" aria-modal="true" aria-labelledby="sf-order-modal-title" onClick={(event) => event.stopPropagation()}><button className="sf-order-modal-close" type="button" aria-label="Close" onClick={() => setOrderLocationDish(null)}>×</button><p className="eyebrow">Almost there</p><h2 id="sf-order-modal-title">Where should we <em>bring it?</em></h2><p>Enter your delivery location and we’ll include it in your WhatsApp order.</p><label htmlFor="sf-order-location">Your location</label><input id="sf-order-location" value={orderLocation} onChange={(event) => setOrderLocation(event.target.value)} placeholder="Area, street, building or landmark" autoFocus /><button className="whatsapp-button" type="button" disabled={!orderLocation.trim()} onClick={submitDishOrder}><MessageCircle size={17}/> Order Now</button></section></div>}
-      <footer className="footer"><a className="wordmark footer-mark" href="#top">SAPORI<span>·</span></a><div className="footer-meta"><span>Lamu Road, after the Casino, towards Mambrui</span><span>Italian cuisine · Ethiopian flavours · Good company</span><span>© 2026 SAPORI</span></div><a className="footer-top" href="#top">Back to top <ArrowDown size={15} /></a></footer>
+      <footer className="footer"><a className="wordmark footer-mark" href="#top">sapori<span>·</span></a><div className="footer-meta"><span>Lamu Road, after the Casino, towards Mambrui</span><span>Italian cuisine · Ethiopian flavours · Good company</span><span>© 2026 SAPORI</span></div><a className="footer-top" href="#top">Back to top <ArrowDown size={15} /></a></footer>
     </main>
   )
 }
