@@ -67,7 +67,8 @@ function App() {
   const pizzaStageRef = useRef<HTMLDivElement>(null)
   const scrollRafRef = useRef<number | null>(null)
   const lastTouchAtRef = useRef(0)
-  const [activeIndex, setActiveIndex] = useState(0)\n  const [showFullMenu, setShowFullMenu] = useState(false)
+  const [activeIndex, setActiveIndex] = useState(0)
+  const [showFullMenu, setShowFullMenu] = useState(false)
   const [pizzaToppings, setPizzaToppings] = useState<{ topping: Topping; id: number; x: number; y: number; flyX: number; flyY: number; size: number; rotation: number }[]>([])
   const [pizzaInstructions, setPizzaInstructions] = useState('')
   const [reducedMotion, setReducedMotion] = useState(false)
@@ -251,7 +252,8 @@ function App() {
   const resetDishPointer = (event: React.PointerEvent<HTMLElement>) => { event.currentTarget.style.setProperty('--pointer-x', '0'); event.currentTarget.style.setProperty('--pointer-y', '0') }
 
   return (
-    <main className="site-shell" style={{ backgroundColor: activeDish.theme.bg }}>\n      <div className="sf-cursor" aria-hidden="true"><span>VIEW</span></div>
+    <main className="site-shell" style={{ backgroundColor: activeDish.theme.bg }}>
+      <div className="sf-cursor" aria-hidden="true"><span>VIEW</span></div>
       <header className="topbar sf-topbar">
         <a className="wordmark sf-wordmark" href="#top" aria-label="Lo Sfizio home">Lo Sfizio<span>·</span></a>
         <div className="topbar-right">
