@@ -758,3 +758,18 @@ html, body { background:#FAF6EE; color:#321B14; }
 .sf-card-content li,.sf-full-menu-copy li { align-items:center; flex-wrap:wrap; }
 .sf-item-order { display:inline-flex; align-items:center; gap:5px; margin-left:auto; padding:6px 10px; border:1px solid rgba(125,63,44,.28); border-radius:999px; background:rgba(255,255,255,.55); color:#7d3f2c; font:600 10px var(--sans); cursor:pointer; transition:background .2s ease,color .2s ease,transform .2s ease; }
 .sf-item-order:hover { background:#321b14; color:#fff8ef; transform:translateY(-1px); }
+
+
+/* Menu order location prompt */
+.sf-order-modal-backdrop { position:fixed; inset:0; z-index:1000; display:grid; place-items:center; padding:22px; background:rgba(30,19,15,.62); backdrop-filter:blur(8px); }
+.sf-order-modal { position:relative; width:min(460px,100%); padding:34px; border:1px solid rgba(255,255,255,.7); border-radius:26px; background:#FAF6EE; color:#321B14; box-shadow:0 28px 90px rgba(0,0,0,.28); }
+.sf-order-modal h2 { margin:8px 0 10px; font:600 clamp(32px,7vw,42px)/1 'Cormorant Garamond',Georgia,serif; }
+.sf-order-modal h2 em { color:#9A4B32; }
+.sf-order-modal p:not(.eyebrow) { color:#806E64; font-size:13px; line-height:1.6; }
+.sf-order-modal label { display:block; margin:22px 0 8px; font-size:11px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; }
+.sf-order-modal input { width:100%; min-height:50px; padding:0 14px; border:1px solid rgba(50,27,20,.2); border-radius:12px; outline:none; background:#fff; color:#321B14; font:14px var(--sans); }
+.sf-order-modal input:focus { border-color:#9A4B32; box-shadow:0 0 0 3px rgba(154,75,50,.12); }
+.sf-order-modal .whatsapp-button { width:100%; margin-top:18px; justify-content:center; }
+.sf-order-modal .whatsapp-button:disabled { opacity:.45; cursor:not-allowed; }
+.sf-order-modal-close { position:absolute; top:13px; right:16px; width:34px; height:34px; border:0; border-radius:50%; background:rgba(50,27,20,.08); color:#321B14; font-size:24px; cursor:pointer; }
+@media(max-width:520px) { .sf-order-modal { padding:29px 23px; } }
