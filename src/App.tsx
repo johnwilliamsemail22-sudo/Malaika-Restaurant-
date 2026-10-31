@@ -67,7 +67,7 @@ function App() {
   const pizzaStageRef = useRef<HTMLDivElement>(null)
   const scrollRafRef = useRef<number | null>(null)
   const lastTouchAtRef = useRef(0)
-  const [activeIndex, setActiveIndex] = useState(0)
+  const [activeIndex, setActiveIndex] = useState(0)\n  const [showFullMenu, setShowFullMenu] = useState(false)
   const [pizzaToppings, setPizzaToppings] = useState<{ topping: Topping; id: number; x: number; y: number; flyX: number; flyY: number; size: number; rotation: number }[]>([])
   const [pizzaInstructions, setPizzaInstructions] = useState('')
   const [reducedMotion, setReducedMotion] = useState(false)
@@ -88,25 +88,24 @@ function App() {
     const onChange = () => setReducedMotion(media.matches)
     media.addEventListener('change', onChange)
     const touchDevice = window.matchMedia('(pointer: coarse)').matches
+    let lenis: Lenis | null = null
+    let frame = 0
     if (!media.matches && !touchDevice) {
-      const lenis = new Lenis({ duration: 1.35, lerp: .075, smoothWheel: true, syncTouch: false, wheelMultiplier: .8, touchMultiplier: .85 })
-      let frame = 0
-      const raf = (time: number) => { lenis.raf(time); frame = window.requestAnimationFrame(raf) }
+      lenis = new Lenis({ duration: 1.35, lerp: .075, smoothWheel: true, syncTouch: false, wheelMultiplier: .8, touchMultiplier: .85 })
+      const raf = (time: number) => { lenis?.raf(time); frame = window.requestAnimationFrame(raf) }
       frame = window.requestAnimationFrame(raf)
-    
+    }
+    return () => { media.removeEventListener('change', onChange); if (frame) window.cancelAnimationFrame(frame); lenis?.destroy() }
+  }, [])
+
   useEffect(() => {
     if (reducedMotion) return
     const targets = Array.from(document.querySelectorAll<HTMLElement>('.intro, .menu-header, .dish-slide, .reservation, .closing, .footer'))
     targets.forEach((element) => element.classList.add('motion-reveal'))
     const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) { entry.target.classList.add('is-revealed'); observer.unobserve(entry.target) }
-      })
+      entries.forEach((entry) => { if (entry.isIntersecting) { entry.target.classList.add('is-revealed'); observer.unobserve(entry.target) } })
     }, { threshold: 0.12, rootMargin: '0px 0px -7% 0px' })
-    targets.forEach((element, index) => {
-      if (element.classList.contains('dish-slide')) element.style.setProperty('--reveal-delay', `${(index % 5) * 55}ms`)
-      observer.observe(element)
-    })
+    targets.forEach((element, index) => { if (element.classList.contains('dish-slide')) element.style.setProperty('--reveal-delay', `${(index % 5) * 55}ms`); observer.observe(element) })
     return () => observer.disconnect()
   }, [reducedMotion])
 
@@ -119,6 +118,19 @@ function App() {
     window.addEventListener('scroll', onScroll, { passive: true }); update()
     return () => { window.removeEventListener('scroll', onScroll); if (frame) window.cancelAnimationFrame(frame) }
   }, [])
+
+  useEffect(() => {
+    if (reducedMotion || window.matchMedia('(pointer: coarse)').matches) return
+    const cursor = document.querySelector<HTMLElement>('.sf-cursor')
+    if (!cursor) return
+    let x = -100, y = -100, targetX = -100, targetY = -100, frame = 0
+    const move = (event: PointerEvent) => { targetX = event.clientX; targetY = event.clientY; cursor.classList.add('is-visible') }
+    const tick = () => { x += (targetX - x) * .19; y += (targetY - y) * .19; cursor.style.transform = `translate3d(${x}px,${y}px,0) translate(-50%,-50%)`; frame = window.requestAnimationFrame(tick) }
+    const over = (event: PointerEvent) => { const target = event.target as HTMLElement | null; cursor.classList.toggle('is-hovering', !!target?.closest('a, button, .dish-art, .sf-hero-photo-card, .sf-float-card')); cursor.classList.toggle('is-ordering', !!target?.closest('.sf-order, .sf-primary-button, .whatsapp-button')) }
+    const leave = () => cursor.classList.remove('is-visible')
+    window.addEventListener('pointermove', move, { passive: true }); window.addEventListener('pointerover', over, { passive: true }); document.documentElement.addEventListener('pointerleave', leave); frame = window.requestAnimationFrame(tick)
+    return () => { window.removeEventListener('pointermove', move); window.removeEventListener('pointerover', over); document.documentElement.removeEventListener('pointerleave', leave); window.cancelAnimationFrame(frame) }
+  }, [reducedMotion])
 
   useEffect(() => {
     if (reducedMotion || window.matchMedia('(pointer: coarse)').matches) return
@@ -159,6 +171,18 @@ function App() {
     const settleTimer = window.setTimeout(() => setBurgerOpen(false), 1550)
     return () => window.clearTimeout(settleTimer)
   }, [activeIndex, reducedMotion])
+
+  useEffect(() => {
+    if (showFullMenu || reducedMotion) return
+    const carousel = carouselRef.current
+    if (!carousel) return
+    const timer = window.setInterval(() => {
+      if (document.hidden || carousel.matches(':hover') || carousel.matches(':focus-within')) return
+      const next = (activeIndex + 1) % dishes.length
+      scrollToDish(next)
+    }, 5200)
+    return () => window.clearInterval(timer)
+  }, [activeIndex, showFullMenu, reducedMotion])
 
   const handleCarouselScroll = () => {
     const carousel = carouselRef.current
@@ -263,25 +287,32 @@ function App() {
         <div className="intro-location"><MapPin size={16} strokeWidth={1.5} /><span>Blue Marlin Shopping Arcade<br />Lamu Road, Malindi</span></div>
       </section>
 
-      <section className="menu-stage" id="menu" aria-labelledby="menu-title">
-        <div className="menu-header"><div><p className="eyebrow">The menu / 05 chapters</p><h2 id="menu-title">The <em>menu.</em></h2></div></div>
-        <div className="carousel-wrap">
-          <div className="dish-carousel" ref={carouselRef} onScroll={handleCarouselScroll} tabIndex={0} onKeyDown={(event) => { if (event.key === 'ArrowRight') { event.preventDefault(); scrollToDish(Math.min(dishes.length - 1, activeIndex + 1)) }; if (event.key === 'ArrowLeft') { event.preventDefault(); scrollToDish(Math.max(0, activeIndex - 1)) } }} aria-label="Lo Sfizio menu dishes">
-            {dishes.map((dish, index) => (
-              <article className={`dish-slide dish-${dish.kind} ${activeIndex === index ? 'is-active' : ''} ${dish.kind === 'burger' && burgerOpen ? 'burger-open' : ''}`} key={dish.number} style={{ '--pointer-x': 0, '--pointer-y': 0 } as React.CSSProperties} onPointerMove={dish.kind === 'burger' || dish.kind === 'seafood' ? handleDishPointer : undefined} onPointerLeave={dish.kind === 'burger' || dish.kind === 'seafood' ? resetDishPointer : undefined}>
-                <div className="slide-index">{dish.number} <span>/</span> 05</div>
-                <div className="slide-copy"><p className="eyebrow">{dish.kicker}</p><p className="slide-description">{dish.description}</p></div>
-                <div className="dish-art" aria-hidden="true">{dish.kind === 'pizza' ? <div className="pizza-stage" ref={pizzaStageRef}><img src={dish.asset} alt="" width="1024" height="1024" fetchPriority="high" decoding="async" /><div className="topping-rain">{pizzaToppings.map(({ topping, id, x, y, flyX, flyY, size, rotation }) => <span className="dropped-topping" key={id} style={{ left: `${x}%`, top: `${y}%`, '--fly-x': `${flyX}px`, '--fly-y': `${flyY}px`, '--piece-scale': size ?? 1, '--piece-rotation': `${rotation ?? 0}deg` } as React.CSSProperties}><ToppingVisual topping={topping} /></span>)}</div></div> : dish.kind === 'burger' ? <><img className="burger-image burger-exploded" src={dish.asset} alt="" width="1024" height="1024" loading="lazy" decoding="async" /><img className="burger-image burger-assembled" src={assembledBurgerAsset} alt="" width="1024" height="1024" loading="lazy" decoding="async" /></> : <img src={dish.asset} alt="" width="1024" height="1024" loading="lazy" decoding="async" />}</div>
-                {dish.kind === 'burger' && <div className="burger-interaction"><button type="button" className="micro-toggle" onClick={() => setBurgerOpen((value) => !value)}>{burgerOpen ? 'Close the stack' : 'Open the stack'}</button><div className="burger-inside"><span>Charcoal beef</span><span>Aged cheddar</span><span>Charred onion</span><span>House sauce</span></div></div>}
-                {(dish.kind === 'seafood' || dish.kind === 'burger') && <div className="pointer-orb" aria-hidden="true" />}
-                {dish.kind === 'pizza' && <div className="pizza-controls"><div className="pizza-controls-heading"><span className="pizza-controls-label">Build your pizza</span><span className="pizza-extra-total">+{Array.from(new Set(pizzaToppings.map((item) => item.topping))).reduce((sum, topping) => sum + toppingPrices[topping], 0)} KSh</span></div><div className="topping-tray">{availableToppings.map((topping) => { const selected = pizzaToppings.some(({ topping: current }) => current === topping); return <button className={`topping-button ${selected ? 'is-selected' : ''}`} type="button" key={topping} aria-pressed={selected} onClick={(event) => toggleTopping(topping, event.currentTarget)}><ToppingVisual topping={topping} /><span className="topping-name">{topping}</span><span className="topping-price">+{toppingPrices[topping]} KSh</span></button> })}</div><textarea className="pizza-instructions" rows={2} value={pizzaInstructions} onChange={(event) => setPizzaInstructions(event.target.value)} placeholder="Special instructions (optional)" aria-label="Special instructions for your pizza" /><span className="pizza-count" aria-live="polite">{lastAddedTopping ? `${lastAddedTopping} added` : pizzaToppings.length ? 'Tap a selected topping to remove it' : 'Choose your toppings'}</span></div>}
-                <div className="slide-footer"><div className="dish-nameplate"><span>{dish.kicker}</span><strong>{dish.title}</strong></div><div className="slide-menu-list">{dish.menu.map((item) => <div className="menu-line" key={item.name}><span>{item.name}</span><span>{item.price}</span></div>)}</div><button className="whatsapp-button" type="button" onClick={() => openWhatsApp(dish.kind === 'pizza' ? orderText : `Hello Lo Sfizio, I would like to order ${dish.title}. ${dish.menu.map((item) => `${item.name} (${item.price})`).join('; ')} Please confirm availability.`)}><MessageCircle size={17} strokeWidth={1.8} /> Order now · {dish.price}</button></div>
-              </article>
-            ))}
+      <section className={`menu-stage sf-menu-stage ${showFullMenu ? 'sf-full-menu-open' : ''}`} id="menu" aria-labelledby="menu-title">
+        {!showFullMenu ? <>
+          <div className="menu-header sf-menu-heading">
+            <div><p className="eyebrow">A taste of Lo Sfizio</p><h2 id="menu-title">Made to be <em>savoured.</em></h2><p className="sf-menu-intro">A little something for every appetite. Explore our favourites, one delicious chapter at a time.</p></div>
+            <button className="sf-all-menu-button" type="button" onClick={() => setShowFullMenu(true)}>Explore all menu <ArrowRight size={17} /></button>
           </div>
-          <div className="edge-fade edge-fade-left" aria-hidden="true" /><div className="edge-fade edge-fade-right" aria-hidden="true" />
-          <div className="carousel-arrows" aria-label="Browse menu dishes"><button className="dish-arrow dish-arrow-prev" type="button" aria-label="Previous dish" disabled={activeIndex === 0} onClick={() => scrollToDish(Math.max(0, activeIndex - 1))}><span aria-hidden="true">‹</span></button><span className="carousel-hint">Explore the menu</span><button className="dish-arrow dish-arrow-next" type="button" aria-label="Next dish" disabled={activeIndex === dishes.length - 1} onClick={() => scrollToDish(Math.min(dishes.length - 1, activeIndex + 1))}><span aria-hidden="true">›</span></button></div>
-        </div>
+          <div className="sf-glass-carousel-shell" onMouseEnter={(event) => event.currentTarget.classList.add('is-paused')} onMouseLeave={(event) => event.currentTarget.classList.remove('is-paused')}>
+            <div className="sf-glass-carousel" ref={carouselRef} onScroll={handleCarouselScroll} aria-label="Lo Sfizio menu categories">
+              {dishes.map((dish, index) => <article className={`sf-menu-glass-card ${activeIndex===index?'is-active':''}`} key={dish.number} onClick={() => setActiveIndex(index)}>
+                <div className="sf-card-topline"><span>CHAPTER {dish.number}</span><span className="sf-card-spark">✳</span></div>
+                <div className="sf-card-image"><img src={dish.asset} alt={dish.title} loading="lazy" decoding="async" /></div>
+                <div className="sf-card-content"><p className="sf-card-kicker">{dish.kicker}</p><h3>{dish.title}</h3><p className="sf-card-description">{dish.description}</p>
+                  <ul>{dish.menu.map((item) => <li key={item.name}><span>{item.name}</span><span>{item.price}</span></li>)}</ul>
+                  <button className="sf-card-order" type="button" onClick={(event) => { event.stopPropagation(); openWhatsApp(`Hello Lo Sfizio, I would like to enquire about ${dish.title}: ${dish.menu.map((item) => item.name).join(', ')}. Please confirm availability.`) }}>Ask about this menu <ArrowRight size={15} /></button>
+                </div>
+              </article>)}
+            </div>
+            <div className="sf-carousel-controls"><button type="button" aria-label="Previous menu category" disabled={activeIndex===0} onClick={() => scrollToDish(Math.max(0,activeIndex-1))}><ArrowLeft size={17}/></button><div className="sf-carousel-progress"><span style={{width:`${((activeIndex+1)/dishes.length)*100}%`}} /></div><span className="sf-carousel-count">0{activeIndex+1} / 0{dishes.length}</span><button type="button" aria-label="Next menu category" disabled={activeIndex===dishes.length-1} onClick={() => scrollToDish(Math.min(dishes.length-1,activeIndex+1))}><ArrowRight size={17}/></button></div>
+            <p className="sf-swipe-hint">Swipe or use the arrows to discover more <span>↔</span></p>
+          </div>
+          <div className="sf-menu-bottom-cta"><span>Looking for something specific?</span><button type="button" onClick={() => setShowFullMenu(true)}>See the complete menu <ArrowRight size={16}/></button></div>
+        </> : <>
+          <div className="sf-full-menu-heading"><button className="sf-back-menu" type="button" onClick={() => setShowFullMenu(false)}><ArrowLeft size={16}/> Back to the experience</button><p className="eyebrow">Benvenuti · Lo Sfizio, Malindi</p><h2 id="menu-title">The full <em>menu.</em></h2><p>Take your time. Find your favourite.</p></div>
+          <div className="sf-full-menu-grid">{dishes.map((dish) => <article className="sf-full-menu-card" key={dish.number}><div className="sf-full-menu-photo"><img src={dish.asset} alt={dish.title} loading="lazy" /></div><div className="sf-full-menu-copy"><p className="sf-card-kicker">{dish.kicker}</p><h3>{dish.title}</h3><p>{dish.description}</p><ul>{dish.menu.map((item) => <li key={item.name}><span>{item.name}</span><span>{item.price}</span></li>)}</ul><button className="sf-card-order" type="button" onClick={() => openWhatsApp(`Hello Lo Sfizio, I would like to enquire about ${dish.title}: ${dish.menu.map((item) => item.name).join(', ')}. Please confirm availability.`)}>Ask about this menu <ArrowRight size={15}/></button></div></article>)}</div>
+          <p className="sf-menu-note">Menu items and availability may change. Please contact us for today's selection and prices.</p>
+        </>}
       </section>
 
       <section className="reservation" id="reserve" aria-labelledby="reserve-title"><div className="reservation-intro"><p className="eyebrow">A seat by the garden</p><h2 id="reserve-title">Reserve<br /><em>your table.</em></h2><p>Tell us when you are coming. We will confirm the best table for your evening on WhatsApp.</p></div><form className="reservation-form" onSubmit={submitReservation}><label>Name<input required value={reservation.name} onChange={(event) => updateReservation('name', event.target.value)} placeholder="Your name" /></label><div className="form-row"><label>Date<input required type="date" value={reservation.date} onChange={(event) => updateReservation('date', event.target.value)} /></label><label>Time<input required type="time" value={reservation.time} onChange={(event) => updateReservation('time', event.target.value)} /></label></div><label>Guests<select value={reservation.guests} onChange={(event) => updateReservation('guests', event.target.value)}>{['1', '2', '3', '4', '5', '6+'].map((count) => <option key={count} value={count}>{count} guest{count === '1' ? '' : 's'}</option>)}</select></label><label>Notes <span>(optional)</span><textarea rows={3} value={reservation.notes} onChange={(event) => updateReservation('notes', event.target.value)} placeholder="A birthday, a favourite table, anything we should know" /></label><button className="whatsapp-button reservation-submit" type="submit"><MessageCircle size={17} strokeWidth={1.8} /> Continue to WhatsApp</button></form></section>
