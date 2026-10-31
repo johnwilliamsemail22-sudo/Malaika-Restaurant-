@@ -36,11 +36,11 @@ const availableToppings = Object.keys(toppingPrices) as Topping[];
 const assembledBurgerAsset = '/images/dishes/burger-assembled.webp'
 
 const dishes: Dish[] = [
-  { number: '01', kind: 'pizza', kicker: 'Malaika wood-fired', title: 'Margherita Malaika', description: 'Well-rested dough, rich tomato, and a hot open flame doing what it does best.', price: '1,400 KSh', asset: '/images/dishes/pizza-base.webp', theme: { bg: '#F9F8F6', ink: '#3E2723', muted: '#80746F', accent: '#D96B43' }, menu: [{ name: 'Sauce + sea salt', price: 'included' }, { name: 'Fresh basil', price: '+ 120 KSh' }, { name: 'Fior di Latte', price: '+ 250 KSh' }] },
-  { number: '02', kind: 'burger', kicker: 'Charcoal & brioche', title: 'The Malaika Burger', description: 'Grilled beef, bright char, and the kind of brioche that makes you slow down for another bite.', price: '1,650 KSh', asset: '/images/dishes/burger-exploded.webp', theme: { bg: '#0E4C5E', ink: '#F6F0E5', muted: '#A7C0BE', accent: '#D8A46A' }, menu: [{ name: 'Grilled beef + brioche', price: '1,650 KSh' }, { name: 'Charred onion', price: 'included' }, { name: 'Malaika fries', price: '+ 300 KSh' }] },
-  { number: '03', kind: 'seafood', kicker: 'Indian Ocean catch', title: 'Seafood Salad', description: 'Citrus, herbs, and the bright edge of the sea, made for long afternoons by the coast.', price: '1,200 KSh', asset: '/images/dishes/seafood-salad.webp', theme: { bg: '#D96B43', ink: '#FFF6EA', muted: '#F2C3A7', accent: '#0E4C5E' }, menu: [{ name: 'Seafood Salad', price: '1,200 KSh' }, { name: 'Grilled Octopus', price: '2,400 KSh' }, { name: 'Citrus catch of the day', price: 'market' }] },
-  { number: '04', kind: 'pasta', kicker: 'Handmade pasta', title: 'Lobster Ravioli', description: 'Silk-soft pasta, lobster, and cashew: generous, coastal, and quietly indulgent.', price: '2,600 KSh', asset: '/images/dishes/lobster-ravioli.webp', theme: { bg: '#FCF3CF', ink: '#3E2723', muted: '#8E8171', accent: '#D96B43' }, menu: [{ name: 'Lobster Ravioli', price: '2,600 KSh' }, { name: 'Prawn Pasta with Cashewnut', price: '2,200 KSh' }, { name: 'Brown butter + lime', price: 'included' }] },
-  { number: '05', kind: 'dessert', kicker: 'Last light', title: 'Artisanal Gelato', description: 'A chilled scoop, a soft coffee finish, and the table not quite ready to leave.', price: '600 KSh', asset: '/images/dishes/artisanal-gelato.webp', theme: { bg: '#2C3E50', ink: '#F7F1E7', muted: '#B7C0C5', accent: '#FCF3CF' }, menu: [{ name: 'Artisanal Gelato', price: '600 KSh' }, { name: 'Classic Tiramisu', price: '900 KSh' }, { name: 'Espresso', price: '350 KSh' }] },
+  { number: '01', kind: 'pizza', kicker: 'Italian favourites', title: 'Wood-Fired Pizza', description: 'Slow-fermented dough, rich tomato, creamy mozzarella and fresh toppings, baked until beautifully golden.', price: 'Ask us', asset: '/images/dishes/pizza-base.webp', theme: { bg: '#FAF6EE', ink: '#321B14', muted: '#806E64', accent: '#9A4B32' }, menu: [{ name: 'Margherita', price: 'Ask us' }, { name: 'Spicy Salami', price: 'Ask us' }, { name: 'Coast Prawn', price: 'Ask us' }] },
+  { number: '02', kind: 'dessert', kicker: 'Coffee & pastries', title: 'Coffee & Daily Bakes', description: 'A beautifully pulled espresso, creamy cappuccino and fresh pastries for slow Malindi mornings.', price: 'Ask us', asset: '/images/dishes/artisanal-gelato.webp', theme: { bg: '#F1E7D7', ink: '#321B14', muted: '#806E64', accent: '#9A4B32' }, menu: [{ name: 'Espresso & Cappuccino', price: 'Ask us' }, { name: 'Iced Coffee', price: 'Ask us' }, { name: 'Fresh pastries', price: 'Daily' }] },
+  { number: '03', kind: 'seafood', kicker: 'A little sfizio', title: 'Mozzarella Tomato Samosas', description: 'A much-loved savoury bite with melted mozzarella and tomato — a signature worth coming back for.', price: 'Ask us', asset: '/images/dishes/seafood-salad.webp', theme: { bg: '#E9D6C1', ink: '#321B14', muted: '#806E64', accent: '#9A4B32' }, menu: [{ name: 'Mozzarella & tomato samosas', price: 'Ask us' }, { name: 'Piadina Romagnola', price: 'Ask us' }, { name: 'Fresh juices', price: 'Ask us' }] },
+  { number: '04', kind: 'pasta', kicker: 'Italian pasta', title: 'Ravioli & Tagliatelle', description: 'Comforting Italian pasta favourites, from delicate ravioli to generous plates of tagliatelle and gnocchi.', price: 'Ask us', asset: '/images/dishes/lobster-ravioli.webp', theme: { bg: '#FAF0D9', ink: '#321B14', muted: '#806E64', accent: '#9A4B32' }, menu: [{ name: 'Spinach Ravioli', price: 'Ask us' }, { name: 'Tagliatelle', price: 'Ask us' }, { name: 'Gnocchi al pomodoro', price: 'Ask us' }] },
+  { number: '05', kind: 'dessert', kicker: 'Something sweet', title: 'Italian Desserts', description: 'Finish with a little sweetness, from classic tiramisu to a chilled scoop of gelato.', price: 'Ask us', asset: '/images/dishes/artisanal-gelato.webp', theme: { bg: '#E8E4D9', ink: '#321B14', muted: '#806E64', accent: '#9A4B32' }, menu: [{ name: 'Classic Tiramisu', price: 'Ask us' }, { name: 'Artisanal Gelato', price: 'Ask us' }, { name: 'Daily sweet bakes', price: 'Daily' }] },
 ]
 
 const themes = dishes.map((dish) => dish.theme.bg)
@@ -79,7 +79,7 @@ function App() {
     const additions = pizzaToppings.length ? ` with ${Array.from(new Set(pizzaToppings.map(({ topping }) => topping))).map((topping) => `${topping} (+${toppingPrices[topping]} KSh)`).join(', ')}` : ''
     const extraTotal = Array.from(new Set(pizzaToppings.map((item) => item.topping))).reduce((sum, topping) => sum + toppingPrices[topping], 0)
     const notes = pizzaInstructions.trim() ? ` Special instructions: ${pizzaInstructions.trim()}.` : ''
-    return `Hello Malaika, I would like to order ${activeDish.title}${additions}. Extra toppings total: ${extraTotal} KSh.${notes} Please confirm availability.`
+    return `Hello Lo Sfizio, I would like to enquire about ${activeDish.title}.${notes} Please confirm availability.`
   }, [activeDish.title, pizzaToppings, pizzaInstructions])
 
   useEffect(() => {
@@ -174,13 +174,13 @@ function App() {
     setLastAddedTopping(topping)
   }
   const openWhatsApp = (message = orderText) => {
-    const currentY = window.scrollY; const url = `https://wa.me/254700000000?text=${encodeURIComponent(message)}`
+    const currentY = window.scrollY; const url = `https://wa.me/254791419131?text=${encodeURIComponent(message)}`
     window.open(url, '_blank', 'noopener,noreferrer'); window.requestAnimationFrame(() => window.scrollTo({ top: currentY, behavior: 'auto' }))
   }
   const updateReservation = (field: keyof Reservation, value: string) => setReservation((current) => ({ ...current, [field]: value }))
   const submitReservation = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    const message = `Hello Malaika, I would like to reserve a table. Name: ${reservation.name}. Date: ${reservation.date}. Time: ${reservation.time}. Guests: ${reservation.guests}.${reservation.notes ? ` Notes: ${reservation.notes}.` : ''} Please confirm availability.`
+    const message = `Hello Lo Sfizio, I would like to enquire about a table reservation. Name: ${reservation.name}. Date: ${reservation.date}. Time: ${reservation.time}. Guests: ${reservation.guests}.${reservation.notes ? ` Notes: ${reservation.notes}.` : ''} Please confirm availability.`
     openWhatsApp(message)
   }
   const handleDishPointer = (event: React.PointerEvent<HTMLElement>) => { const rect = event.currentTarget.getBoundingClientRect(); event.currentTarget.style.setProperty('--pointer-x', String((event.clientX - rect.left) / rect.width - .5)); event.currentTarget.style.setProperty('--pointer-y', String((event.clientY - rect.top) / rect.height - .5)) }
@@ -188,32 +188,32 @@ function App() {
 
   return (
     <main className="site-shell" style={{ backgroundColor: activeDish.theme.bg }}>
-      <header className="topbar">
-        <a className="wordmark" href="#top" aria-label="Malaika home"><span>M</span>ALAiKA</a>
-        <div className="topbar-right"><a className="toplink" href="#menu">The menu</a><button className="top-order liquid-glass" type="button" onClick={scrollToReservation}>Reserve a table</button></div>
-      </header>
-
-      <section className="hero" id="top" aria-labelledby="hero-title">
-        <img className="hero-image" src="/images/malaika-room.webp" alt="The leafy open-air dining room at Malaika Restaurant in Malindi" width="768" height="1364" fetchPriority="high" decoding="async" />
-        <div className="hero-scrim" />
-        <div className="hero-content">
-          <p className="eyebrow hero-eyebrow"><span className="eyebrow-line" /> Malindi, Kenya</p>
-          <h1 id="hero-title">The coast,<br /><em>at its best.</em></h1>
-          <div className="hero-bottomline"><p>Wood fire, Indian Ocean produce,<br />and long tables on Silver Sand Road.</p><div className="hero-actions"><a className="hero-cta hero-cta-light" href="#menu">See menu <ArrowDown size={15} strokeWidth={1.8} /></a><button className="hero-cta liquid-glass" type="button" onClick={scrollToReservation}>Reserve a table <ArrowDown size={15} strokeWidth={1.8} /></button></div></div>
+      <header className="topbar sf-topbar">
+        <a className="wordmark sf-wordmark" href="#top" aria-label="Lo Sfizio home">Lo Sfizio<span>·</span></a>
+        <div className="topbar-right"><a className="toplink" href="#menu">Menu</a><a className="top-order sf-order" href="#reserve">Order Now</a><button className="sf-menu-toggle" type="button"       <section className="sf-hero" id="top" aria-labelledby="hero-title">
+        <div className="sf-hero-copy">
+          <p className="sf-kicker">ITALIAN COFFEE · FOOD · GOOD COMPANY · MALINDI</p>
+          <h1 id="hero-title">Lo Sfizio</h1>
+          <p className="sf-hero-subtitle">A little taste of Italy, a warm welcome by the coast. Enjoy beautifully made coffee, Italian favourites, fresh pastries and the pleasure of taking your time.</p>
+          <div className="sf-hero-actions"><a className="sf-primary-button" href="#menu">Order Now</a><a className="sf-secondary-button" href="#menu">View Menu</a></div>
         </div>
-        <div className="hero-index" aria-hidden="true">01 <span>/</span> 05</div>
+        <div className="sf-hero-photo-card">
+          <img src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=1800&q=88" alt="Warm, welcoming café interior" width="1800" height="1200" fetchPriority="high" />
+          <div className="sf-float-card sf-float-coffee"><span>☕</span><small>MADE WITH CARE</small><strong>Italian Coffee</strong></div>
+          <div className="sf-float-card sf-float-pasta"><span>🍝</span><small>FAVOURITE FLAVOURS</small><strong>Fresh Pasta</strong></div>
+        </div>
       </section>
 
       <section className="intro" aria-labelledby="intro-title">
         <div className="intro-mark" aria-hidden="true">M</div>
-        <div className="intro-copy"><p className="eyebrow">A table near the tide</p><h2 id="intro-title">Come for the <em>light.</em><br />Stay for the fire.</h2><p className="intro-body">Malaika is an open-air restaurant shaped by Malindi's generous rhythms. Fire, tide, and good company set the pace.</p></div>
-        <div className="intro-location"><MapPin size={16} strokeWidth={1.5} /><span>Silver Sand Road<br />Malindi, Kenya</span></div>
+        <div className="intro-copy"><p className="eyebrow">A table near the tide</p><h2 id="intro-title">Come for the <em>light.</em><br />Stay for the fire.</h2><p className="intro-body">Lo Sfizio is an open-air restaurant shaped by Malindi's generous rhythms. Fire, tide, and good company set the pace.</p></div>
+        <div className="intro-location"><MapPin size={16} strokeWidth={1.5} /><span>Malindi, Kenya<br />Malindi, Kenya</span></div>
       </section>
 
       <section className="menu-stage" id="menu" aria-labelledby="menu-title">
         <div className="menu-header"><div><p className="eyebrow">The menu / 05 chapters</p><h2 id="menu-title">The <em>menu.</em></h2></div></div>
         <div className="carousel-wrap">
-          <div className="dish-carousel" ref={carouselRef} onScroll={handleCarouselScroll} tabIndex={0} onKeyDown={(event) => { if (event.key === 'ArrowRight') { event.preventDefault(); scrollToDish(Math.min(dishes.length - 1, activeIndex + 1)) }; if (event.key === 'ArrowLeft') { event.preventDefault(); scrollToDish(Math.max(0, activeIndex - 1)) } }} aria-label="Malaika menu dishes">
+          <div className="dish-carousel" ref={carouselRef} onScroll={handleCarouselScroll} tabIndex={0} onKeyDown={(event) => { if (event.key === 'ArrowRight') { event.preventDefault(); scrollToDish(Math.min(dishes.length - 1, activeIndex + 1)) }; if (event.key === 'ArrowLeft') { event.preventDefault(); scrollToDish(Math.max(0, activeIndex - 1)) } }} aria-label="Lo Sfizio menu dishes">
             {dishes.map((dish, index) => (
               <article className={`dish-slide dish-${dish.kind} ${activeIndex === index ? 'is-active' : ''} ${dish.kind === 'burger' && burgerOpen ? 'burger-open' : ''}`} key={dish.number} style={{ '--pointer-x': 0, '--pointer-y': 0 } as React.CSSProperties} onPointerMove={dish.kind === 'burger' || dish.kind === 'seafood' ? handleDishPointer : undefined} onPointerLeave={dish.kind === 'burger' || dish.kind === 'seafood' ? resetDishPointer : undefined}>
                 <div className="slide-index">{dish.number} <span>/</span> 05</div>
@@ -222,7 +222,7 @@ function App() {
                 {dish.kind === 'burger' && <div className="burger-interaction"><button type="button" className="micro-toggle" onClick={() => setBurgerOpen((value) => !value)}>{burgerOpen ? 'Close the stack' : 'Open the stack'}</button><div className="burger-inside"><span>Charcoal beef</span><span>Aged cheddar</span><span>Charred onion</span><span>House sauce</span></div></div>}
                 {(dish.kind === 'seafood' || dish.kind === 'burger') && <div className="pointer-orb" aria-hidden="true" />}
                 {dish.kind === 'pizza' && <div className="pizza-controls"><div className="pizza-controls-heading"><span className="pizza-controls-label">Build your pizza</span><span className="pizza-extra-total">+{Array.from(new Set(pizzaToppings.map((item) => item.topping))).reduce((sum, topping) => sum + toppingPrices[topping], 0)} KSh</span></div><div className="topping-tray">{availableToppings.map((topping) => { const selected = pizzaToppings.some(({ topping: current }) => current === topping); return <button className={`topping-button ${selected ? 'is-selected' : ''}`} type="button" key={topping} aria-pressed={selected} onClick={(event) => toggleTopping(topping, event.currentTarget)}><ToppingVisual topping={topping} /><span className="topping-name">{topping}</span><span className="topping-price">+{toppingPrices[topping]} KSh</span></button> })}</div><textarea className="pizza-instructions" rows={2} value={pizzaInstructions} onChange={(event) => setPizzaInstructions(event.target.value)} placeholder="Special instructions (optional)" aria-label="Special instructions for your pizza" /><span className="pizza-count" aria-live="polite">{lastAddedTopping ? `${lastAddedTopping} added` : pizzaToppings.length ? 'Tap a selected topping to remove it' : 'Choose your toppings'}</span></div>}
-                <div className="slide-footer"><div className="dish-nameplate"><span>{dish.kicker}</span><strong>{dish.title}</strong></div><div className="slide-menu-list">{dish.menu.map((item) => <div className="menu-line" key={item.name}><span>{item.name}</span><span>{item.price}</span></div>)}</div><button className="whatsapp-button" type="button" onClick={() => openWhatsApp(dish.kind === 'pizza' ? orderText : `Hello Malaika, I would like to order ${dish.title}. ${dish.menu.map((item) => `${item.name} (${item.price})`).join('; ')} Please confirm availability.`)}><MessageCircle size={17} strokeWidth={1.8} /> Order now · {dish.price}</button></div>
+                <div className="slide-footer"><div className="dish-nameplate"><span>{dish.kicker}</span><strong>{dish.title}</strong></div><div className="slide-menu-list">{dish.menu.map((item) => <div className="menu-line" key={item.name}><span>{item.name}</span><span>{item.price}</span></div>)}</div><button className="whatsapp-button" type="button" onClick={() => openWhatsApp(dish.kind === 'pizza' ? orderText : `Hello Lo Sfizio, I would like to order ${dish.title}. ${dish.menu.map((item) => `${item.name} (${item.price})`).join('; ')} Please confirm availability.`)}><MessageCircle size={17} strokeWidth={1.8} /> Order now · {dish.price}</button></div>
               </article>
             ))}
           </div>
@@ -234,7 +234,7 @@ function App() {
       <section className="reservation" id="reserve" aria-labelledby="reserve-title"><div className="reservation-intro"><p className="eyebrow">A seat by the garden</p><h2 id="reserve-title">Reserve<br /><em>your table.</em></h2><p>Tell us when you are coming. We will confirm the best table for your evening on WhatsApp.</p></div><form className="reservation-form" onSubmit={submitReservation}><label>Name<input required value={reservation.name} onChange={(event) => updateReservation('name', event.target.value)} placeholder="Your name" /></label><div className="form-row"><label>Date<input required type="date" value={reservation.date} onChange={(event) => updateReservation('date', event.target.value)} /></label><label>Time<input required type="time" value={reservation.time} onChange={(event) => updateReservation('time', event.target.value)} /></label></div><label>Guests<select value={reservation.guests} onChange={(event) => updateReservation('guests', event.target.value)}>{['1', '2', '3', '4', '5', '6+'].map((count) => <option key={count} value={count}>{count} guest{count === '1' ? '' : 's'}</option>)}</select></label><label>Notes <span>(optional)</span><textarea rows={3} value={reservation.notes} onChange={(event) => updateReservation('notes', event.target.value)} placeholder="A birthday, a favourite table, anything we should know" /></label><button className="whatsapp-button reservation-submit" type="submit"><MessageCircle size={17} strokeWidth={1.8} /> Continue to WhatsApp</button></form></section>
 
       <section className="closing" aria-labelledby="closing-title"><div className="closing-quote"><p className="eyebrow">After the last course</p><h2 id="closing-title">Leave a little<br /><em>room for wonder.</em></h2></div><div className="closing-aside"><p>Open daily from noon until the tide turns. Walk-ins are welcome; for the best table, send a note ahead.</p><button className="whatsapp-button" type="button" onClick={scrollToReservation}><MessageCircle size={17} strokeWidth={1.8} /> Reserve a table</button></div></section>
-      <footer className="footer"><a className="wordmark footer-mark" href="#top"><span>M</span>ALAiKA</a><div className="footer-meta"><span>Silver Sand Road, Malindi</span><span>12° 11′ S / 40° 07′ E</span><span>© 2026 Malaika</span></div><a className="footer-top" href="#top">Back to top <ArrowDown size={15} /></a></footer>
+      <footer className="footer"><a className="wordmark footer-mark" href="#top"><span>M</span>ALAiKA</a><div className="footer-meta"><span>Silver Sand Road, Malindi</span><span>12° 11′ S / 40° 07′ E</span><span>© 2026 Lo Sfizio</span></div><a className="footer-top" href="#top">Back to top <ArrowDown size={15} /></a></footer>
     </main>
   )
 }
