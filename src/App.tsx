@@ -93,7 +93,52 @@ function App() {
       let frame = 0
       const raf = (time: number) => { lenis.raf(time); frame = window.requestAnimationFrame(raf) }
       frame = window.requestAnimationFrame(raf)
-      return () => { media.removeEventListener('change', onChange); window.cancelAnimationFrame(frame); lenis.destroy() }
+    
+  useEffect(() => {
+    if (reducedMotion) return
+    const targets = Array.from(document.querySelectorAll<HTMLElement>('.intro, .menu-header, .dish-slide, .reservation, .closing, .footer'))
+    targets.forEach((element) => element.classList.add('motion-reveal'))
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) { entry.target.classList.add('is-revealed'); observer.unobserve(entry.target) }
+      })
+    }, { threshold: 0.12, rootMargin: '0px 0px -7% 0px' })
+    targets.forEach((element, index) => {
+      if (element.classList.contains('dish-slide')) element.style.setProperty('--reveal-delay', `${(index % 5) * 55}ms`)
+      observer.observe(element)
+    })
+    return () => observer.disconnect()
+  }, [reducedMotion])
+
+  useEffect(() => {
+    const header = document.querySelector<HTMLElement>('.sf-topbar')
+    if (!header) return
+    let frame = 0
+    const update = () => { header.classList.toggle('is-scrolled', window.scrollY > 24); frame = 0 }
+    const onScroll = () => { if (!frame) frame = window.requestAnimationFrame(update) }
+    window.addEventListener('scroll', onScroll, { passive: true }); update()
+    return () => { window.removeEventListener('scroll', onScroll); if (frame) window.cancelAnimationFrame(frame) }
+  }, [])
+
+  useEffect(() => {
+    if (reducedMotion || window.matchMedia('(pointer: coarse)').matches) return
+    const cursor = document.querySelector<HTMLElement>('.sf-cursor')
+    if (!cursor) return
+    let x = -100, y = -100, targetX = -100, targetY = -100, frame = 0
+    const move = (event: PointerEvent) => { targetX = event.clientX; targetY = event.clientY; cursor.classList.add('is-visible') }
+    const tick = () => { x += (targetX - x) * .19; y += (targetY - y) * .19; cursor.style.transform = `translate3d(${x}px,${y}px,0) translate(-50%,-50%)`; frame = window.requestAnimationFrame(tick) }
+    const over = (event: PointerEvent) => {
+      const target = event.target as HTMLElement | null
+      cursor.classList.toggle('is-hovering', !!target?.closest('a, button, .dish-art, .sf-hero-photo-card, .sf-float-card'))
+      cursor.classList.toggle('is-ordering', !!target?.closest('.sf-order, .sf-primary-button, .whatsapp-button'))
+    }
+    const leave = () => cursor.classList.remove('is-visible')
+    window.addEventListener('pointermove', move, { passive: true }); window.addEventListener('pointerover', over, { passive: true })
+    document.documentElement.addEventListener('pointerleave', leave); frame = window.requestAnimationFrame(tick)
+    return () => { window.removeEventListener('pointermove', move); window.removeEventListener('pointerover', over); document.documentElement.removeEventListener('pointerleave', leave); window.cancelAnimationFrame(frame) }
+  }, [reducedMotion])
+
+  return () => { media.removeEventListener('change', onChange); window.cancelAnimationFrame(frame); lenis.destroy() }
     }
     return () => media.removeEventListener('change', onChange)
   }, [])
@@ -187,7 +232,7 @@ function App() {
   const resetDishPointer = (event: React.PointerEvent<HTMLElement>) => { event.currentTarget.style.setProperty('--pointer-x', '0'); event.currentTarget.style.setProperty('--pointer-y', '0') }
 
   return (
-    <main className="site-shell" style={{ backgroundColor: activeDish.theme.bg }}>
+    <main className="site-shell" style={{ backgroundColor: activeDish.theme.bg }}>\n      <div className="sf-cursor" aria-hidden="true"><span>VIEW</span></div>
       <header className="topbar sf-topbar">
         <a className="wordmark sf-wordmark" href="#top" aria-label="Lo Sfizio home">Lo Sfizio<span>·</span></a>
         <div className="topbar-right">
@@ -241,7 +286,7 @@ function App() {
 
       <section className="reservation" id="reserve" aria-labelledby="reserve-title"><div className="reservation-intro"><p className="eyebrow">A seat by the garden</p><h2 id="reserve-title">Reserve<br /><em>your table.</em></h2><p>Tell us when you are coming. We will confirm the best table for your evening on WhatsApp.</p></div><form className="reservation-form" onSubmit={submitReservation}><label>Name<input required value={reservation.name} onChange={(event) => updateReservation('name', event.target.value)} placeholder="Your name" /></label><div className="form-row"><label>Date<input required type="date" value={reservation.date} onChange={(event) => updateReservation('date', event.target.value)} /></label><label>Time<input required type="time" value={reservation.time} onChange={(event) => updateReservation('time', event.target.value)} /></label></div><label>Guests<select value={reservation.guests} onChange={(event) => updateReservation('guests', event.target.value)}>{['1', '2', '3', '4', '5', '6+'].map((count) => <option key={count} value={count}>{count} guest{count === '1' ? '' : 's'}</option>)}</select></label><label>Notes <span>(optional)</span><textarea rows={3} value={reservation.notes} onChange={(event) => updateReservation('notes', event.target.value)} placeholder="A birthday, a favourite table, anything we should know" /></label><button className="whatsapp-button reservation-submit" type="submit"><MessageCircle size={17} strokeWidth={1.8} /> Continue to WhatsApp</button></form></section>
 
-      <section className="closing" aria-labelledby="closing-title"><div className="closing-quote"><p className="eyebrow">After the last course</p><h2 id="closing-title">Leave a little<br /><em>room for wonder.</em></h2></div><div className="closing-aside"><p>Open daily from noon until the tide turns. Walk-ins are welcome; for the best table, send a note ahead.</p><button className="whatsapp-button" type="button" onClick={scrollToReservation}><MessageCircle size={17} strokeWidth={1.8} /> Reserve a table</button></div></section>
+      <section className="closing" aria-labelledby="closing-title"><div className="closing-quote"><p className="eyebrow">After the last course</p><h2 id="closing-title">Leave a little<br /><em>room for wonder.</em></h2></div><div className="closing-aside"><p><span className="sf-live-dot" aria-hidden="true"></span>Open daily from noon until the tide turns. Walk-ins are welcome; for the best table, send a note ahead.</p><button className="whatsapp-button" type="button" onClick={scrollToReservation}><MessageCircle size={17} strokeWidth={1.8} /> Reserve a table</button></div></section>
       <footer className="footer"><a className="wordmark footer-mark" href="#top">Lo Sfizio<span>·</span></a><div className="footer-meta"><span>Lamu Road, Malindi</span><span>Italian coffee · Food · Good company</span><span>© 2026 Lo Sfizio</span></div><a className="footer-top" href="#top">Back to top <ArrowDown size={15} /></a></footer>
     </main>
   )
