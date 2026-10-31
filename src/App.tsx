@@ -311,7 +311,7 @@ function App() {
         </> : <>
           <div className="sf-full-menu-heading"><button className="sf-back-menu" type="button" onClick={() => setShowFullMenu(false)}><ArrowLeft size={16}/> Back to the experience</button><p className="eyebrow">Benvenuti · Lo Sfizio, Malindi</p><h2 id="menu-title">The full <em>menu.</em></h2><p>Take your time. Find your favourite.</p></div>
           <div className="sf-full-menu-grid">{dishes.map((dish) => <article className="sf-full-menu-card" key={dish.number}><div className="sf-full-menu-photo"><img src={dish.asset} alt={dish.title} loading="lazy" /></div><div className="sf-full-menu-copy"><p className="sf-card-kicker">{dish.kicker}</p><h3>{dish.title}</h3><p>{dish.description}</p><ul>{dish.menu.map((item) => <li key={item.name}><span>{item.name}</span><span>{item.price}</span></li>)}</ul><button className="sf-card-order" type="button" onClick={() => openWhatsApp(`Hello Lo Sfizio, I would like to enquire about ${dish.title}: ${dish.menu.map((item) => item.name).join(', ')}. Please confirm availability.`)}>Ask about this menu <ArrowRight size={15}/></button></div></article>)}</div>
-          <p className="sf-menu-note">Menu items and availability may change. Please contact us for today's selection and prices.</p>
+          <p className="sf-menu-note">Demo menu and illustrative prices for presentation only. Final items and prices will be confirmed by Lo Sfizio.</p>
         </>}
       </section>
 
