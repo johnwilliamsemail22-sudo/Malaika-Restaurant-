@@ -73,6 +73,8 @@ function App() {
   const [pizzaInstructions, setPizzaInstructions] = useState('')
   const [reducedMotion, setReducedMotion] = useState(false)
   const [burgerOpen, setBurgerOpen] = useState(false)
+  const [orderLocationDish, setOrderLocationDish] = useState<Dish | null>(null)
+  const [orderLocation, setOrderLocation] = useState('')
   const [reservation, setReservation] = useState<Reservation>({ name: '', date: '', time: '', guests: '2', notes: '' })
 
   const activeDish = dishes[activeIndex]
@@ -238,6 +240,13 @@ function App() {
     setPizzaToppings((current) => [...current, ...newPieces])
     setLastAddedTopping(topping)
   }
+  const openDishOrder = (dish: Dish) => { setOrderLocation(''); setOrderLocationDish(dish) }
+  const submitDishOrder = () => {
+    if (!orderLocation.trim() || !orderLocationDish) return
+    const message = `Hello Lo Sfizio! 👋\n\nI'd like to place an order.\n\nMenu: ${orderLocationDish.title}\nItems: ${orderLocationDish.menu.map((item) => item.name).join(', ')}\nPrice shown: ${orderLocationDish.price}\nLocation: ${orderLocation.trim()}\n\nPlease confirm availability and delivery details. Thank you!`
+    setOrderLocationDish(null)
+    openWhatsApp(message)
+  }
   const openWhatsApp = (message = orderText) => {
     const currentY = window.scrollY; const url = `https://wa.me/254791419131?text=${encodeURIComponent(message)}`
     window.open(url, '_blank', 'noopener,noreferrer'); window.requestAnimationFrame(() => window.scrollTo({ top: currentY, behavior: 'auto' }))
@@ -297,7 +306,7 @@ function App() {
                 <div className="sf-card-image"><img src={dish.asset} alt={dish.title} loading="lazy" decoding="async" /></div>
                 <div className="sf-card-content"><p className="sf-card-kicker">{dish.kicker}</p><h3>{dish.title}</h3><p className="sf-card-description">{dish.description}</p>
                   <ul>{dish.menu.map((item) => <li key={item.name}><span>{item.name}</span><span>{item.price}</span><button className="sf-item-order" type="button" onClick={() => openWhatsApp(`Hello Lo Sfizio! 👋\n\nI'd like to order:\n\nDish: ${item.name}\nMenu category: ${dish.title}\nPrice: ${item.price}\nQuantity: 1\n\nPlease confirm availability and let me know the next steps. Thank you!`)}>Order <ArrowRight size={13}/></button></li>)}</ul>
-                  <button className="sf-card-order sf-primary-button" type="button" onClick={(event) => { event.stopPropagation(); openWhatsApp(`Hello Lo Sfizio, I would like to enquire about ${dish.title}: ${dish.menu.map((item) => item.name).join(', ')}. Please confirm availability.`) }}><span>Order Now</span><span className="sf-card-order-price">{dish.price}</span></button>
+                  <button className="sf-card-order sf-primary-button" type="button" onClick={(event) => { event.stopPropagation(); openDishOrder(dish) }}><span>Order Now</span><span className="sf-card-order-price">{dish.price}</span></button>
                 </div>
               </article>)}
             </div>
@@ -307,7 +316,7 @@ function App() {
           <div className="sf-menu-bottom-cta"><span>Looking for something specific?</span><button type="button" onClick={() => setShowFullMenu(true)}>See the complete menu <ArrowRight size={16}/></button></div>
         </> : <>
           <div className="sf-full-menu-heading"><button className="sf-back-menu" type="button" onClick={() => setShowFullMenu(false)}><ArrowLeft size={16}/> Back to the experience</button><p className="eyebrow">Benvenuti · Lo Sfizio, Malindi</p><h2 id="menu-title">The full <em>menu.</em></h2><p>Take your time. Find your favourite.</p></div>
-          <div className="sf-full-menu-grid">{dishes.map((dish) => <article className="sf-full-menu-card" key={dish.number}><div className="sf-full-menu-photo"><img src={dish.asset} alt={dish.title} loading="lazy" /></div><div className="sf-full-menu-copy"><p className="sf-card-kicker">{dish.kicker}</p><h3>{dish.title}</h3><p>{dish.description}</p><ul>{dish.menu.map((item) => <li key={item.name}><span>{item.name}</span><span>{item.price}</span><button className="sf-item-order" type="button" onClick={() => openWhatsApp(`Hello Lo Sfizio! 👋\n\nI'd like to order:\n\nDish: ${item.name}\nMenu category: ${dish.title}\nPrice: ${item.price}\nQuantity: 1\n\nPlease confirm availability and let me know the next steps. Thank you!`)}>Order <ArrowRight size={13}/></button></li>)}</ul><button className="sf-card-order sf-primary-button" type="button" onClick={() => openWhatsApp(`Hello Lo Sfizio, I would like to enquire about ${dish.title}: ${dish.menu.map((item) => item.name).join(', ')}. Please confirm availability.`)}><span>Order Now</span><span className="sf-card-order-price">{dish.price}</span></button></div></article>)}</div>
+          <div className="sf-full-menu-grid">{dishes.map((dish) => <article className="sf-full-menu-card" key={dish.number}><div className="sf-full-menu-photo"><img src={dish.asset} alt={dish.title} loading="lazy" /></div><div className="sf-full-menu-copy"><p className="sf-card-kicker">{dish.kicker}</p><h3>{dish.title}</h3><p>{dish.description}</p><ul>{dish.menu.map((item) => <li key={item.name}><span>{item.name}</span><span>{item.price}</span><button className="sf-item-order" type="button" onClick={() => openWhatsApp(`Hello Lo Sfizio! 👋\n\nI'd like to order:\n\nDish: ${item.name}\nMenu category: ${dish.title}\nPrice: ${item.price}\nQuantity: 1\n\nPlease confirm availability and let me know the next steps. Thank you!`)}>Order <ArrowRight size={13}/></button></li>)}</ul><button className="sf-card-order sf-primary-button" type="button" onClick={() => openDishOrder(dish)}><span>Order Now</span><span className="sf-card-order-price">{dish.price}</span></button></div></article>)}</div>
           <p className="sf-menu-note">Demo menu and illustrative prices for presentation only. Final items and prices will be confirmed by Lo Sfizio.</p>
         </>}
       </section>
@@ -315,6 +324,7 @@ function App() {
       <section className="reservation" id="reserve" aria-labelledby="reserve-title"><div className="reservation-intro"><p className="eyebrow">A seat by the garden</p><h2 id="reserve-title">Reserve<br /><em>your table.</em></h2><p>Tell us when you are coming. We will confirm the best table for your evening on WhatsApp.</p></div><form className="reservation-form" onSubmit={submitReservation}><label>Name<input required value={reservation.name} onChange={(event) => updateReservation('name', event.target.value)} placeholder="Your name" /></label><div className="form-row"><label>Date<input required type="date" value={reservation.date} onChange={(event) => updateReservation('date', event.target.value)} /></label><label>Time<input required type="time" value={reservation.time} onChange={(event) => updateReservation('time', event.target.value)} /></label></div><label>Guests<select value={reservation.guests} onChange={(event) => updateReservation('guests', event.target.value)}>{['1', '2', '3', '4', '5', '6+'].map((count) => <option key={count} value={count}>{count} guest{count === '1' ? '' : 's'}</option>)}</select></label><label>Notes <span>(optional)</span><textarea rows={3} value={reservation.notes} onChange={(event) => updateReservation('notes', event.target.value)} placeholder="A birthday, a favourite table, anything we should know" /></label><button className="whatsapp-button reservation-submit" type="submit"><MessageCircle size={17} strokeWidth={1.8} /> Reserve a Table</button></form></section>
 
       <section className="closing" aria-labelledby="closing-title"><div className="closing-quote"><p className="eyebrow">After the last course</p><h2 id="closing-title">Leave a little<br /><em>room for wonder.</em></h2></div><div className="closing-aside"><p><span className="sf-live-dot" aria-hidden="true"></span>Open daily from noon until the tide turns. Walk-ins are welcome; for the best table, send a note ahead.</p><button className="whatsapp-button" type="button" onClick={scrollToReservation}><MessageCircle size={17} strokeWidth={1.8} /> Reserve a table</button></div></section>
+      {orderLocationDish && <div className="sf-order-modal-backdrop" role="presentation" onClick={() => setOrderLocationDish(null)}><section className="sf-order-modal" role="dialog" aria-modal="true" aria-labelledby="sf-order-modal-title" onClick={(event) => event.stopPropagation()}><button className="sf-order-modal-close" type="button" aria-label="Close" onClick={() => setOrderLocationDish(null)}>×</button><p className="eyebrow">Almost there</p><h2 id="sf-order-modal-title">Where should we <em>bring it?</em></h2><p>Enter your delivery location and we’ll include it in your WhatsApp order.</p><label htmlFor="sf-order-location">Your location</label><input id="sf-order-location" value={orderLocation} onChange={(event) => setOrderLocation(event.target.value)} placeholder="Area, street, building or landmark" autoFocus /><button className="whatsapp-button" type="button" disabled={!orderLocation.trim()} onClick={submitDishOrder}><MessageCircle size={17}/> Order Now</button></section></div>}
       <footer className="footer"><a className="wordmark footer-mark" href="#top">Lo Sfizio<span>·</span></a><div className="footer-meta"><span>Lamu Road, Malindi</span><span>Italian coffee · Food · Good company</span><span>© 2026 Lo Sfizio</span></div><a className="footer-top" href="#top">Back to top <ArrowDown size={15} /></a></footer>
     </main>
   )
