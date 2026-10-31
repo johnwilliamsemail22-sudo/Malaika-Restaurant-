@@ -176,7 +176,7 @@ function App() {
       if (document.hidden || carousel.matches(':hover') || carousel.matches(':focus-within')) return
       const next = (activeIndex + 1) % dishes.length
       scrollToDish(next)
-    }, 4600)
+    }, 2500)
     return () => window.clearInterval(timer)
   }, [activeIndex, showFullMenu, reducedMotion])
 
