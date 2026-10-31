@@ -589,3 +589,56 @@ html { scroll-behavior: smooth; }
 @media (max-width:699px) {
  .pizza-stage .dropped-topping { width:clamp(42px,10vw,58px); height:clamp(42px,10vw,58px); }
 }
+
+
+/* Lo Sfizio rebrand — warm Italian coffee-shop hero */
+:root { --page-bg:#FAF6EE; --page-ink:#321B14; --page-muted:#806E64; --page-accent:#9A4B32; }
+html, body { background:#FAF6EE; color:#321B14; }
+.site-shell { background:#FAF6EE!important; color:#321B14; }
+.sf-topbar { position:absolute; top:0; left:0; right:0; z-index:30; display:flex; align-items:center; justify-content:space-between; padding:26px clamp(22px,7vw,104px); color:#321B14; }
+.sf-wordmark { color:#321B14!important; font-family:var(--sans); font-size:clamp(22px,2vw,30px); font-weight:600; letter-spacing:-.06em; text-decoration:none; }
+.sf-wordmark span { color:#9A4B32; }
+.sf-topbar .topbar-right { display:flex; align-items:center; gap:14px; }
+.sf-topbar .toplink { color:#321B14; }
+.sf-order { display:inline-flex; align-items:center; justify-content:center; padding:14px 27px; border-radius:999px; background:#321B14; color:#fffaf3!important; text-decoration:none; box-shadow:0 12px 24px rgba(50,27,20,.18); }
+.sf-menu-toggle { display:grid; width:48px; height:48px; place-items:center; border:0; border-radius:50%; background:#321B14; color:#fffaf3; font-size:20px; cursor:pointer; box-shadow:0 12px 24px rgba(50,27,20,.16); }
+.sf-hero { min-height:100svh; padding:130px clamp(22px,8vw,120px) 64px; display:flex; flex-direction:column; align-items:center; justify-content:flex-start; gap:48px; background:#FAF6EE; color:#321B14; text-align:center; }
+.sf-hero-copy { width:min(850px,100%); display:flex; flex-direction:column; align-items:center; }
+.sf-kicker { margin:10px 0 18px; color:#8D7568; font:600 10px/1.4 var(--mono); letter-spacing:.19em; }
+.sf-hero h1 { margin:0; color:#321B14; font-family:Georgia,'Times New Roman',serif; font-size:clamp(76px,13vw,164px); font-weight:400; line-height:.98; letter-spacing:-.075em; }
+.sf-hero-subtitle { width:min(690px,92%); margin:26px auto 0; color:#49352C; font-size:clamp(17px,2.1vw,27px); line-height:1.5; font-weight:400; }
+.sf-hero-actions { display:flex; align-items:center; justify-content:center; gap:14px; margin-top:30px; }
+.sf-primary-button,.sf-secondary-button { min-height:58px; display:inline-flex; align-items:center; justify-content:center; padding:0 30px; border-radius:999px; text-decoration:none; font-size:16px; transition:transform .22s ease,box-shadow .22s ease; }
+.sf-primary-button { color:#fffaf3; background:#321B14; box-shadow:0 12px 22px rgba(50,27,20,.2); }
+.sf-secondary-button { color:#321B14; background:#fff; border:1px solid rgba(50,27,20,.12); }
+.sf-primary-button:hover,.sf-secondary-button:hover { transform:translateY(-3px); box-shadow:0 15px 26px rgba(50,27,20,.16); }
+.sf-hero-photo-card { position:relative; width:min(900px,100%); height:clamp(380px,57vw,690px); overflow:hidden; border:12px solid rgba(255,255,255,.44); border-radius:36px; box-shadow:0 20px 55px rgba(50,27,20,.1); isolation:isolate; }
+.sf-hero-photo-card > img { width:100%; height:100%; display:block; object-fit:cover; object-position:center 55%; }
+.sf-float-card { position:absolute; z-index:2; display:flex; flex-direction:column; align-items:flex-start; gap:3px; min-width:170px; padding:13px 17px; border:1px solid rgba(255,255,255,.7); border-radius:20px; background:rgba(255,250,243,.72); color:#321B14; text-align:left; backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px); box-shadow:0 12px 30px rgba(30,20,14,.15); }
+.sf-float-card span { font-size:22px; }
+.sf-float-card small { color:#8D7568; font:600 8px/1.4 var(--mono); letter-spacing:.12em; }
+.sf-float-card strong { font-family:Georgia,serif; font-size:19px; font-weight:500; }
+.sf-float-coffee { top:13%; left:5%; }
+.sf-float-pasta { right:5%; bottom:12%; }
+.intro { background:#FAF6EE!important; color:#321B14!important; }
+.intro-mark { color:#9A4B32!important; }
+.intro-copy .eyebrow,.intro-location { color:#806E64!important; }
+.menu-stage { color:#321B14; }
+@media(max-width:699px) {
+ .sf-topbar { padding:18px 20px; }
+ .sf-topbar .toplink { display:none; }
+ .sf-order { padding:12px 17px; font-size:13px; }
+ .sf-menu-toggle { width:43px; height:43px; }
+ .sf-hero { min-height:auto; padding:112px 18px 44px; gap:32px; }
+ .sf-kicker { font-size:8px; letter-spacing:.13em; }
+ .sf-hero h1 { font-size:clamp(66px,17vw,112px); }
+ .sf-hero-subtitle { width:100%; margin-top:19px; font-size:17px; line-height:1.48; }
+ .sf-hero-actions { width:100%; gap:9px; margin-top:23px; }
+ .sf-primary-button,.sf-secondary-button { min-height:51px; padding:0 22px; font-size:14px; }
+ .sf-hero-photo-card { height:clamp(340px,108vw,510px); border-width:7px; border-radius:27px; }
+ .sf-float-card { min-width:135px; padding:10px 12px; border-radius:15px; }
+ .sf-float-card strong { font-size:16px; }
+ .sf-float-card small { font-size:7px; }
+ .sf-float-coffee { top:8%; left:4%; }
+ .sf-float-pasta { right:4%; bottom:8%; }
+}
