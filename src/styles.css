@@ -799,3 +799,18 @@ html, body { background:#FAF6EE; color:#321B14; }
 @media(prefers-reduced-motion:reduce) {
   .sf-hero h1 { animation: none; clip-path: none; opacity: 1; transform: none; }
 }
+
+
+/* Subtle ranking line beneath the handwritten hero wordmark */
+.sf-hero-ranking {
+  margin: 7px 0 0;
+  color: #9a4b32;
+  font: 600 10px/1.4 var(--mono);
+  letter-spacing: .19em;
+  text-align: center;
+  text-transform: uppercase;
+  opacity: .82;
+}
+@media(max-width:699px) {
+  .sf-hero-ranking { margin-top: 5px; font-size: 9px; letter-spacing: .16em; }
+}
