@@ -750,3 +750,8 @@ html, body { background:#FAF6EE; color:#321B14; }
  .sf-back-menu{margin-bottom:34px}
 }
 @media(prefers-reduced-motion:reduce){.sf-glass-carousel{scroll-behavior:auto}.sf-menu-glass-card,.sf-full-menu-card,.sf-card-image img{transition:none}}
+
+
+.sf-card-content li,.sf-full-menu-copy li { align-items:center; flex-wrap:wrap; }
+.sf-item-order { display:inline-flex; align-items:center; gap:5px; margin-left:auto; padding:6px 10px; border:1px solid rgba(125,63,44,.28); border-radius:999px; background:rgba(255,255,255,.55); color:#7d3f2c; font:600 10px var(--sans); cursor:pointer; transition:background .2s ease,color .2s ease,transform .2s ease; }
+.sf-item-order:hover { background:#321b14; color:#fff8ef; transform:translateY(-1px); }
