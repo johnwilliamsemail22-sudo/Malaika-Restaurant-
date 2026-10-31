@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,700;1,700&family=DM+Mono:wght@500&family=Manrope:wght@600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,700;1,700&family=DM+Mono:wght@500&family=Kalam:wght@400;700&family=Manrope:wght@600&display=swap');
 
 :root {
   --page-bg: #f9f8f6;
@@ -605,7 +605,7 @@ html, body { background:#FAF6EE; color:#321B14; }
 .sf-hero { min-height:100svh; padding:130px clamp(22px,8vw,120px) 64px; display:flex; flex-direction:column; align-items:center; justify-content:flex-start; gap:48px; background:#FAF6EE; color:#321B14; text-align:center; }
 .sf-hero-copy { width:min(850px,100%); display:flex; flex-direction:column; align-items:center; }
 .sf-kicker { margin:10px 0 18px; color:#8D7568; font:600 10px/1.4 var(--mono); letter-spacing:.19em; }
-.sf-hero h1 { margin:0; color:#321B14; font-family:Georgia,'Times New Roman',serif; font-size:clamp(76px,13vw,164px); font-weight:400; line-height:.98; letter-spacing:-.075em; }
+.sf-hero h1 { margin:0; color:#321B14; font-family:'Kalam',cursive; font-size:clamp(82px,13.5vw,174px); font-weight:700; line-height:1.08; letter-spacing:0; }
 .sf-hero-subtitle { width:min(690px,92%); margin:26px auto 0; color:#49352C; font-size:clamp(17px,2.1vw,27px); line-height:1.5; font-weight:400; }
 .sf-hero-actions { display:flex; align-items:center; justify-content:center; gap:14px; margin-top:30px; }
 .sf-primary-button,.sf-secondary-button { min-height:58px; display:inline-flex; align-items:center; justify-content:center; padding:0 30px; border-radius:999px; text-decoration:none; font-size:16px; transition:transform .22s ease,box-shadow .22s ease; }
@@ -631,7 +631,7 @@ html, body { background:#FAF6EE; color:#321B14; }
  .sf-menu-toggle { width:43px; height:43px; }
  .sf-hero { min-height:auto; padding:112px 18px 44px; gap:32px; }
  .sf-kicker { font-size:8px; letter-spacing:.13em; }
- .sf-hero h1 { font-size:clamp(66px,17vw,112px); }
+ .sf-hero h1 { font-size:clamp(68px,18vw,118px); line-height:1.08; }
  .sf-hero-subtitle { width:100%; margin-top:19px; font-size:17px; line-height:1.48; }
  .sf-hero-actions { width:100%; gap:9px; margin-top:23px; }
  .sf-primary-button,.sf-secondary-button { min-height:51px; padding:0 22px; font-size:14px; }
