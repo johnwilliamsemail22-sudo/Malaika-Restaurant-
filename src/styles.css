@@ -841,13 +841,4 @@ html, body { background:#FAF6EE; color:#321B14; }
  .sf-ink-stream,.sf-ink-splash { stroke-dashoffset:0; }
  .sf-ink-doodle { opacity:1; transform:none; }
 }
-\n
-/* Scroll-linked SAPORI ink transformation: the word itself travels and liquefies. */
-.sf-ink-morph{position:fixed;inset:0;width:100vw;height:100vh;z-index:45;pointer-events:none;overflow:visible;opacity:0}
-.sf-ink-morph-word{paint-order:stroke fill;stroke:#321B14;stroke-width:1.2px;transform-origin:center;filter:url(#sapori-liquid)}
-.sf-ink-morph-badge{font-size:clamp(17px,2.2vw,29px);letter-spacing:.01em;paint-order:stroke fill;stroke:#321B14;stroke-width:.35px}
-.sf-ink-destination{position:absolute;right:7%;top:50%;width:min(30%,340px);height:110px;transform:translateY(-50%);pointer-events:none;opacity:0}
-.sf-ink-destination:after{content:"";display:block;width:100%;height:100%}
-.sf-hero #hero-title{transition:opacity .08s linear}
-.intro .intro-copy{position:relative;z-index:1}
-@media(max-width:700px){.sf-ink-destination{right:5%;top:auto;bottom:8%;width:42%;height:70px}.sf-ink-morph-badge{font-size:19px}}
+
