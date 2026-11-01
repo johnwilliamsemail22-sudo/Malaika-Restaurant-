@@ -113,6 +113,62 @@ function App() {
   }, [reducedMotion])
 
 
+
+  useEffect(() => {
+    const heroWord = document.querySelector<HTMLElement>('#hero-title')
+    const destination = document.querySelector<HTMLElement>('.sf-ink-destination')
+    const overlay = document.querySelector<SVGSVGElement>('.sf-ink-morph')
+    const inkWord = overlay?.querySelector<SVGTextElement>('.sf-ink-morph-word')
+    const inkBadge = overlay?.querySelector<SVGTextElement>('.sf-ink-morph-badge')
+    const filter = overlay?.querySelector<SVGFEGaussianBlurElement>('#sapori-blur')
+    const displacement = overlay?.querySelector<SVGElement>('#sapori-displacement')
+    if (!heroWord || !destination || !overlay || !inkWord || !inkBadge) return
+    let frame = 0
+    const clamp = (value: number) => Math.max(0, Math.min(1, value))
+    const smooth = (value: number) => { const t = clamp(value); return t * t * (3 - 2 * t) }
+    const update = () => {
+      const hero = heroWord.getBoundingClientRect()
+      const target = destination.getBoundingClientRect()
+      const heroX = hero.left + hero.width / 2
+      const heroY = hero.top + window.scrollY + hero.height * .72
+      const targetX = target.left + target.width / 2
+      const targetY = target.top + window.scrollY + target.height / 0.0 + target.height * .5
+      const start = Math.max(0, heroY - window.innerHeight * .32)
+      const finish = Math.max(start + 1, targetY - window.innerHeight * .52)
+      const progress = smooth((window.scrollY - start) / (finish - start))
+      const travelling = Math.sin(progress * Math.PI)
+      const x = heroX + (targetX - heroX) * progress
+      const y = heroY + (targetY - heroY) * progress - window.scrollY
+      const size = hero.height * .76 * (1 - progress) + Math.min(42, window.innerWidth * .055) * progress
+      overlay.setAttribute('viewBox', `0 0 ${window.innerWidth} ${window.innerHeight}`)
+      inkWord.setAttribute('x', String(x))
+      inkWord.setAttribute('y', String(y))
+      inkWord.setAttribute('font-size', String(size))
+      inkWord.setAttribute('transform', `translate(0 ${-travelling * 18}) scale(1 ${1 + travelling * 2.25})`)
+      inkWord.style.opacity = String((1 - smooth((progress - .68) / .3)) * (window.scrollY > start ? 1 : 0))
+      if (displacement) displacement.setAttribute('scale', String(travelling * 125))
+      if (filter) filter.setAttribute('stdDeviation', String(travelling * 1.8))
+      inkBadge.setAttribute('x', String(targetX))
+      inkBadge.setAttribute('y', String(target.top + target.height * .62))
+      inkBadge.style.opacity = String(smooth((progress - .72) / .26))
+      destination.style.opacity = String(smooth((progress - .76) / .2))
+      heroWord.style.opacity = String(1 - smooth(progress / .2))
+      overlay.style.opacity = String(window.scrollY > start - 2 && progress < .999 ? 1 : 0)
+      frame = 0
+    }
+    const onScroll = () => { if (!frame) frame = window.requestAnimationFrame(update) }
+    window.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener('resize', onScroll)
+    update()
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('resize', onScroll)
+      if (frame) window.cancelAnimationFrame(frame)
+      heroWord.style.opacity = ''
+      destination.style.opacity = ''
+    }
+  }, [])
+
   useEffect(() => {
     const header = document.querySelector<HTMLElement>('.sf-topbar')
     if (!header) return
@@ -274,6 +330,7 @@ function App() {
           </button>
         </div>
       </header>
+      <svg className="sf-ink-morph" aria-hidden="true"><defs><filter id="sapori-liquid" x="-50%" y="-60%" width="200%" height="240%"><feTurbulence type="fractalNoise" baseFrequency=".012 .035" numOctaves="2" seed="8" result="noise"/><feDisplacementMap id="sapori-displacement" in="SourceGraphic" in2="noise" scale="0" xChannelSelector="R" yChannelSelector="G"/><feGaussianBlur id="sapori-blur" stdDeviation="0"/></filter></defs><text className="sf-ink-morph-word" textAnchor="middle" fontFamily="Kalam, cursive" fontWeight="700" fill="#321B14" filter="url(#sapori-liquid)">sapori</text><text className="sf-ink-morph-badge" textAnchor="middle" fontFamily="Kalam, cursive" fontWeight="700" fill="#321B14">#1 restaurant in Malindi</text></svg>
       <section className="sf-hero" id="top" aria-labelledby="hero-title">
         <div className="sf-hero-copy">
           <p className="sf-kicker">ITALIAN CUISINE · ETHIOPIAN FLAVOURS · MALINDI</p>
@@ -289,6 +346,7 @@ function App() {
       </section>
 
       <section className="intro" aria-labelledby="intro-title">
+        <div className="sf-ink-destination" aria-hidden="true"></div>
         <div className="intro-mark" aria-hidden="true">L</div>
         <div className="intro-copy"><p className="eyebrow">Welcome to SAPORI</p><h2 id="intro-title">Italian flavour.<br /><em>Coastal soul.</em></h2><p className="intro-body">Thoughtfully prepared Italian favourites and vibrant Ethiopian flavours, served with genuine hospitality on Lamu Road in Malindi. Settle in beneath the baobab trees and enjoy good food and good company.</p></div>
         <div className="intro-location"><MapPin size={16} strokeWidth={1.5} /><span>Lamu Road, after the Casino<br />Towards Mambrui, Malindi</span></div>
