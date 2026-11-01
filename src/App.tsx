@@ -132,7 +132,7 @@ function App() {
       const heroX = hero.left + hero.width / 2
       const heroY = hero.top + window.scrollY + hero.height * .72
       const targetX = target.left + target.width / 2
-      const targetY = target.top + window.scrollY + target.height / 0.0 + target.height * .5
+      const targetY = target.top + window.scrollY + target.height * .5
       const start = Math.max(0, heroY - window.innerHeight * .32)
       const finish = Math.max(start + 1, targetY - window.innerHeight * .52)
       const progress = smooth((window.scrollY - start) / (finish - start))
