@@ -112,6 +112,24 @@ function App() {
     return () => observer.disconnect()
   }, [reducedMotion])
 
+
+  useEffect(() => {
+    const hero = document.querySelector<HTMLElement>('.sf-hero')
+    if (!hero) return
+    let frame = 0
+    const update = () => {
+      const rect = hero.getBoundingClientRect()
+      const travel = Math.max(1, hero.offsetHeight - window.innerHeight * .35)
+      const progress = Math.min(1, Math.max(0, -rect.top / travel))
+      hero.style.setProperty('--ink-scroll', String(progress))
+      frame = 0
+    }
+    const onScroll = () => { if (!frame) frame = window.requestAnimationFrame(update) }
+    window.addEventListener('scroll', onScroll, { passive: true })
+    update()
+    return () => { window.removeEventListener('scroll', onScroll); if (frame) window.cancelAnimationFrame(frame) }
+  }, [])
+
   useEffect(() => {
     const header = document.querySelector<HTMLElement>('.sf-topbar')
     if (!header) return
@@ -277,12 +295,13 @@ function App() {
         <div className="sf-hero-copy">
           <p className="sf-kicker">ITALIAN CUISINE · ETHIOPIAN FLAVOURS · MALINDI</p>
           <h1 id="hero-title">sapori</h1>
-          <p className="sf-hero-ranking">#1 restaurant in malindi</p>
           <p className="sf-hero-subtitle">Discover contemporary Italian cuisine with a distinctive Ethiopian touch, warm hospitality and relaxed open-air dining beneath Malindi’s majestic baobab trees.</p>
-          <div className="sf-hero-actions"><a className="sf-primary-button" href="#menu">Order Now</a><a className="sf-secondary-button" href="#menu">View Menu</a></div>
+          <div className="sf-hero-actions"><a className="sf-primary-button" href="#menu">Order Now</a><a className="sf-secondary-button" href="#menu">Explore Menu</a></div>
         </div>
         <div className="sf-hero-photo-card">
           <img src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=1800&q=88" alt="Warm, welcoming café interior" width="1800" height="1200" fetchPriority="high" />
+          <svg className="sf-ink-waterfall" viewBox="0 0 300 760" preserveAspectRatio="none" aria-hidden="true"><path className="sf-ink-stream sf-ink-stream-one" d="M42 0 C20 120 75 170 48 285 S65 430 42 560"/><path className="sf-ink-stream sf-ink-stream-two" d="M82 0 C110 110 55 210 88 330 S70 480 98 620"/><path className="sf-ink-stream sf-ink-stream-three" d="M125 0 C105 150 145 220 120 360 S145 520 130 700"/><path className="sf-ink-splash" d="M30 560 Q5 535 0 510 M48 560 Q80 535 95 500 M98 620 Q130 590 155 570 M130 700 Q170 665 190 640"/></svg>
+          <div className="sf-ink-doodle" aria-label="Number one restaurant in Malindi"><span>#1</span><strong>restaurant in<br/>malindi</strong><i>✳</i></div>
           <div className="sf-float-card sf-float-coffee"><span>☕</span><small>MADE WITH CARE</small><strong>Italian Coffee</strong></div>
           <div className="sf-float-card sf-float-pasta"><span>🍝</span><small>FAVOURITE FLAVOURS</small><strong>Fresh Pasta</strong></div>
         </div>
