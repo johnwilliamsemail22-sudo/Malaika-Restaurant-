@@ -136,7 +136,9 @@ function App() {
       inkWord.setAttribute('x', String(x)); inkWord.setAttribute('y', String(y))
       inkWord.setAttribute('font-size', String(size))
       inkWord.style.opacity = String(1 - smooth((progress-.72)/.25))
-      const displacement = overlay.querySelector<SVGElement>('#sapori-displacement')\n      if (displacement) displacement.setAttribute('scale', String(Math.sin(progress*Math.PI)*105))\n      inkWord.style.filter = 'url(#sapori-liquid)'
+      const displacement = overlay.querySelector<SVGElement>('#sapori-displacement')
+      if (displacement) displacement.setAttribute('scale', String(Math.sin(progress*Math.PI)*105))
+      inkWord.style.filter = 'url(#sapori-liquid)'
       inkBadge.setAttribute('x', String(to.left + to.width/2))
       inkBadge.setAttribute('y', String(to.top + to.height*.58))
       inkBadge.style.opacity = String(smooth((progress-.7)/.28))
