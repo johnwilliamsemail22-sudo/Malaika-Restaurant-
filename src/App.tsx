@@ -114,20 +114,43 @@ function App() {
 
 
   useEffect(() => {
-    const hero = document.querySelector<HTMLElement>('.sf-hero')
-    if (!hero) return
+    const heroWord = document.querySelector<HTMLElement>('#hero-title')
+    const destination = document.querySelector<HTMLElement>('.sf-ink-destination')
+    const overlay = document.querySelector<SVGSVGElement>('.sf-ink-morph')
+    const inkWord = overlay?.querySelector<SVGTextElement>('.sf-ink-morph-word')
+    const inkBadge = overlay?.querySelector<SVGTextElement>('.sf-ink-morph-badge')
+    if (!heroWord || !destination || !overlay || !inkWord || !inkBadge) return
     let frame = 0
+    const clamp = (v: number) => Math.max(0, Math.min(1, v))
+    const smooth = (v: number) => { const t = clamp(v); return t*t*(3-2*t) }
     const update = () => {
-      const rect = hero.getBoundingClientRect()
-      const travel = Math.max(1, hero.offsetHeight - window.innerHeight * .35)
-      const progress = Math.min(1, Math.max(0, -rect.top / travel))
-      hero.style.setProperty('--ink-scroll', String(progress))
+      const from = heroWord.getBoundingClientRect()
+      const to = destination.getBoundingClientRect()
+      const start = Math.max(0, window.innerHeight * .12 - from.top) / Math.max(1, from.height * .9)
+      const finish = clamp((window.innerHeight * .68 - to.top) / Math.max(1, window.innerHeight * .72))
+      const progress = smooth(Math.max(start, finish))
+      const x = from.left + from.width/2 + (to.left + to.width/2 - (from.left + from.width/2))*progress
+      const y = from.top + from.height*.72 + (to.top + to.height*.56 - (from.top + from.height*.72))*progress
+      const size = Math.max(30, from.height*.72*(1-progress) + 30*progress)
+      overlay.setAttribute('viewBox', `0 0 ${window.innerWidth} ${window.innerHeight}`)
+      inkWord.setAttribute('x', String(x)); inkWord.setAttribute('y', String(y))
+      inkWord.setAttribute('font-size', String(size))
+      inkWord.style.opacity = String(1 - smooth((progress-.72)/.25))
+      const displacement = overlay.querySelector<SVGFEPointLightElement>('#sapori-displacement')\n      if (displacement) displacement.setAttribute('scale', String(Math.sin(progress*Math.PI)*105))\n      inkWord.style.filter = 'url(#sapori-liquid)'
+      inkBadge.setAttribute('x', String(to.left + to.width/2))
+      inkBadge.setAttribute('y', String(to.top + to.height*.58))
+      inkBadge.style.opacity = String(smooth((progress-.7)/.28))
+      heroWord.style.opacity = String(1 - smooth((progress-.04)/.2))
+      destination.style.opacity = String(smooth((progress-.76)/.22))
+      overlay.style.opacity = String(progress > 0.015 && progress < .995 ? '1' : progress >= .995 ? '1' : '0')
+      overlay.style.setProperty('--liquid', String(progress))
       frame = 0
     }
     const onScroll = () => { if (!frame) frame = window.requestAnimationFrame(update) }
-    window.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener('scroll', onScroll, {passive:true})
+    window.addEventListener('resize', onScroll)
     update()
-    return () => { window.removeEventListener('scroll', onScroll); if (frame) window.cancelAnimationFrame(frame) }
+    return () => { window.removeEventListener('scroll', onScroll); window.removeEventListener('resize', onScroll); if(frame) window.cancelAnimationFrame(frame); heroWord.style.opacity=''; destination.style.opacity='' }
   }, [])
 
   useEffect(() => {
@@ -291,7 +314,7 @@ function App() {
           </button>
         </div>
       </header>
-      <section className="sf-hero" id="top" aria-labelledby="hero-title">
+      <svg className="sf-ink-morph" aria-hidden="true"><defs><filter id="sapori-liquid" x="-35%" y="-50%" width="170%" height="220%"><feTurbulence type="fractalNoise" baseFrequency=".012 .035" numOctaves="2" seed="8" result="noise"/><feDisplacementMap id="sapori-displacement" in="SourceGraphic" in2="noise" scale="0" xChannelSelector="R" yChannelSelector="G"/></filter></defs><text className="sf-ink-morph-word" textAnchor="middle" fontFamily="Kalam, cursive" fontWeight="700" fill="#321B14" filter="url(#sapori-liquid)">sapori</text><text className="sf-ink-morph-badge" textAnchor="middle" fontFamily="Kalam, cursive" fontWeight="700" fill="#321B14">#1 restaurant in Malindi</text></svg>\n      <section className="sf-hero" id="top" aria-labelledby="hero-title">
         <div className="sf-hero-copy">
           <p className="sf-kicker">ITALIAN CUISINE · ETHIOPIAN FLAVOURS · MALINDI</p>
           <h1 id="hero-title">sapori</h1>
@@ -300,14 +323,12 @@ function App() {
         </div>
         <div className="sf-hero-photo-card">
           <img src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=1800&q=88" alt="Warm, welcoming café interior" width="1800" height="1200" fetchPriority="high" />
-          <svg className="sf-ink-waterfall" viewBox="0 0 300 760" preserveAspectRatio="none" aria-hidden="true"><path className="sf-ink-stream sf-ink-stream-one" pathLength="1" d="M42 0 C20 120 75 170 48 285 S65 430 42 560"/><path className="sf-ink-stream sf-ink-stream-two" pathLength="1" d="M82 0 C110 110 55 210 88 330 S70 480 98 620"/><path className="sf-ink-stream sf-ink-stream-three" pathLength="1" d="M125 0 C105 150 145 220 120 360 S145 520 130 700"/><path className="sf-ink-splash" pathLength="1" d="M30 560 Q5 535 0 510 M48 560 Q80 535 95 500 M98 620 Q130 590 155 570 M130 700 Q170 665 190 640"/></svg>
-          <div className="sf-ink-doodle" aria-label="Number one restaurant in Malindi"><span>#1</span><strong>restaurant in<br/>malindi</strong><i>✳</i></div>
           <div className="sf-float-card sf-float-coffee"><span>☕</span><small>MADE WITH CARE</small><strong>Italian Coffee</strong></div>
           <div className="sf-float-card sf-float-pasta"><span>🍝</span><small>FAVOURITE FLAVOURS</small><strong>Fresh Pasta</strong></div>
         </div>
       </section>
 
-      <section className="intro" aria-labelledby="intro-title">
+      <section className="intro" aria-labelledby="intro-title">\n        <div className="sf-ink-destination" aria-hidden="true"></div>
         <div className="intro-mark" aria-hidden="true">L</div>
         <div className="intro-copy"><p className="eyebrow">Welcome to SAPORI</p><h2 id="intro-title">Italian flavour.<br /><em>Coastal soul.</em></h2><p className="intro-body">Thoughtfully prepared Italian favourites and vibrant Ethiopian flavours, served with genuine hospitality on Lamu Road in Malindi. Settle in beneath the baobab trees and enjoy good food and good company.</p></div>
         <div className="intro-location"><MapPin size={16} strokeWidth={1.5} /><span>Lamu Road, after the Casino<br />Towards Mambrui, Malindi</span></div>
