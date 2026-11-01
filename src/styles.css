@@ -814,3 +814,30 @@ html, body { background:#FAF6EE; color:#321B14; }
 @media(max-width:699px) {
   .sf-hero-ranking { margin-top: 5px; font-size: 9px; letter-spacing: .16em; }
 }
+
+/* Scroll-driven ink waterfall and hand-drawn SAPORI ranking */
+.sf-hero { --ink-scroll: 0; }
+.sf-hero-ranking { display:none; }
+.sf-hero-photo-card { isolation:isolate; }
+.sf-ink-waterfall { position:absolute; z-index:4; top:-8%; right:clamp(8px,5vw,68px); width:clamp(100px,17vw,230px); height:118%; overflow:visible; pointer-events:none; opacity:calc(.12 + var(--ink-scroll) * .88); transform:translateY(calc(var(--ink-scroll) * 34px)); }
+.sf-ink-stream,.sf-ink-splash { fill:none; stroke:#321B14; stroke-width:3.4; stroke-linecap:round; stroke-linejoin:round; stroke-dasharray:1; stroke-dashoffset:calc(1 - var(--ink-scroll)); vector-effect:non-scaling-stroke; }
+.sf-ink-stream-two { stroke-width:2.2; opacity:.8; }
+.sf-ink-stream-three { stroke-width:1.8; opacity:.65; }
+.sf-ink-splash { stroke-width:2.3; opacity:.9; }
+.sf-ink-doodle { position:absolute; z-index:5; right:clamp(16px,6vw,76px); bottom:clamp(24px,5vw,64px); display:flex; align-items:center; gap:10px; color:#321B14; font-family:'Kalam',cursive; text-align:left; opacity:var(--ink-scroll); transform:translate3d(calc((1 - var(--ink-scroll)) * 36px),calc((1 - var(--ink-scroll)) * -18px),0) rotate(-5deg) scale(calc(.82 + var(--ink-scroll) * .18)); transform-origin:right bottom; pointer-events:none; }
+.sf-ink-doodle span { font-size:clamp(54px,8vw,100px); font-weight:700; line-height:.8; }
+.sf-ink-doodle strong { font-size:clamp(20px,3vw,38px); font-weight:700; line-height:.82; }
+.sf-ink-doodle i { position:absolute; right:-18px; top:-22px; color:#9A4B32; font-size:25px; font-style:normal; }
+.sf-hero-actions .sf-secondary-button { font-weight:600; }
+@media(max-width:699px) {
+ .sf-ink-waterfall { right:4px; width:100px; height:112%; }
+ .sf-ink-doodle { right:15px; bottom:18px; gap:7px; }
+ .sf-ink-doodle span { font-size:52px; }
+ .sf-ink-doodle strong { font-size:19px; }
+ .sf-ink-doodle i { right:-10px; top:-16px; font-size:18px; }
+}
+@media(prefers-reduced-motion:reduce) {
+ .sf-ink-waterfall { opacity:.75; transform:none; }
+ .sf-ink-stream,.sf-ink-splash { stroke-dashoffset:0; }
+ .sf-ink-doodle { opacity:1; transform:none; }
+}
