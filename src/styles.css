@@ -778,7 +778,7 @@ html, body { background:#FAF6EE; color:#321B14; }
 /* sapori handwritten hero wordmark */
 .sf-hero h1 {
   font-family: 'Kalam', cursive;
-  font-size: clamp(112px, 19vw, 250px);
+  font-size: clamp(150px, 23vw, 320px);
   font-weight: 700;
   line-height: .98;
   letter-spacing: -.045em;
@@ -793,7 +793,7 @@ html, body { background:#FAF6EE; color:#321B14; }
 }
 .sf-wordmark { font-family: 'Kalam', cursive!important; font-size: clamp(30px, 3vw, 42px)!important; font-weight: 700!important; letter-spacing: -.055em!important; }
 @media(max-width:699px) {
-  .sf-hero h1 { font-size: clamp(92px, 23vw, 158px); line-height: 1; }
+  .sf-hero h1 { font-size: clamp(112px, 27vw, 190px); line-height: 1; }
   .sf-wordmark { font-size: 32px!important; }
 }
 @media(prefers-reduced-motion:reduce) {
