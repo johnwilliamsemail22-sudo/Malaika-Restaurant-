@@ -842,3 +842,12 @@ html, body { background:#FAF6EE; color:#321B14; }
  .sf-ink-doodle { opacity:1; transform:none; }
 }
 
+
+/* Scroll-driven SAPORI ink word transformation */
+.sf-ink-morph{position:fixed;inset:0;width:100vw;height:100vh;z-index:46;pointer-events:none;overflow:visible;opacity:0}
+.sf-ink-morph-word{paint-order:stroke fill;stroke:#321B14;stroke-width:1.4px;transform-box:fill-box;transform-origin:center}
+.sf-ink-morph-badge{font-size:clamp(18px,2.4vw,32px);letter-spacing:.005em;paint-order:stroke fill;stroke:#321B14;stroke-width:.5px}
+.sf-ink-destination{position:absolute;right:7%;top:48%;width:min(34%,390px);height:110px;transform:translateY(-50%);pointer-events:none;opacity:0}
+.sf-intro-copy{position:relative;z-index:1}
+.sf-hero #hero-title{transition:opacity .08s linear}
+@media(max-width:700px){.sf-ink-destination{right:6%;top:auto;bottom:7%;width:43%;height:76px}.sf-ink-morph-badge{font-size:19px}}
