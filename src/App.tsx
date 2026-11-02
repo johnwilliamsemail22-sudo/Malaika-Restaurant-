@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { ArrowDown, ArrowLeft, ArrowRight, MapPin, MessageCircle } from 'lucide-react'
 import Lenis from 'lenis'
+import StaffDashboard from './StaffDashboard'
 
 type Theme = { bg: string; ink: string; muted: string; accent: string }
 type Topping = 'Fior di Latte' | 'Prosciutto' | 'Wild Rocket' | 'Spicy Salami' | 'Coast Prawns' | 'Mushrooms' | 'Chilli Honey' | 'Olives'
@@ -62,7 +63,7 @@ function ToppingVisual({ topping }: { topping: Topping }) {
   return <span className={`topping-visual topping-visual-${slug}`} aria-hidden="true"><img src={toppingAssets[topping]} alt="" width="512" height="512" loading="lazy" decoding="async" /></span>
 }
 
-function App() {
+function Site() {
   const carouselRef = useRef<HTMLDivElement>(null)
   const pizzaStageRef = useRef<HTMLDivElement>(null)
   const scrollRafRef = useRef<number | null>(null)
@@ -348,4 +349,4 @@ function App() {
   )
 }
 
-export default App
+export default function App() { return window.location.pathname.startsWith('/staff') ? <StaffDashboard /> : <Site /> }
