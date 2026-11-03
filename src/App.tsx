@@ -4,6 +4,7 @@ import Lenis from 'lenis'
 import StaffDashboard from './StaffDashboard'
 import BuildYourPizza from './components/BuildYourPizza'
 const BASE = import.meta.env.BASE_URL
+const withBase = (p: string) => (p.startsWith("/") ? (BASE.endsWith("/") ? BASE.slice(0, -1) : BASE) + p : p)
 import { menuData } from './menuData'
 import type { MenuCategory } from './menuData'
 
@@ -24,28 +25,28 @@ type Dish = {
 }
 
 const toppingAssets: Record<Topping, string> = {
-  'Fior di Latte': `${BASE}/images/toppings/fior-di-latte.webp`,
-  'Prosciutto': `${BASE}/images/toppings/prosciutto.svg`,
-  'Wild Rocket': `${BASE}/images/toppings/wild-rocket.svg`,
-  'Spicy Salami': `${BASE}/images/toppings/spicy-salami.svg`,
-  'Coast Prawns': `${BASE}/images/toppings/coast-prawns.svg`,
-  'Mushrooms': `${BASE}/images/toppings/mushrooms.svg`,
-  'Chilli Honey': `${BASE}/images/toppings/chilli-honey.svg`,
-  'Olives': `${BASE}/images/toppings/olives.svg`,
+  'Fior di Latte': `${withBase("/images/toppings/fior-di-latte.webp")}`,
+  'Prosciutto': `${withBase("/images/toppings/prosciutto.svg")}`,
+  'Wild Rocket': `${withBase("/images/toppings/wild-rocket.svg")}`,
+  'Spicy Salami': `${withBase("/images/toppings/spicy-salami.svg")}`,
+  'Coast Prawns': `${withBase("/images/toppings/coast-prawns.svg")}`,
+  'Mushrooms': `${withBase("/images/toppings/mushrooms.svg")}`,
+  'Chilli Honey': `${withBase("/images/toppings/chilli-honey.svg")}`,
+  'Olives': `${withBase("/images/toppings/olives.svg")}`,
 }
 const toppingPrices: Record<Topping, number> = {
   'Fior di Latte': 200, 'Prosciutto': 350, 'Wild Rocket': 120, 'Spicy Salami': 300,
   'Coast Prawns': 450, 'Mushrooms': 150, 'Chilli Honey': 100, 'Olives': 120,
 }
 const availableToppings = Object.keys(toppingPrices) as Topping[];
-const assembledBurgerAsset = `${BASE}/images/dishes/burger-assembled.webp`
+const assembledBurgerAsset = `${withBase("/images/dishes/burger-assembled.webp")}`
 
 const dishes: Dish[] = [
-  { number: '01', kind: 'pizza', kicker: 'Italian favourites', title: 'Wood-Fired Pizza', description: 'Slow-fermented dough, rich tomato, creamy mozzarella and fresh toppings, baked until beautifully golden.', price: 'KSh 1,200', asset: `${BASE}/images/dishes/pizza-base.webp`, theme: { bg: '#FAF6EE', ink: '#321B14', muted: '#806E64', accent: '#9A4B32' }, menu: [{ name: 'Margherita', price: 'KSh 450' }, { name: 'Spicy Salami', price: 'KSh 950' }, { name: 'Coast Prawn', price: 'KSh 1,350' }] },
-  { number: '02', kind: 'dessert', kicker: 'Coffee & pastries', title: 'Coffee & Daily Bakes', description: 'A beautifully pulled espresso, creamy cappuccino and fresh pastries for slow Malindi mornings.', price: 'KSh 850', asset: `${BASE}/images/dishes/artisanal-gelato.webp`, theme: { bg: '#F1E7D7', ink: '#321B14', muted: '#806E64', accent: '#9A4B32' }, menu: [{ name: 'Espresso & Cappuccino', price: 'KSh 550' }, { name: 'Iced Coffee', price: 'KSh 700' }, { name: 'Fresh pastries', price: 'KSh 350' }] },
-  { number: '03', kind: 'seafood', kicker: 'A little sfizio', title: 'Mozzarella Tomato Samosas', description: 'A much-loved savoury bite with melted mozzarella and tomato — a signature worth coming back for.', price: 'KSh 1,100', asset: `${BASE}/images/dishes/seafood-salad.webp`, theme: { bg: '#E9D6C1', ink: '#321B14', muted: '#806E64', accent: '#9A4B32' }, menu: [{ name: 'Mozzarella & tomato samosas', price: 'KSh 1,400' }, { name: 'Piadina Romagnola', price: 'KSh 1,250' }, { name: 'Fresh juices', price: 'KSh 1,300' }] },
-  { number: '04', kind: 'pasta', kicker: 'Italian pasta', title: 'Ravioli & Tagliatelle', description: 'Comforting Italian pasta favourites, from delicate ravioli to generous plates of tagliatelle and gnocchi.', price: 'KSh 650', asset: `${BASE}/images/dishes/lobster-ravioli.webp`, theme: { bg: '#FAF0D9', ink: '#321B14', muted: '#806E64', accent: '#9A4B32' }, menu: [{ name: 'Spinach Ravioli', price: 'KSh 500' }, { name: 'Tagliatelle', price: 'KSh 400' }, { name: 'Gnocchi al pomodoro', price: 'KSh 600' }] },
-  { number: '05', kind: 'dessert', kicker: 'Something sweet', title: 'Italian Desserts', description: 'Finish with a little sweetness, from classic tiramisu to a chilled scoop of gelato.', price: 'KSh 700', asset: `${BASE}/images/dishes/artisanal-gelato.webp`, theme: { bg: '#E8E4D9', ink: '#321B14', muted: '#806E64', accent: '#9A4B32' }, menu: [{ name: 'Classic Tiramisu', price: 'KSh 700' }, { name: 'Artisanal Gelato', price: 'KSh 700' }, { name: 'Daily sweet bakes', price: 'KSh 400' }] },
+  { number: '01', kind: 'pizza', kicker: 'Italian favourites', title: 'Wood-Fired Pizza', description: 'Slow-fermented dough, rich tomato, creamy mozzarella and fresh toppings, baked until beautifully golden.', price: 'KSh 1,200', asset: `${withBase("/images/dishes/pizza-base.webp")}`, theme: { bg: '#FAF6EE', ink: '#321B14', muted: '#806E64', accent: '#9A4B32' }, menu: [{ name: 'Margherita', price: 'KSh 450' }, { name: 'Spicy Salami', price: 'KSh 950' }, { name: 'Coast Prawn', price: 'KSh 1,350' }] },
+  { number: '02', kind: 'dessert', kicker: 'Coffee & pastries', title: 'Coffee & Daily Bakes', description: 'A beautifully pulled espresso, creamy cappuccino and fresh pastries for slow Malindi mornings.', price: 'KSh 850', asset: `${withBase("/images/dishes/artisanal-gelato.webp")}`, theme: { bg: '#F1E7D7', ink: '#321B14', muted: '#806E64', accent: '#9A4B32' }, menu: [{ name: 'Espresso & Cappuccino', price: 'KSh 550' }, { name: 'Iced Coffee', price: 'KSh 700' }, { name: 'Fresh pastries', price: 'KSh 350' }] },
+  { number: '03', kind: 'seafood', kicker: 'A little sfizio', title: 'Mozzarella Tomato Samosas', description: 'A much-loved savoury bite with melted mozzarella and tomato — a signature worth coming back for.', price: 'KSh 1,100', asset: `${withBase("/images/dishes/seafood-salad.webp")}`, theme: { bg: '#E9D6C1', ink: '#321B14', muted: '#806E64', accent: '#9A4B32' }, menu: [{ name: 'Mozzarella & tomato samosas', price: 'KSh 1,400' }, { name: 'Piadina Romagnola', price: 'KSh 1,250' }, { name: 'Fresh juices', price: 'KSh 1,300' }] },
+  { number: '04', kind: 'pasta', kicker: 'Italian pasta', title: 'Ravioli & Tagliatelle', description: 'Comforting Italian pasta favourites, from delicate ravioli to generous plates of tagliatelle and gnocchi.', price: 'KSh 650', asset: `${withBase("/images/dishes/lobster-ravioli.webp")}`, theme: { bg: '#FAF0D9', ink: '#321B14', muted: '#806E64', accent: '#9A4B32' }, menu: [{ name: 'Spinach Ravioli', price: 'KSh 500' }, { name: 'Tagliatelle', price: 'KSh 400' }, { name: 'Gnocchi al pomodoro', price: 'KSh 600' }] },
+  { number: '05', kind: 'dessert', kicker: 'Something sweet', title: 'Italian Desserts', description: 'Finish with a little sweetness, from classic tiramisu to a chilled scoop of gelato.', price: 'KSh 700', asset: `${withBase("/images/dishes/artisanal-gelato.webp")}`, theme: { bg: '#E8E4D9', ink: '#321B14', muted: '#806E64', accent: '#9A4B32' }, menu: [{ name: 'Classic Tiramisu', price: 'KSh 700' }, { name: 'Artisanal Gelato', price: 'KSh 700' }, { name: 'Daily sweet bakes', price: 'KSh 400' }] },
 ]
 
 const themes = dishes.map((dish) => dish.theme.bg)
@@ -455,18 +456,18 @@ function App() {
           <div className="sapori-real-menu">
             {menuData.map((category, categoryIndex) => {
               const categoryImage = /PIZZA|PIZZE|FOCACCIA/i.test(category.category)
-                ? `${BASE}/images/dishes/pizza-base.webp`
+                ? `${withBase("/images/dishes/pizza-base.webp")}`
                 : /PASTA|RISOTTO|RAVIOLI|GNOCCHI/i.test(category.category)
-                  ? `${BASE}/images/dishes/lobster-ravioli.webp`
+                  ? `${withBase("/images/dishes/lobster-ravioli.webp")}`
                   : /PESCE|FISH|SEAFOOD|CEVICHE/i.test(category.category)
-                    ? `${BASE}/images/dishes/seafood-salad.webp`
+                    ? `${withBase("/images/dishes/seafood-salad.webp")}`
                     : /DOLCI|DESSERT|GELATO/i.test(category.category)
-                      ? `${BASE}/images/dishes/artisanal-gelato.webp`
+                      ? `${withBase("/images/dishes/artisanal-gelato.webp")}`
                       : /BEV|DRINK|COFFEE|WINE|COCKTAIL/i.test(category.category)
-                        ? `${BASE}/images/dishes/artisanal-gelato.webp`
+                        ? `${withBase("/images/dishes/artisanal-gelato.webp")}`
                         : /POLLO|CHICKEN|CARNE|BEEF|MANZO|SUINO/i.test(category.category)
-                          ? `${BASE}/images/dishes/burger-assembled.webp`
-                          : `${BASE}/images/dishes/seafood-salad.webp`
+                          ? `${withBase("/images/dishes/burger-assembled.webp")}`
+                          : `${withBase("/images/dishes/seafood-salad.webp")}`
               const compact = /BEV|DRINK|COFFEE|WINE|COCKTAIL|WATER/i.test(category.category)
               return <section className={`sapori-menu-category ${compact ? 'is-compact' : ''}`} key={category.category} data-category={category.category} ref={(el) => { menuSectionRefs.current[category.category] = el }}>
                 <header><span>{String(categoryIndex + 1).padStart(2, '0')}</span><h3>{category.category}</h3><i>{category.items.length} items</i></header>
