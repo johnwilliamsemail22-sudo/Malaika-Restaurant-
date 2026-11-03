@@ -11,7 +11,9 @@ const pepperoniImage = "https://raw.githubusercontent.com/johnwilliamsemail22-su
 const peppersImage = "https://raw.githubusercontent.com/johnwilliamsemail22-sudo/barbarmalindi/main/src/assets/t-peppers.png";
 const tomatoImage = "https://raw.githubusercontent.com/johnwilliamsemail22-sudo/barbarmalindi/main/src/assets/t-tomato.png";
 
-\nconst ovenIgnitionUrl = "https://raw.githubusercontent.com/johnwilliamsemail22-sudo/barbarmalindi/main/public/audio/oven-ignition.mp3";\nconst toppingDropUrl = "https://raw.githubusercontent.com/johnwilliamsemail22-sudo/barbarmalindi/main/public/audio/topping-drop.mp3";\n\ntype ToppingId =
+const ovenIgnitionUrl = "https://raw.githubusercontent.com/johnwilliamsemail22-sudo/barbarmalindi/main/public/audio/oven-ignition.mp3";\nconst toppingDropUrl = "https://raw.githubusercontent.com/johnwilliamsemail22-sudo/barbarmalindi/main/public/audio/topping-drop.mp3";
+
+type ToppingId =
   "pepperoni" | "mushroom" | "olives" | "basil" | "peppers" | "onion" | "tomato" | "mozzarella";
 
 type PlacedTopping = {
@@ -51,36 +53,36 @@ type Topping = {
 const TOPPINGS: Topping[] = [
   {
     id: "pepperoni",
-    name: "Pepperoni",
-    priceKes: 100,
+    name: "Italian sausage",
+    priceKes: 400,
     piecesPerTap: 10,
     image: pepperoniImage,
     width: 24,
   },
   {
     id: "mushroom",
-    name: "Mushroom",
-    priceKes: 80,
+    name: "Mushrooms",
+    priceKes: 400,
     piecesPerTap: 9,
     image: mushroomImage,
     width: 20,
   },
-  { id: "olives", name: "Olives", priceKes: 60, piecesPerTap: 12, image: oliveImage, width: 18 },
-  { id: "basil", name: "Basil", priceKes: 40, piecesPerTap: 9, image: basilImage, width: 20 },
+  { id: "olives", name: "Olives", priceKes: 400, piecesPerTap: 12, image: oliveImage, width: 18 },
+  { id: "basil", name: "Chicken", priceKes: 300, piecesPerTap: 9, image: basilImage, width: 20 },
   {
     id: "peppers",
-    name: "Peppers",
-    priceKes: 70,
+    name: "Corn",
+    priceKes: 300,
     piecesPerTap: 9,
     image: peppersImage,
     width: 22,
   },
-  { id: "onion", name: "Red onion", priceKes: 60, piecesPerTap: 9, image: onionImage, width: 20 },
-  { id: "tomato", name: "Tomato", priceKes: 80, piecesPerTap: 9, image: tomatoImage, width: 19 },
+  { id: "onion", name: "Datterino tomatoes", priceKes: 300, piecesPerTap: 9, image: onionImage, width: 20 },
+  { id: "tomato", name: "Pineapple", priceKes: 300, piecesPerTap: 9, image: tomatoImage, width: 19 },
   {
     id: "mozzarella",
     name: "Mozzarella",
-    priceKes: 100,
+    priceKes: 300,
     piecesPerTap: 10,
     image: mozzarellaImage,
     width: 21,
