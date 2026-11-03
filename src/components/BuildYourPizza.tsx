@@ -384,8 +384,8 @@ export default function BuildYourPizza({ onAddToCart, onClose }: { onAddToCart: 
   const basePrice = SIZES.find((candidate) => candidate.id === size)!.priceKes;
   const totalPrice =
     basePrice +
-    placed.reduce((sum, piece) => {
-      return sum + TOPPINGS.find((topping) => topping.id === piece.kind)!.priceKes;
+    Array.from(new Set(placed.map((piece) => piece.kind))).reduce((sum, kind) => {
+      return sum + TOPPINGS.find((topping) => topping.id === kind)!.priceKes;
     }, 0);
 
   const counts = TOPPINGS.reduce<Record<ToppingId, number>>(
