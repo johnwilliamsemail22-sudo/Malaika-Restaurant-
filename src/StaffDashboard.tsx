@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { CalendarDays, ChefHat, Coffee, LayoutDashboard, LogOut, Plus, X, Search, Bell, Utensils, Clock3, CheckCircle2, Image as ImageIcon } from 'lucide-react'
 import { menuData } from './menuData'
 import { menuImageFor } from './menuImages'
@@ -15,6 +15,19 @@ const cash=(n:number)=>'KSh '+n.toLocaleString('en-KE')
 const imageFor=(name:string,cat:string)=>menuImageFor(name,cat)
 export default function StaffDashboard({onClose}:{onClose:()=>void}){
 const [pin,setPin]=useState(''),[logged,setLogged]=useState(false),[section,setSection]=useState('Today'),[orders,setOrders]=useState(seed),[tab,setTab]=useState('Live board'),[expanded,setExpanded]=useState(''),[paused,setPaused]=useState(false),[sound,setSound]=useState(true),[filter,setFilter]=useState('All orders'),[search,setSearch]=useState(''),[bookings,setBookings]=useState([{name:'Mariam Omar',time:'1:30 PM',guests:4,phone:'+254 711 234 567'},{name:'James & family',time:'2:00 PM',guests:6,phone:'+254 722 111 222'},{name:'Aisha Mohamed',time:'7:00 PM',guests:2,phone:'+254 733 222 111'}]),[showBooking,setShowBooking]=useState(false),[bookingName,setBookingName]=useState(''),[bookingTime,setBookingTime]=useState(''),[bookingPhone,setBookingPhone]=useState(''),[bookingGuests,setBookingGuests]=useState('2'),[menu,setMenu]=useState(()=>menuData.flatMap(c=>c.items.map((d,i)=>({id:c.category+'-'+i,name:d.name,cat:c.category,price:d.price,description:d.description,meta:d.meta,sold:false,image:imageFor(d.name,c.category)})))),[onlyOff,setOnlyOff]=useState(false),[dishName,setDishName]=useState(''),[dishPrice,setDishPrice]=useState(''),[dishCategory,setDishCategory]=useState('PIZZE | PIZZA'),[showDish,setShowDish]=useState(false),[kitchen,setKitchen]=useState(false),[menuSearch,setMenuSearch]=useState(''),[menuCategory,setMenuCategory]=useState('All'),[menuTab,setMenuTab]=useState('Food')
+useEffect(()=>{
+ const syncOrders=()=>{
+  try{
+   const saved=JSON.parse(localStorage.getItem('sapori-orders')||'[]')
+   const normalized=saved.map((o:any)=>({id:String(o.id),name:o.customerName||o.name||'Guest',item:o.item||'Custom order',phone:o.customerPhone||o.phone||'',total:Number(o.total||0),status:o.status||'New',minutes:Math.max(0,Math.floor((Date.now()-new Date(o.createdAt||Date.now()).getTime())/60000)),paid:Boolean(o.paid),details:Array.isArray(o.details)?o.details:(o.notes?[o.notes]:[o.item||'Custom order'])}))
+   setOrders([...normalized,...seed.filter(s=>!normalized.some((o:any)=>o.id===s.id))])
+  }catch(error){console.error('Could not sync SAPORI demo orders',error)}
+ }
+ syncOrders()
+ window.addEventListener('sapori-order',syncOrders)
+ window.addEventListener('storage',syncOrders)
+ return ()=>{window.removeEventListener('sapori-order',syncOrders);window.removeEventListener('storage',syncOrders)}
+},[])
 const update=(id:string,status:string)=>setOrders(v=>v.map(o=>o.id===id?{...o,status}:o))
 const active=orders.filter(o=>['New','Cooking','Ready'].includes(o.status))
 const unpaid=orders.filter(o=>!o.paid&&o.status!=='Cancelled')
