@@ -11,7 +11,8 @@ const pepperoniImage = "https://raw.githubusercontent.com/johnwilliamsemail22-su
 const peppersImage = "https://raw.githubusercontent.com/johnwilliamsemail22-sudo/barbarmalindi/main/src/assets/t-peppers.png";
 const tomatoImage = "https://raw.githubusercontent.com/johnwilliamsemail22-sudo/barbarmalindi/main/src/assets/t-tomato.png";
 
-const ovenIgnitionUrl = "https://raw.githubusercontent.com/johnwilliamsemail22-sudo/barbarmalindi/main/public/audio/oven-ignition.mp3";\nconst toppingDropUrl = "https://raw.githubusercontent.com/johnwilliamsemail22-sudo/barbarmalindi/main/public/audio/topping-drop.mp3";
+const ovenIgnitionUrl = "https://raw.githubusercontent.com/johnwilliamsemail22-sudo/barbarmalindi/main/public/audio/oven-ignition.mp3";
+const toppingDropUrl = "https://raw.githubusercontent.com/johnwilliamsemail22-sudo/barbarmalindi/main/public/audio/topping-drop.mp3";
 
 type ToppingId =
   "pepperoni" | "mushroom" | "olives" | "basil" | "peppers" | "onion" | "tomato" | "mozzarella";
