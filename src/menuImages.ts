@@ -4,6 +4,11 @@ const exactDishImages: Record<string, string> = {
   'MELANZANE ALLA PARMIGIANA': 'https://mrcuisto.com/assets/images/1746435999552-vpdmemv9.webp',
   'FETTUCCINE CON PANNA, POLLO E FUNGHI': 'https://image.idntimes.com/post/20250924/vecteezy_creamy-fettuccine-alfredo-with-mushrooms-and-chicken-on-a_49506801_fc7308a4-aecd-412e-8815-1deee000cee0.jpeg',
   'SPAGHETTI VONGOLE': 'https://qul.imgix.net/6dc77474-1add-4bfd-9ae7-3b4d3ab15f16/513012_sld.jpg',
+  'PRIMAVERA': 'https://images.prismic.io/crosta-mollica-next/aejP6cBOoF08xNfh_3D_PIZZA_PRIMAVERA_UK_CHILLED_FOP.png?auto=format%2Ccompress',
+  'CHICKEN TIBS': 'https://es.flavelo.com/uploads/recipe/99/pizza-ethiopian-style-fekvo-16x9.webp',
+  'PROSCIUTTO COTTO': 'https://objednavkajidla.cz/assets/images/b42ccb01f57eae311937c89c0fc75793/851-600.jpg',
+  'QUATTRO STAGIONI': 'https://trattorialapasta.com/cms-data/blog/menu/pizza-quattro-stagioni/image/pizza-quattro-stagioni.jpg',
+  'CRUDO E RUCOLA': 'https://resizer.otstatic.com/v2/photos/xlarge/1/24688411.webp',
   'MARGHERITA': 'https://image-worker.mindtrip.ai/image-resize/format%3Dwebp%2Cw%3D720/https%3A/media-cdn.tripadvisor.com/media/photo-o/15/df/77/57/pizza-a-portafoglio-classica.jpg',
   'ORTOLANA': 'https://lkfconcepts.com/cdn/shop/files/PizzaOrtolana05.jpg?v=1745934317',
   'ROMANA': 'https://vecchianapoli.ro/userfiles/0/meniu/pix_med/poza-pizza-romana-437.jpg',
@@ -20,6 +25,7 @@ const normalizeDishName = (name: string) => name.toUpperCase().replace(/\([^)]*\
 const fallbackDishImage = (category: string) => /PIZZA|PIZZE|FOCACCIA/i.test(category) ? '/images/dishes/pizza-base.webp' : /PASTA|RISOTTO|RAVIOLI|GNOCCHI/i.test(category) ? '/images/dishes/lobster-ravioli.webp' : /PESCE|FISH|SEAFOOD|CEVICHE/i.test(category) ? '/images/dishes/seafood-salad.webp' : /DOLCI|DESSERT|GELATO/i.test(category) ? '/images/dishes/artisanal-gelato.webp' : /POLLO|CHICKEN|CARNE|BEEF|MANZO|SUINO/i.test(category) ? '/images/dishes/burger-assembled.webp' : '/images/dishes/seafood-salad.webp'
 export const menuImageFor = (name: string, category: string) => {
   const normalized = normalizeDishName(name)
+  if (normalized.startsWith('FRITTURA DI GAMBERI E CALAMARI')) return fallbackDishImage(category)
   const exact = Object.entries(exactDishImages).find(([key]) => normalized.startsWith(key))
   return exact?.[1] ?? fallbackDishImage(category)
 }
