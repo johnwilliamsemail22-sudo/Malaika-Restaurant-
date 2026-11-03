@@ -7,7 +7,7 @@ const withBase = (p: string) => (p.startsWith("/") ? (BASE.endsWith("/") ? BASE.
 
 // Vendored assets (no network dependency, instant animations)
 const baseImage = `${withBase("/images/pizza/base.webp")}`;
-const bakedCheeseImage = `${withBase("/images/pizza/baked-cheese.webp")}`;
+const bakedCheeseImage = `${withBase("/images/pizza/baked-done.webp")}`;
 const toppingDropUrl = `${withBase("/audio/topping-drop.mp3")}`;
 const ovenIgnitionUrl = `${withBase("/audio/oven-ignition.mp3")}`;
 const fireVideoUrl = `${withBase("/oven-fire-loop.mp4")}`;
