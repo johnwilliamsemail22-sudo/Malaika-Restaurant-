@@ -620,6 +620,8 @@ export default function BuildYourPizza({
       if (remaining <= 0) {
         if (orderTimerRef.current !== null) window.clearInterval(orderTimerRef.current);
         orderTimerRef.current = null;
+        // Lock in the baked state before the oven/fire overlay disappears.
+        setBaked(true);
         setFiring(false);
         setFired(true);
       }
