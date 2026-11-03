@@ -4,7 +4,6 @@ const exactDishImages: Record<string, string> = {
   'MELANZANE ALLA PARMIGIANA': 'https://mrcuisto.com/assets/images/1746435999552-vpdmemv9.webp',
   'FETTUCCINE CON PANNA, POLLO E FUNGHI': 'https://image.idntimes.com/post/20250924/vecteezy_creamy-fettuccine-alfredo-with-mushrooms-and-chicken-on-a_49506801_fc7308a4-aecd-412e-8815-1deee000cee0.jpeg',
   'SPAGHETTI VONGOLE': 'https://qul.imgix.net/6dc77474-1add-4bfd-9ae7-3b4d3ab15f16/513012_sld.jpg',
-  'PRIMAVERA': 'https://images.prismic.io/crosta-mollica-next/aejP6cBOoF08xNfh_3D_PIZZA_PRIMAVERA_UK_CHILLED_FOP.png?auto=format%2Ccompress',
   'CHICKEN TIBS': 'https://es.flavelo.com/uploads/recipe/99/pizza-ethiopian-style-fekvo-16x9.webp',
   'PROSCIUTTO COTTO': 'https://objednavkajidla.cz/assets/images/b42ccb01f57eae311937c89c0fc75793/851-600.jpg',
   'QUATTRO STAGIONI': 'https://trattorialapasta.com/cms-data/blog/menu/pizza-quattro-stagioni/image/pizza-quattro-stagioni.jpg',
