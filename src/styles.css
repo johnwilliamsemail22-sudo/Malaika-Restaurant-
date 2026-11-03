@@ -862,3 +862,32 @@ html, body { background:#FAF6EE; color:#321B14; }
  .sf-staff-order-top { align-items:flex-start; flex-direction:column; gap:5px; }
  .sf-staff-order-bottom select { max-width:145px; }
 }
+
+
+/* SAPORI booking, cart and order-tracking interactions */
+.sf-cart-button{position:relative;display:grid;place-items:center;width:48px;height:48px;border-radius:50%;background:#321B14;color:#FAF6EE;box-shadow:0 12px 24px rgba(50,27,20,.16);cursor:pointer}
+.sf-cart-button>span{position:absolute;top:-5px;right:-4px;display:grid;place-items:center;min-width:19px;height:19px;padding:0 4px;border:2px solid #FAF6EE;border-radius:99px;background:#9A4B32;color:#fff;font:700 10px var(--sans)}
+.sf-topbar .sf-order{border:0;cursor:pointer;font:600 11px var(--sans);letter-spacing:.08em;text-transform:uppercase}
+.sf-hero-actions button{font-family:var(--sans);cursor:pointer}
+.sf-fly-to-cart{position:fixed;z-index:1200;top:22px;right:24px;display:flex;align-items:center;gap:12px;padding:15px 19px;border-radius:999px;background:#321B14;color:#FAF6EE;box-shadow:0 18px 50px rgba(50,27,20,.25);animation:sf-fly-cart .85s cubic-bezier(.2,.8,.2,1) both}
+.sf-fly-to-cart svg{animation:sf-bag-pop .85s ease both}
+.sf-fly-to-cart span{font:600 12px var(--sans)}
+@keyframes sf-fly-cart{0%{opacity:0;transform:translate(40px,35px) scale(.65)}35%{opacity:1;transform:translate(-5px,0) scale(1.04)}75%{opacity:1;transform:translate(0,0) scale(1)}100%{opacity:0;transform:translate(0,-12px) scale(.94)}}
+@keyframes sf-bag-pop{0%{transform:rotate(-18deg) scale(.5)}45%{transform:rotate(12deg) scale(1.2)}100%{transform:rotate(0) scale(1)}}
+.sf-cart-modal{max-height:min(82svh,760px);overflow-y:auto}
+.sf-cart-orders{display:grid;gap:14px;margin:22px 0}
+.sf-cart-order{padding:17px;border:1px solid rgba(50,27,20,.13);border-radius:17px;background:#fffdf9}
+.sf-cart-order-top{display:flex;justify-content:space-between;gap:12px;align-items:center}
+.sf-cart-order-top span,.sf-cart-order small{font:600 9px var(--mono);letter-spacing:.08em;color:#806E64}
+.sf-cart-order-top strong{padding:6px 9px;border-radius:99px;background:#eee7de;color:#321B14;font:700 10px var(--sans)}
+.sf-cart-order h3{margin:12px 0 4px;color:#321B14;font:600 21px 'Cormorant Garamond',Georgia,serif}
+.sf-cart-order p{margin:0 0 16px;color:#6f625c;font-size:11px}
+.sf-order-progress{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin:12px 0}
+.sf-order-progress span{position:relative;display:flex;align-items:center;gap:5px;color:#a59a93;font:600 9px var(--sans)}
+.sf-order-progress span i{display:block;width:8px;height:8px;flex:0 0 8px;border:1px solid #b8aaa0;border-radius:50%;background:transparent}
+.sf-order-progress span.done{color:#321B14}
+.sf-order-progress span.done i{border-color:#321B14;background:#321B14;box-shadow:0 0 0 3px rgba(50,27,20,.1)}
+.sf-cart-empty{display:grid;justify-items:center;gap:12px;padding:28px 12px;color:#806E64;text-align:center}
+.sf-cart-empty p{margin:0}
+.sf-cart-empty .whatsapp-button{width:auto}
+@media(max-width:520px){.sf-topbar .topbar-right{gap:8px}.sf-topbar .sf-order{padding:11px 13px;font-size:9px}.sf-cart-button{width:42px;height:42px}.sf-hero-actions{width:100%;gap:9px}.sf-hero-actions button{padding:0 16px;min-height:50px;font-size:12px}.sf-order-progress span{font-size:8px;gap:3px}.sf-cart-order{padding:13px}}
