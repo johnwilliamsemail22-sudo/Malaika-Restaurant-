@@ -1032,3 +1032,24 @@ html, body { background:#FAF6EE; color:#321B14; }
 .sapori-real-menu{grid-column:1/-1;width:100%}
 .sapori-real-menu .sapori-menu-category{max-width:640px;margin:0 auto 34px}
 .menu-stage .sapori-real-menu{display:block !important}
+
+
+/* Keep the fully baked finish visible after the oven animation ends. */
+.sf-pizza-builder-overlay .pizza-builder__pizza-stage[data-baked="true"] .pizza-builder__base{
+  filter:saturate(1.18) contrast(1.08) brightness(.94);
+  transition:filter .7s ease;
+}
+.sf-pizza-builder-overlay .pizza-builder__pizza-stage[data-baked="true"]::after{
+  content:"";position:absolute;inset:0;z-index:4;pointer-events:none;border-radius:50%;
+  background:
+    radial-gradient(ellipse at 18% 28%,rgba(91,39,14,.25) 0 2.2%,transparent 7%),
+    radial-gradient(ellipse at 74% 21%,rgba(101,43,13,.22) 0 2%,transparent 7%),
+    radial-gradient(ellipse at 82% 66%,rgba(89,37,13,.2) 0 2.5%,transparent 8%),
+    radial-gradient(ellipse at 30% 79%,rgba(112,49,16,.2) 0 2%,transparent 7%),
+    radial-gradient(circle at 50% 50%,transparent 54%,rgba(74,31,12,.16) 76%,rgba(60,25,10,.24) 100%);
+  mix-blend-mode:multiply;opacity:.9;
+}
+.sf-pizza-builder-overlay .pizza-builder__pizza-stage[data-baked="true"] .pizza-builder__cheese-melt{
+  opacity:1;animation:pz-melt .8s .15s ease both;
+}
+.sf-pizza-builder-overlay .pizza-builder__pizza-stage[data-finished="true"] .pizza-builder__countdown{display:none}
