@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { ArrowDown, ArrowLeft, ArrowRight, MapPin, MessageCircle, ShoppingBag } from 'lucide-react'
 import Lenis from 'lenis'
 import StaffDashboard from './StaffDashboard'
+import BuildYourPizza from './components/BuildYourPizza'
 import { menuData } from './menuData'
 
 type Theme = { bg: string; ink: string; muted: string; accent: string }
@@ -87,6 +88,7 @@ function App() {
   const [staffOrders, setStaffOrders] = useState<any[]>([])
   const [reservation, setReservation] = useState<Reservation>({ name: '', date: '', time: '', guests: '2', notes: '' })
   const [reservationSubmitted, setReservationSubmitted] = useState(false)
+  const [showPizzaBuilder, setShowPizzaBuilder] = useState(false)
 
   const activeDish = dishes[activeIndex]
   const orderText = useMemo(() => {
@@ -259,6 +261,20 @@ function App() {
     setFlyingToCart(true)
     window.setTimeout(() => { setFlyingToCart(false); setOrderLocationDish(null); setOrderSuccess({ id, name: customerName.trim(), item: item.name, total }) }, 850)
   }
+  const addCustomPizzaToCart = (pizza: { name: string; total: number; details: string }) => {
+    const id = `SP-${Date.now().toString().slice(-6)}`
+    const order = { id, customerName: 'Guest', customerPhone: '', item: pizza.name, category: 'Custom pizza', price: `KSh ${pizza.total.toLocaleString('en-KE')}`, total: pizza.total, status: 'New', type: 'Pickup', notes: pizza.details, createdAt: new Date().toISOString() }
+    const existing = JSON.parse(localStorage.getItem('sapori-orders') || '[]')
+    const updated = [order, ...existing]
+    localStorage.setItem('sapori-orders', JSON.stringify(updated))
+    window.dispatchEvent(new CustomEvent('sapori-order', { detail: order }))
+    setCartOrders(updated)
+    setStaffOrders(updated)
+    setShowPizzaBuilder(false)
+    setFlyingToCart(true)
+    window.setTimeout(() => setFlyingToCart(false), 1100)
+    setShowCart(true)
+  }
   const openWhatsApp = (message = orderText) => {
     const currentY = window.scrollY; const url = `https://wa.me/254715048268?text=${encodeURIComponent(message)}`
     window.open(url, '_blank', 'noopener,noreferrer'); window.requestAnimationFrame(() => window.scrollTo({ top: currentY, behavior: 'auto' }))
@@ -321,7 +337,7 @@ function App() {
                 <div className="sf-card-image"><img src={dish.asset} alt={dish.title} loading="lazy" decoding="async" /></div>
                 <div className="sf-card-content"><p className="sf-card-kicker">{dish.kicker}</p><h3>{dish.title}</h3><p className="sf-card-description">{dish.description}</p>
                   <ul>{dish.menu.map((item) => <li key={item.name}><span>{item.name}</span><span>{item.price}</span><button className="sf-item-order" type="button" onClick={() => openDishOrder(dish, item.name)}>Order <ArrowRight size={13}/></button></li>)}</ul>
-                  <button className="sf-card-order sf-primary-button" type="button" onClick={(event) => { event.stopPropagation(); openDishOrder(dish) }}><span>Order Now</span><span className="sf-card-order-price">{dish.price}</span></button>
+                  <button className="sf-card-order sf-primary-button" type="button" onClick={(event) => { event.stopPropagation(); openDishOrder(dish) }}><span>Order Now</span><span className="sf-card-order-price">{dish.price}</span></button>{dish.kind === 'pizza' && <button className="sf-build-pizza-button" type="button" onClick={(event) => { event.stopPropagation(); setShowPizzaBuilder(true) }}>🍕 Build your own pizza <ArrowRight size={15}/></button>}
                 </div>
               </article>)}
             </div>
@@ -378,6 +394,7 @@ function App() {
       <section className="reservation" id="reserve" aria-labelledby="reserve-title"><div className="reservation-intro"><p className="eyebrow">A seat by the garden</p><h2 id="reserve-title">Reserve<br /><em>your table.</em></h2><p>Tell us when you are coming. We will confirm the best table for your evening on WhatsApp.</p></div><form className="reservation-form" onSubmit={submitReservation}><label>Name<input required value={reservation.name} onChange={(event) => updateReservation('name', event.target.value)} placeholder="Your name" /></label><div className="form-row"><label>Date<input required type="date" value={reservation.date} onChange={(event) => updateReservation('date', event.target.value)} /></label><label>Time<input required type="time" value={reservation.time} onChange={(event) => updateReservation('time', event.target.value)} /></label></div><label>Guests<select value={reservation.guests} onChange={(event) => updateReservation('guests', event.target.value)}>{['1', '2', '3', '4', '5', '6+'].map((count) => <option key={count} value={count}>{count} guest{count === '1' ? '' : 's'}</option>)}</select></label><label>Notes <span>(optional)</span><textarea rows={3} value={reservation.notes} onChange={(event) => updateReservation('notes', event.target.value)} placeholder="A birthday, a favourite table, anything we should know" /></label><button className="whatsapp-button reservation-submit" type="submit"><MessageCircle size={17} strokeWidth={1.8} /> Send reservation request</button></form>{reservationSubmitted && <div className="sf-order-modal-backdrop" role="presentation"><section className="sf-order-modal sf-order-success" role="dialog" aria-modal="true" aria-labelledby="sf-reservation-success-title"><div className="sf-reservation-check" aria-hidden="true">✓</div><p className="eyebrow">REQUEST RECEIVED</p><h2 id="sf-reservation-success-title">Thank you, <em>{reservation.name}.</em></h2><p>Your reservation request has been received. Our team is checking table availability for {reservation.date} at {reservation.time} for {reservation.guests} guest{reservation.guests === "1" ? "" : "s"}.</p><p>We’ll get back to you to confirm whether your table is available. Your table is not confirmed yet.</p><button className="sf-done-button" type="button" onClick={() => { setReservationSubmitted(false); setReservation({ name: "", date: "", time: "", guests: "2", notes: "" }) }}>Done</button></section></div>}</section>
 
       <section className="closing" aria-labelledby="closing-title"><div className="closing-quote"><p className="eyebrow">After the last course</p><h2 id="closing-title">Leave a little<br /><em>room for wonder.</em></h2></div><div className="closing-aside"><p><span className="sf-live-dot" aria-hidden="true"></span>Open daily from 12 noon to 10 PM. Walk-ins are welcome; contact us on WhatsApp to enquire or reserve your table.</p><button className="whatsapp-button" type="button" onClick={scrollToReservation}><MessageCircle size={17} strokeWidth={1.8} /> Reserve a table</button></div></section>
+      {showPizzaBuilder && <div className="sf-pizza-builder-overlay"><BuildYourPizza onAddToCart={addCustomPizzaToCart} onClose={() => setShowPizzaBuilder(false)} /></div>}
       {flyingToCart && <div className="sf-fly-to-cart" aria-hidden="true"><ShoppingBag size={25}/><span>Added to your orders</span></div>}
       {showCart && <div className="sf-order-modal-backdrop" role="presentation" onClick={() => setShowCart(false)}><section className="sf-order-modal sf-cart-modal" role="dialog" aria-modal="true" aria-labelledby="sf-cart-title" onClick={(event) => event.stopPropagation()}><button className="sf-order-modal-close" type="button" aria-label="Close cart" onClick={() => setShowCart(false)}>×</button><p className="eyebrow">SAPORI · PICKUP ORDERS</p><h2 id="sf-cart-title">Your <em>orders.</em></h2><p>Your order references are saved on this device, so you can return after refreshing.</p>{cartOrders.length === 0 ? <div className="sf-cart-empty"><ShoppingBag size={30}/><p>Your cart is waiting for something delicious.</p><button className="whatsapp-button" type="button" onClick={() => { setShowCart(false); setShowFullMenu(true); document.getElementById("menu")?.scrollIntoView({behavior:"smooth"}) }}>Explore menu</button></div> : <div className="sf-cart-orders">{cartOrders.map((order:any) => <article className="sf-cart-order" key={order.id}><div className="sf-cart-order-top"><span>ORDER {order.id}</span><strong>{order.status || 'New'}</strong></div><h3>{order.item}</h3><p>{order.customerName} · Pickup · KSh {Number(order.total || 0).toLocaleString('en-KE')}</p><div className="sf-order-progress"><span className="done"><i/>Received</span><span className={(['Cooking','Ready'].includes(order.status)) ? 'done' : ''}><i/>Preparing</span><span className={order.status === 'Ready' ? 'done' : ''}><i/>Ready for pickup</span></div><small>Keep your order number: {order.id}</small></article>)}</div>}<button className="sf-done-button" type="button" onClick={() => setShowCart(false)}>Close</button></section></div>}
       {orderLocationDish && <div className="sf-order-modal-backdrop" role="presentation" onClick={() => setOrderLocationDish(null)}><section className="sf-order-modal" role="dialog" aria-modal="true" aria-labelledby="sf-order-modal-title" onClick={(event) => event.stopPropagation()}><button className="sf-order-modal-close" type="button" aria-label="Close" onClick={() => setOrderLocationDish(null)}>×</button><p className="eyebrow">SAPORI · PICKUP ONLY</p><h2 id="sf-order-modal-title">Place your <em>order.</em></h2><p>Order online and collect your food fresh from SAPORI. We do not offer delivery.</p><label htmlFor="sf-order-item">Your selection</label><select id="sf-order-item" value={selectedOrderItem} onChange={(event) => setSelectedOrderItem(event.target.value)}>{orderLocationDish.menu.map((item) => <option key={item.name} value={item.name}>{item.name} · {item.price}</option>)}</select><label htmlFor="sf-customer-name">Your name</label><input id="sf-customer-name" value={customerName} onChange={(event) => setCustomerName(event.target.value)} placeholder="Name for collection" autoFocus /><label htmlFor="sf-customer-phone">Phone number</label><input id="sf-customer-phone" type="tel" value={customerPhone} onChange={(event) => setCustomerPhone(event.target.value)} placeholder="+254..." /><div className="sf-pickup-note"><MapPin size={16}/> Collection from SAPORI, Malindi.</div><button className="whatsapp-button" type="button" disabled={!customerName.trim() || !customerPhone.trim()} onClick={submitDishOrder}>Place pickup order <ArrowRight size={16}/></button></section></div>}
