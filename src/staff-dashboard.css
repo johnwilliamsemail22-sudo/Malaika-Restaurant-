@@ -35,3 +35,31 @@
 .sf-full-menu-open .sf-full-menu-heading{max-width:1440px;margin:0 auto}
 @media(max-width:700px){.sapori-real-menu{grid-template-columns:1fr;gap:22px;margin-top:24px}.sapori-menu-items{gap:9px}.sapori-menu-item-photo{height:112px}.sapori-menu-item-copy{padding:9px 9px 33px}.sapori-menu-item-copy h4{font-size:11px}.sapori-menu-item-copy p{font-size:9px;-webkit-line-clamp:2}.sapori-menu-category>header h3{font-size:18px}}
 @media(min-width:701px) and (max-width:980px){.sapori-real-menu{gap:20px 14px}.sapori-menu-items{gap:8px}}
+
+
+/* Full menu palette correction — match SAPORI's warm paper + espresso identity */
+.sf-full-menu-open,
+.sf-full-menu-open .sf-full-menu-heading,
+.sf-full-menu-open .sapori-real-menu{background:#f9f8f6!important;color:#3e2723!important}
+.sf-full-menu-open .sf-full-menu-heading .eyebrow,
+.sf-full-menu-open .sf-full-menu-heading>p,
+.sf-full-menu-open .sf-full-menu-heading h2{color:#3e2723!important}
+.sf-full-menu-open .sf-full-menu-heading h2 em{color:#6d5147!important}
+.sf-full-menu-open .sf-back-menu{color:#3e2723!important;border-color:rgba(62,39,35,.24)!important;background:transparent!important}
+.sapori-menu-category{border-bottom:1px solid rgba(62,39,35,.18)!important}
+.sapori-menu-category>header{border-bottom:1px solid rgba(62,39,35,.2)!important}
+.sapori-menu-category>header>span{color:#806e64!important}
+.sapori-menu-category>header h3{color:#3e2723!important;text-shadow:none!important}
+.sapori-menu-category>header i{color:#80746f!important}
+.sapori-menu-item{background:#fffdf9!important;border:1px solid rgba(62,39,35,.13)!important;box-shadow:0 5px 18px rgba(62,39,35,.055)!important}
+.sapori-menu-item:hover{background:#f2ece4!important;border-color:rgba(62,39,35,.28)!important}
+.sapori-menu-item-photo{background:#eee7de!important}
+.sapori-menu-item-copy h4{color:#3e2723!important}
+.sapori-menu-item-copy p{color:#6f625c!important}
+.sapori-menu-item-copy strong{color:#6b4438!important}
+.sapori-menu-item>button{background:#3e2723!important;color:#fff9f1!important}
+.sapori-menu-category.is-compact .sapori-menu-item{background:transparent!important;border-bottom:1px solid rgba(62,39,35,.13)!important;box-shadow:none!important}
+.sapori-menu-category.is-compact .sapori-menu-item>button{background:#eee7de!important;color:#3e2723!important}
+.sf-full-menu-open .sf-menu-note{color:#80746f!important}
+.sf-full-menu-open .sapori-real-menu,
+.sf-full-menu-open .sapori-real-menu *{text-shadow:none}
