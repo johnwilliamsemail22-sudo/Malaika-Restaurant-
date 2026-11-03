@@ -1,5 +1,4 @@
 const exactDishImages: Record<string, string> = {
-  'CEVICHE DI CALAMARI': 'https://hellofish.it/wp-content/uploads/2021/04/ceviche-di-cernia-calamari-e-gamberi.jpg',
   'BRUSCHETTA CRUDO E MANGO': 'https://www.prodottitipicitoscani.it/images/bruschette-con-prosciutto-crudo-mango-e-ricotta-big.jpg',
   'ARANCINA': 'https://www.knuspr.de/cdn-cgi/image/f%3Dauto%2Cw%3D800%2Ch%3D600%2Cfit%3Dcover/https%3A/cdn.knuspr.de/images/meals/large/recipe_1493_1777283285968_cheese-stuffed-arancini_691baa52.jpg',
   'MELANZANE ALLA PARMIGIANA': 'https://mrcuisto.com/assets/images/1746435999552-vpdmemv9.webp',
