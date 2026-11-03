@@ -949,3 +949,86 @@ html, body { background:#FAF6EE; color:#321B14; }
 .sf-pizza-builder-overlay .pizza-builder__pizza-stage{isolation:isolate}
 .sf-pizza-builder-overlay .pizza-builder__base{position:relative;z-index:0}
 .sf-pizza-builder-overlay .pizza-builder__topping{user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
+
+/* ===== builder upgrade: THM-style interactions ===== */
+.sf-pizza-builder-overlay .pizza-builder__base{transition:opacity .5s ease}
+.sf-pizza-builder-overlay .pizza-builder__base[data-baked="true"]{animation:pz-bake .9s ease}
+@keyframes pz-bake{0%{filter:brightness(1)}35%{filter:brightness(1.18) saturate(1.15)}100%{filter:brightness(1)}}
+.sf-pizza-builder-overlay .pizza-builder__cheese-melt{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;z-index:1;opacity:0;animation:pz-melt .8s .15s ease both;pointer-events:none}
+@keyframes pz-melt{from{opacity:0;transform:scale(1.06)}to{opacity:1;transform:scale(1)}}
+.sf-pizza-builder-overlay .pizza-builder__topping-cell{position:relative;display:flex;justify-content:center}
+.sf-pizza-builder-overlay .pizza-builder__topping[data-maxed="true"]{opacity:.45;filter:saturate(.4)}
+.sf-pizza-builder-overlay .pizza-builder__topping-orb{transition:transform .22s cubic-bezier(.2,1.4,.4,1),box-shadow .25s ease;border:3px solid transparent}
+.sf-pizza-builder-overlay .pizza-builder__topping-orb[data-picked="true"]{border-color:#df4d0c;box-shadow:0 0 0 3px rgba(223,77,12,.22)}
+.sf-pizza-builder-overlay .pizza-builder__topping:active .pizza-builder__topping-orb{transform:scale(.86)}
+.sf-pizza-builder-overlay .pizza-builder__topping:hover .pizza-builder__topping-orb{transform:scale(1.07)}
+.sf-pizza-builder-overlay .pizza-builder__count-badge{background:#df4d0c;box-shadow:0 2px 8px rgba(223,77,12,.4);font-weight:700;animation:pz-badge-pop .3s cubic-bezier(.2,1.6,.4,1)}
+@keyframes pz-badge-pop{from{transform:scale(.4)}to{transform:scale(1)}}
+.sf-pizza-builder-overlay .pizza-builder__remove-batch{position:absolute;top:-7px;right:calc(50% - 74px);width:26px;height:26px;border-radius:50%;background:#fff;border:1.5px solid rgba(48,32,24,.25);display:grid;place-items:center;color:#9b4d31;cursor:pointer;box-shadow:0 2px 8px rgba(20,10,5,.18);transition:transform .18s cubic-bezier(.2,1.4,.4,1),background .2s;z-index:2}
+.sf-pizza-builder-overlay .pizza-builder__remove-batch:active{transform:scale(.82);background:#f6e7dc}
+.sf-pizza-builder-overlay .pizza-builder__remove-batch:hover{background:#fff1e8}
+.sf-pizza-builder-overlay .pizza-builder__back,.pizza-builder__size,.pizza-builder__fire-button{transition:transform .16s cubic-bezier(.2,1.4,.4,1),filter .2s}
+.sf-pizza-builder-overlay .pizza-builder__back:active,.pizza-builder__size:active{transform:scale(.88)}
+.sf-pizza-builder-overlay .pizza-builder__fire-button:not(:disabled):active{transform:scale(.965)}
+.sf-pizza-builder-overlay .pizza-builder__dropped-ingredient{will-change:transform,opacity}
+.sf-pizza-builder-overlay .pizza-builder__flying-topping{will-change:transform,opacity}
+@media (max-width:720px){.sf-pizza-builder-overlay .pizza-builder__remove-batch{right:auto;left:calc(50% + 26px);top:-7px}}
+
+/* ===== THM-style menu listing ===== */
+.sapori-menu-chips{position:sticky;top:0;z-index:12;display:flex;gap:8px;overflow-x:auto;padding:12px 4px;margin:0 -4px 18px;scrollbar-width:none;background:linear-gradient(var(--chip-bg,#f7f0e5) 82%,rgba(247,240,229,0));-webkit-backdrop-filter:blur(8px)}
+.sapori-menu-chips::-webkit-scrollbar{display:none}
+.sapori-chip{flex:0 0 auto;padding:9px 18px;border-radius:999px;background:rgba(48,32,24,.06);border:1px solid rgba(48,32,24,.14);font-size:13.5px;font-weight:600;color:#321b14;cursor:pointer;transition:transform .18s cubic-bezier(.2,1.4,.4,1),background .2s,color .2s;white-space:nowrap}
+.sapori-chip:active{transform:scale(.92)}
+.sapori-chip.is-active{background:#321b14;color:#f7f0e5;border-color:#321b14}
+.sapori-real-menu .sapori-menu-category{margin:0 0 34px}
+.sapori-real-menu .sapori-menu-category header{display:flex;align-items:baseline;gap:12px;margin:0 0 14px}
+.sapori-real-menu .sapori-menu-category header h3{font-family:Georgia,serif;font-size:clamp(22px,3.4vw,30px);font-weight:500;margin:0;flex:1}
+.sapori-real-menu .sapori-menu-category header span{font-size:12px;color:#9a8a7c;letter-spacing:.08em}
+.sapori-real-menu .sapori-menu-category header i{font-style:normal;font-size:12.5px;color:#9a8a7c}
+.sapori-real-menu .sapori-menu-items{display:grid;grid-template-columns:1fr;gap:10px}
+.sapori-real-menu .sapori-menu-item{display:flex;flex-direction:row;align-items:center;gap:14px;background:rgba(255,253,247,.85);border:1px solid rgba(48,32,24,.1);border-radius:18px;padding:12px;box-shadow:0 2px 14px rgba(48,32,24,.05);transition:transform .16s cubic-bezier(.2,1.4,.4,1)}
+.sapori-real-menu .sapori-menu-item:active{transform:scale(.985)}
+.sapori-real-menu .sapori-menu-item-photo{width:58px;height:58px;border-radius:50%;overflow:hidden;flex:0 0 auto;background:#efe3d0}
+.sapori-real-menu .sapori-menu-item-photo img{width:100%;height:100%;object-fit:cover}
+.sapori-real-menu .sapori-menu-item-copy{flex:1;min-width:0}
+.sapori-real-menu .sapori-menu-item-copy h4{margin:0 0 2px;font-size:15.5px;font-weight:700;color:#321b14}
+.sapori-real-menu .sapori-menu-item-copy p{margin:0 0 4px;font-size:12.5px;color:#8c7b64;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.sapori-real-menu .sapori-menu-item-copy strong{color:#b0470f;font-size:14px}
+.sapori-add-button{width:42px;height:42px;border-radius:50%;background:#b0470f;color:#fff;display:grid;place-items:center;border:0;cursor:pointer;flex:0 0 auto;transition:transform .18s cubic-bezier(.2,1.5,.4,1),background .2s;box-shadow:0 4px 14px rgba(176,71,15,.3)}
+.sapori-add-button:hover{background:#c95513}
+.sapori-add-button:active{transform:scale(.82)}
+.sapori-add-button.did-pop{animation:pz-add-pop .32s cubic-bezier(.2,1.6,.4,1)}
+@keyframes pz-add-pop{40%{transform:scale(1.22)}100%{transform:scale(1)}}
+.sapori-add-label{font-size:11.5px;font-weight:700}
+.sapori-stepper{display:flex;align-items:center;gap:2px;background:#f1e6d2;border-radius:999px;padding:3px;flex:0 0 auto}
+.sapori-stepper button{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;color:#321b14;cursor:pointer;transition:transform .16s cubic-bezier(.2,1.5,.4,1),background .2s;border:0;background:transparent}
+.sapori-stepper button:active{transform:scale(.8);background:rgba(48,32,24,.1)}
+.sapori-stepper span{min-width:22px;text-align:center;font-weight:700;color:#321b14}
+/* floating cart bar */
+.sf-menu-cartbar{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:60;display:flex;align-items:center;gap:12px;background:#321b14;color:#f7f0e5;border:0;border-radius:999px;padding:14px 22px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 12px 34px rgba(20,10,4,.35);animation:pz-cartbar-in .4s cubic-bezier(.2,1.4,.4,1);max-width:calc(100vw - 32px)}
+.sf-menu-cartbar:active{transform:translateX(-50%) scale(.95)}
+.sf-menu-cartbar b{margin-left:auto;color:#ffb38a}
+@keyframes pz-cartbar-in{from{opacity:0;transform:translateX(-50%) translateY(18px)}to{opacity:1;transform:translateX(-50%)}}
+/* toast */
+.sf-toast{position:fixed;left:50%;bottom:86px;transform:translateX(-50%);z-index:90;background:rgba(50,27,20,.95);color:#f7f0e5;padding:11px 20px;border-radius:999px;font-size:13.5px;font-weight:600;animation:pz-toast-in .3s cubic-bezier(.2,1.4,.4,1);pointer-events:none}
+@keyframes pz-toast-in{from{opacity:0;transform:translateX(-50%) translateY(10px)}to{opacity:1;transform:translateX(-50%)}}
+/* options sheet */
+.sf-options-sheet .sf-options-group{margin:10px 0 6px;display:grid;gap:8px}
+.sf-options-sheet .sf-options-label{font-size:13px;font-weight:700;color:#8c7b64;letter-spacing:.04em;text-transform:uppercase}
+.sf-options-sheet .sf-options-choices{display:flex;flex-wrap:wrap;gap:8px}
+.sf-options-sheet .sf-options-desc{font-size:13px;color:#8c7b64;margin:4px 0 0}
+.sf-option-pill{padding:11px 18px;border-radius:999px;background:rgba(48,32,24,.06);border:1.5px solid rgba(48,32,24,.15);font-weight:600;color:#321b14;cursor:pointer;transition:transform .18s cubic-bezier(.2,1.5,.4,1),background .2s,color .2s,border-color .2s}
+.sf-option-pill:active{transform:scale(.9)}
+.sf-option-pill:hover{border-color:#b0470f;color:#b0470f}
+/* menu cart modal */
+.sf-menu-cart .sf-menu-cart-lines{display:grid;gap:8px;margin:12px 0;max-height:38vh;overflow-y:auto}
+.sf-menu-cart-line{display:flex;align-items:center;gap:10px;background:rgba(48,32,24,.05);border-radius:14px;padding:10px 12px}
+.sf-menu-cart-line > div:first-child{flex:1;min-width:0;display:grid;gap:2px}
+.sf-menu-cart-line b{font-size:14px;color:#321b14}
+.sf-menu-cart-line span{font-size:11.5px;color:#8c7b64}
+.sf-menu-cart-line .sf-line-total{font-size:13.5px;color:#b0470f}
+.sf-menu-cart-total{display:flex;justify-content:space-between;align-items:center;padding:10px 4px;border-top:1px solid rgba(48,32,24,.12);font-weight:700;color:#321b14}
+.sf-cart-hint{font-size:12px;color:#8c7b64;text-align:center;margin:8px 0 0}
+.sapori-real-menu{grid-column:1/-1;width:100%}
+.sapori-real-menu .sapori-menu-category{max-width:640px;margin:0 auto 34px}
+.menu-stage .sapori-real-menu{display:block !important}

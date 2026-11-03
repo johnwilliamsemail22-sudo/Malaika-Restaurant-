@@ -1,25 +1,26 @@
 import { useEffect, useRef, useState } from "react";
 import type { PointerEvent as ReactPointerEvent } from "react";
-import { ArrowLeft, Flame, Plus } from "lucide-react";
-const base = "https://raw.githubusercontent.com/johnwilliamsemail22-sudo/barbarmalindi/main/src/assets/base.png";
-const basilImage = "https://raw.githubusercontent.com/johnwilliamsemail22-sudo/barbarmalindi/main/src/assets/t-basil.png";
-const mozzarellaImage = "https://raw.githubusercontent.com/johnwilliamsemail22-sudo/barbarmalindi/main/src/assets/t-mozz-shreds.png";
-const mushroomImage = "https://raw.githubusercontent.com/johnwilliamsemail22-sudo/barbarmalindi/main/src/assets/t-mushroom.png";
-const oliveImage = "https://raw.githubusercontent.com/johnwilliamsemail22-sudo/barbarmalindi/main/src/assets/t-olive.png";
-const onionImage = "https://raw.githubusercontent.com/johnwilliamsemail22-sudo/barbarmalindi/main/src/assets/t-onion.png";
-const pepperoniImage = "https://raw.githubusercontent.com/johnwilliamsemail22-sudo/barbarmalindi/main/src/assets/t-pepperoni.png";
-const peppersImage = "https://raw.githubusercontent.com/johnwilliamsemail22-sudo/barbarmalindi/main/src/assets/t-peppers.png";
-const tomatoImage = "https://raw.githubusercontent.com/johnwilliamsemail22-sudo/barbarmalindi/main/src/assets/t-tomato.png";
+import { ArrowLeft, Flame, Minus, Plus } from "lucide-react";
 
-const ovenIgnitionUrl = "https://raw.githubusercontent.com/johnwilliamsemail22-sudo/barbarmalindi/main/public/audio/oven-ignition.mp3";
-const toppingDropUrl = "https://raw.githubusercontent.com/johnwilliamsemail22-sudo/barbarmalindi/main/public/audio/topping-drop.mp3";
+const BASE = import.meta.env.BASE_URL;
+
+// Vendored assets (no network dependency, instant animations)
+const baseImage = `${BASE}images/pizza/base.webp`;
+const bakedImage = `${BASE}images/pizza/baked.webp`;
+const cheeseMeltImage = `${BASE}images/pizza/cheese.webp`;
+const toppingDropUrl = `${BASE}audio/topping-drop.mp3`;
+const ovenIgnitionUrl = `${BASE}audio/oven-ignition.mp3`;
+const fireVideoUrl = `${BASE}oven-fire-loop.mp4`;
 
 type ToppingId =
-  "pepperoni" | "mushroom" | "olives" | "basil" | "peppers" | "onion" | "tomato" | "mozzarella";
+  | "chicken" | "corn" | "datterino" | "mozzarella" | "pineapple"
+  | "anchovies" | "capers" | "sausage" | "mushrooms" | "olives"
+  | "tuna" | "coldcuts" | "importedCheese" | "seafood";
 
 type PlacedTopping = {
   id: number;
   kind: ToppingId;
+  batch: number;
   x: number;
   y: number;
   rotation: number;
@@ -49,45 +50,25 @@ type Topping = {
   piecesPerTap: number;
   image: string;
   width: number;
+  maxBatches: number;
 };
 
+// Every SAPORI extra topping, exact menu prices, each mapped to a sprite.
 const TOPPINGS: Topping[] = [
-  {
-    id: "pepperoni",
-    name: "Italian sausage",
-    priceKes: 400,
-    piecesPerTap: 10,
-    image: pepperoniImage,
-    width: 24,
-  },
-  {
-    id: "mushroom",
-    name: "Mushrooms",
-    priceKes: 400,
-    piecesPerTap: 9,
-    image: mushroomImage,
-    width: 20,
-  },
-  { id: "olives", name: "Olives", priceKes: 400, piecesPerTap: 12, image: oliveImage, width: 18 },
-  { id: "basil", name: "Chicken", priceKes: 300, piecesPerTap: 9, image: basilImage, width: 20 },
-  {
-    id: "peppers",
-    name: "Corn",
-    priceKes: 300,
-    piecesPerTap: 9,
-    image: peppersImage,
-    width: 22,
-  },
-  { id: "onion", name: "Datterino tomatoes", priceKes: 300, piecesPerTap: 9, image: onionImage, width: 20 },
-  { id: "tomato", name: "Pineapple", priceKes: 300, piecesPerTap: 9, image: tomatoImage, width: 19 },
-  {
-    id: "mozzarella",
-    name: "Mozzarella",
-    priceKes: 300,
-    piecesPerTap: 10,
-    image: mozzarellaImage,
-    width: 21,
-  },
+  { id: "chicken", name: "Chicken", priceKes: 300, piecesPerTap: 9, image: `${BASE}images/pizza/t-chicken.webp`, width: 21, maxBatches: 2 },
+  { id: "corn", name: "Corn", priceKes: 300, piecesPerTap: 10, image: `${BASE}images/pizza/t-corn.webp`, width: 17, maxBatches: 2 },
+  { id: "datterino", name: "Datterino tomatoes", priceKes: 300, piecesPerTap: 8, image: `${BASE}images/pizza/t-tomato.webp`, width: 20, maxBatches: 2 },
+  { id: "mozzarella", name: "Mozzarella", priceKes: 300, piecesPerTap: 10, image: `${BASE}images/pizza/t-mozz-shreds.webp`, width: 21, maxBatches: 2 },
+  { id: "pineapple", name: "Pineapple", priceKes: 300, piecesPerTap: 9, image: `${BASE}images/pizza/t-pineapple.webp`, width: 19, maxBatches: 2 },
+  { id: "anchovies", name: "Anchovies", priceKes: 400, piecesPerTap: 8, image: `${BASE}images/pizza/t-anchovy.webp`, width: 18, maxBatches: 2 },
+  { id: "capers", name: "Capers", priceKes: 400, piecesPerTap: 12, image: `${BASE}images/pizza/t-capers.webp`, width: 14, maxBatches: 2 },
+  { id: "sausage", name: "Italian sausage", priceKes: 400, piecesPerTap: 10, image: `${BASE}images/pizza/t-salami.webp`, width: 20, maxBatches: 2 },
+  { id: "mushrooms", name: "Mushrooms", priceKes: 400, piecesPerTap: 9, image: `${BASE}images/pizza/t-mushroom.webp`, width: 20, maxBatches: 2 },
+  { id: "olives", name: "Olives", priceKes: 400, piecesPerTap: 12, image: `${BASE}images/pizza/t-olive.webp`, width: 15, maxBatches: 2 },
+  { id: "tuna", name: "Tuna", priceKes: 400, piecesPerTap: 9, image: `${BASE}images/pizza/t-tuna.webp`, width: 20, maxBatches: 2 },
+  { id: "coldcuts", name: "Imported cold cuts", priceKes: 700, piecesPerTap: 8, image: `${BASE}images/pizza/t-prosciutto.webp`, width: 23, maxBatches: 2 },
+  { id: "importedCheese", name: "Imported cheese", priceKes: 700, piecesPerTap: 9, image: `${BASE}images/pizza/t-mozz.webp`, width: 20, maxBatches: 2 },
+  { id: "seafood", name: "Seafood", priceKes: 700, piecesPerTap: 9, image: `${BASE}images/pizza/t-prawn.webp`, width: 20, maxBatches: 2 },
 ];
 
 const SIZES = [
@@ -118,7 +99,7 @@ type PointerSession = {
 
 const SPRING_STIFFNESS = 400;
 const SPRING_DAMPING = 25;
-const BASE_PRICE_KES = 1600;
+const BASE_PRICE_KES = 1600; // tomato sauce + mozzarella base
 const BATCH_PIECE_SCALE = 1.35;
 
 function playOneShot(sound: HTMLAudioElement | null) {
@@ -142,17 +123,12 @@ function formatPrice(shillings: number) {
 
 let placementIdSequence = 0;
 
-function makePlacement(
-  kind: ToppingId,
-  x: number,
-  y: number,
-  widthScale = 1,
-  dropOffset = 42,
-): PlacedTopping {
+function makePlacement(kind: ToppingId, x: number, y: number, batch = 0, widthScale = 1, dropOffset = 42): PlacedTopping {
   const topping = TOPPINGS.find((item) => item.id === kind)!;
   return {
     id: ++placementIdSequence,
     kind,
+    batch,
     x,
     y,
     rotation: Math.round(Math.random() * 30 - 15),
@@ -166,10 +142,7 @@ function makePlacement(
 function randomSaucePoint() {
   const angle = Math.random() * Math.PI * 2;
   const radius = Math.sqrt(Math.random()) * 31;
-  return {
-    x: 50 + Math.cos(angle) * radius,
-    y: 50 + Math.sin(angle) * radius,
-  };
+  return { x: 50 + Math.cos(angle) * radius, y: 50 + Math.sin(angle) * radius };
 }
 
 function randomSauceScatter(count: number) {
@@ -178,10 +151,7 @@ function randomSauceScatter(count: number) {
   return Array.from({ length: count }, (_, index) => {
     const angle = rotation + sector * index + (Math.random() - 0.5) * sector * 0.28;
     const radius = Math.sqrt(0.08 + Math.random() * 0.84) * 31;
-    return {
-      x: 50 + Math.cos(angle) * radius,
-      y: 50 + Math.sin(angle) * radius,
-    };
+    return { x: 50 + Math.cos(angle) * radius, y: 50 + Math.sin(angle) * radius };
   });
 }
 
@@ -206,7 +176,8 @@ function jigglePizza(stage: HTMLDivElement | null) {
   );
 }
 
-function DroppedIngredient({ placement }: { placement: PlacedTopping }) {
+// A landed piece: drops in from above with a damped spring, squash on landing.
+function DroppedIngredient({ placement, baked }: { placement: PlacedTopping; baked: boolean }) {
   const imageRef = useRef<HTMLImageElement>(null);
   const topping = TOPPINGS.find((item) => item.id === placement.kind)!;
 
@@ -247,7 +218,7 @@ function DroppedIngredient({ placement }: { placement: PlacedTopping }) {
   return (
     <img
       ref={imageRef}
-      src={topping.image}
+      src={baked && placement.kind !== "mozzarella" ? topping.image.replace(".webp", "-c.webp") : topping.image}
       alt=""
       aria-hidden="true"
       draggable={false}
@@ -264,13 +235,8 @@ function DroppedIngredient({ placement }: { placement: PlacedTopping }) {
   );
 }
 
-function FlyingTopping({
-  flight,
-  onLand,
-}: {
-  flight: ToppingFlight;
-  onLand: (id: number) => void;
-}) {
+// A piece in flight: arcs from the topping button onto the pizza.
+function FlyingTopping({ flight, onLand }: { flight: ToppingFlight; onLand: (id: number) => void }) {
   const imageRef = useRef<HTMLImageElement>(null);
   const onLandRef = useRef(onLand);
   onLandRef.current = onLand;
@@ -336,18 +302,70 @@ function FlyingTopping({
   );
 }
 
-export default function BuildYourPizza({ onAddToCart, onClose }: { onAddToCart: (order: { name: string; total: number; details: string }) => void; onClose: () => void }) {
+// A batch lifting off (remove): rises and fades, then disappears.
+function LiftingTopping({ placement, onGone }: { placement: PlacedTopping; onGone: (id: number) => void }) {
+  const imageRef = useRef<HTMLImageElement>(null);
+  const onGoneRef = useRef(onGone);
+  onGoneRef.current = onGone;
+  const topping = TOPPINGS.find((item) => item.id === placement.kind)!;
+
+  useEffect(() => {
+    const image = imageRef.current;
+    if (!image) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      onGoneRef.current(placement.id);
+      return;
+    }
+    const animation = image.animate(
+      [
+        { opacity: 1, transform: `translate3d(-50%, -50%, 0) rotate(${placement.rotation}deg) scale(1)` },
+        { opacity: 0, transform: `translate3d(-50%, -85%, 0) rotate(${placement.rotation + 24}deg) scale(1.18)` },
+      ],
+      { duration: 260, easing: "cubic-bezier(.4,0,.6,1)" },
+    );
+    animation.onfinish = () => onGoneRef.current(placement.id);
+    return () => animation.cancel();
+  }, [placement]);
+
+  return (
+    <img
+      ref={imageRef}
+      src={topping.image}
+      alt=""
+      aria-hidden="true"
+      draggable={false}
+      className="pizza-builder__dropped-ingredient"
+      style={{
+        left: `${placement.x}%`,
+        top: `${placement.y}%`,
+        width: `${placement.width}%`,
+        filter: `drop-shadow(${placement.shadowX}px ${placement.shadowY}px 3px rgb(0 0 0 / .36))`,
+      }}
+    />
+  );
+}
+
+export default function BuildYourPizza({
+  onAddToCart,
+  onClose,
+}: {
+  onAddToCart: (order: { name: string; total: number; details: string }) => void;
+  onClose: () => void;
+}) {
   const [size, setSize] = useState<SizeId>("L");
   const [placed, setPlaced] = useState<PlacedTopping[]>([]);
   const [flights, setFlights] = useState<ToppingFlight[]>([]);
+  const [lifting, setLifting] = useState<PlacedTopping[]>([]);
   const [visiblePrice, setVisiblePrice] = useState(BASE_PRICE_KES);
   const [firing, setFiring] = useState(false);
   const [fired, setFired] = useState(false);
-
-
+  const [baked, setBaked] = useState(false);
   const [countdown, setCountdown] = useState(8);
   const [dragKind, setDragKind] = useState<ToppingId | null>(null);
   const [dragOver, setDragOver] = useState(false);
+  const [batchCounters, setBatchCounters] = useState<Record<ToppingId, number>>(
+    TOPPINGS.reduce((acc, t) => ({ ...acc, [t.id]: 0 }), {} as Record<ToppingId, number>),
+  );
   const stageRef = useRef<HTMLDivElement>(null);
   const fireVideoRef = useRef<HTMLVideoElement>(null);
   const dragImageRef = useRef<HTMLImageElement>(null);
@@ -357,9 +375,7 @@ export default function BuildYourPizza({ onAddToCart, onClose }: { onAddToCart: 
   const toppingAudioCursorRef = useRef(0);
   const ignitionAudioRef = useRef<HTMLAudioElement | null>(null);
   const displayedPriceRef = useRef(BASE_PRICE_KES);
-  const addToppingRef = useRef<(kind: ToppingId, options?: AddToppingOptions) => void>(
-    () => undefined,
-  );
+  const addToppingRef = useRef<(kind: ToppingId, options?: AddToppingOptions) => void>(() => undefined);
 
   useEffect(() => {
     const dropSounds = Array.from({ length: 3 }, () => {
@@ -384,8 +400,9 @@ export default function BuildYourPizza({ onAddToCart, onClose }: { onAddToCart: 
   const basePrice = SIZES.find((candidate) => candidate.id === size)!.priceKes;
   const totalPrice =
     basePrice +
-    Array.from(new Set(placed.map((piece) => piece.kind))).reduce((sum, kind) => {
-      return sum + TOPPINGS.find((topping) => topping.id === kind)!.priceKes;
+    TOPPINGS.reduce((sum, topping) => {
+      const batches = batchCounters[topping.id] ?? 0;
+      return sum + batches * topping.priceKes;
     }, 0);
 
   const counts = TOPPINGS.reduce<Record<ToppingId, number>>(
@@ -393,30 +410,26 @@ export default function BuildYourPizza({ onAddToCart, onClose }: { onAddToCart: 
       result[topping.id] = placed.filter((piece) => piece.kind === topping.id).length;
       return result;
     },
-    {
-      pepperoni: 0,
-      mushroom: 0,
-      olives: 0,
-      basil: 0,
-      peppers: 0,
-      onion: 0,
-      tomato: 0,
-      mozzarella: 0,
-    },
+    TOPPINGS.reduce((acc, t) => ({ ...acc, [t.id]: 0 }), {} as Record<ToppingId, number>),
   );
 
   const addTopping = (kind: ToppingId, options: AddToppingOptions = {}) => {
     if (firing) return;
-    if (fired) setFired(false);
+    if (fired) {
+      setFired(false);
+      setBaked(false);
+    }
+    const topping = TOPPINGS.find((item) => item.id === kind)!;
+    const currentBatch = batchCounters[kind] ?? 0;
+    if (currentBatch >= topping.maxBatches) return;
 
     const count = options.count ?? 1;
     const points = count > 1 ? randomSauceScatter(count) : [options.point ?? randomSaucePoint()];
     const widthScale = options.widthScale ?? (count > 1 ? BATCH_PIECE_SCALE : 1);
-    const placements = points.map((point) =>
-      makePlacement(kind, point.x, point.y, widthScale, options.origin ? 7 : 42),
-    );
+    const placements = points.map((point) => makePlacement(kind, point.x, point.y, currentBatch, widthScale, options.origin ? 7 : 42));
     const stageRect = stageRef.current?.getBoundingClientRect();
     const origin = options.origin;
+    setBatchCounters((current) => ({ ...current, [kind]: currentBatch + 1 }));
 
     if (origin && stageRect) {
       const burst = placements.flatMap((placement, index) => {
@@ -447,18 +460,32 @@ export default function BuildYourPizza({ onAddToCart, onClose }: { onAddToCart: 
   };
   addToppingRef.current = addTopping;
 
-  const mozzarellaCount = counts.mozzarella;
-  const distinctToppings = TOPPINGS.filter((topping) => counts[topping.id] > 0).length;
+  // Remove the most recent batch of a topping: pieces lift off.
+  const removeBatch = (kind: ToppingId) => {
+    if (firing || flights.length > 0) return;
+    const currentBatch = batchCounters[kind] ?? 0;
+    if (currentBatch <= 0) return;
+    setBatchCounters((current) => ({ ...current, [kind]: currentBatch - 1 }));
+    const pieces = placed.filter((piece) => piece.kind === kind && piece.batch === currentBatch - 1);
+    if (pieces.length) {
+      setLifting((current) => [...current, ...pieces]);
+      setPlaced((current) => current.filter((piece) => !pieces.includes(piece)));
+      if (fired) {
+        setFired(false);
+        setBaked(false);
+      }
+    }
+  };
+
+  const distinctToppings = TOPPINGS.filter((topping) => (batchCounters[topping.id] ?? 0) > 0).length;
   const helperText =
     distinctToppings >= 3
       ? "Looking good. Fire it"
-      : mozzarellaCount >= 2
+      : (batchCounters.mozzarella ?? 0) >= 2
         ? "Extra cheese"
-        : mozzarellaCount === 1
-          ? "Drag slowly, piece by piece"
-          : placed.length > 0
-            ? "A little more? Drag or tap to add"
-            : "Tap a topping or press and drag it onto the pizza";
+        : distinctToppings > 0
+          ? "A little more? Drag or tap to add"
+          : "Tap a topping or press and drag it onto the pizza";
 
   useEffect(() => {
     let frame = 0;
@@ -516,10 +543,7 @@ export default function BuildYourPizza({ onAddToCart, onClose }: { onAddToCart: 
 
       if (current.kind === "mozzarella" && over) {
         const now = performance.now();
-        const distance = Math.hypot(
-          event.clientX - current.lastSprinkleX,
-          event.clientY - current.lastSprinkleY,
-        );
+        const distance = Math.hypot(event.clientX - current.lastSprinkleX, event.clientY - current.lastSprinkleY);
         if (!current.sprinkled || (now - current.lastSprinkleAt >= 125 && distance >= 12)) {
           const rect = stageRef.current?.getBoundingClientRect();
           if (rect) {
@@ -591,6 +615,7 @@ export default function BuildYourPizza({ onAddToCart, onClose }: { onAddToCart: 
     orderTimerRef.current = window.setInterval(() => {
       remaining -= 1;
       setCountdown(remaining);
+      if (remaining <= 4) setBaked(true);
       if (remaining <= 0) {
         if (orderTimerRef.current !== null) window.clearInterval(orderTimerRef.current);
         orderTimerRef.current = null;
@@ -613,9 +638,9 @@ export default function BuildYourPizza({ onAddToCart, onClose }: { onAddToCart: 
 
   const startPress = (kind: ToppingId, event: ReactPointerEvent<HTMLButtonElement>) => {
     if (event.button !== 0) return;
-    const orb = event.currentTarget
-      .querySelector(".pizza-builder__topping-orb")
-      ?.getBoundingClientRect();
+    const topping = TOPPINGS.find((item) => item.id === kind)!;
+    if ((batchCounters[kind] ?? 0) >= topping.maxBatches) return;
+    const orb = event.currentTarget.querySelector(".pizza-builder__topping-orb")?.getBoundingClientRect();
     const current: PointerSession = {
       kind,
       pointerId: event.pointerId,
@@ -652,11 +677,11 @@ export default function BuildYourPizza({ onAddToCart, onClose }: { onAddToCart: 
     setFiring(true);
   };
 
-  const toppingSummary = TOPPINGS.filter((topping) => counts[topping.id] > 0)
-    .map((topping) => `${topping.name} x${counts[topping.id]}`)
+  const toppingSummary = TOPPINGS.filter((topping) => (batchCounters[topping.id] ?? 0) > 0)
+    .map((topping) => `${topping.name} x${batchCounters[topping.id]}`)
     .join(", ");
   const placeCustomPizzaOrder = () => {
-    const description = size + " SAPORI custom pizza" + (toppingSummary ? " — " + toppingSummary : "");
+    const description = `${size} SAPORI custom pizza${toppingSummary ? " — " + toppingSummary : ""}`;
     onAddToCart({ name: description, total: totalPrice, details: toppingSummary });
   };
   const status = firing
@@ -669,18 +694,9 @@ export default function BuildYourPizza({ onAddToCart, onClose }: { onAddToCart: 
     <section id="build" className="pizza-builder" data-firing={firing} data-drop-ready={dragOver}>
       <div className="pizza-builder__shell">
         <header className="pizza-builder__header">
-          <a
-            href="#top"
-            className="pizza-builder__back"
-            aria-label="Back to the menu"
-            onClick={(event) => {
-              if (!document.getElementById("top")) return;
-              event.preventDefault();
-              document.getElementById("top")?.scrollIntoView({ behavior: "smooth" });
-            }}
-          >
+          <button type="button" className="pizza-builder__back" aria-label="Back to the menu" onClick={onClose}>
             <ArrowLeft size={21} strokeWidth={2.2} aria-hidden="true" />
-          </a>
+          </button>
           <h2 className="pizza-builder__title">Build your SAPORI pizza</h2>
           <div className="pizza-builder__sizes" role="group" aria-label="Choose pizza size">
             {SIZES.map((candidate) => (
@@ -693,6 +709,7 @@ export default function BuildYourPizza({ onAddToCart, onClose }: { onAddToCart: 
                 onClick={() => {
                   setSize(candidate.id);
                   setFired(false);
+                  setBaked(false);
                 }}
                 className="pizza-builder__size"
                 data-active={size === candidate.id}
@@ -708,22 +725,22 @@ export default function BuildYourPizza({ onAddToCart, onClose }: { onAddToCart: 
             <div className="pizza-builder__fire-ring" aria-hidden="true" />
             <div ref={stageRef} className="pizza-builder__pizza-stage" data-drop-ready={dragOver}>
               <img
-                src={base}
+                src={baked ? bakedImage : baseImage}
                 alt="Pizza dough spread with glossy tomato sauce"
                 className="pizza-builder__base"
+                data-baked={baked}
                 draggable={false}
               />
+              {baked && (
+                <img src={cheeseMeltImage} alt="" aria-hidden="true" draggable={false} className="pizza-builder__cheese-melt" />
+              )}
               {placed
                 .filter((piece) => !flights.some((flight) => flight.id === piece.id))
                 .map((piece) => (
-                  <DroppedIngredient key={piece.id} placement={piece} />
+                  <DroppedIngredient key={piece.id} placement={piece} baked={baked} />
                 ))}
               {firing && (
-                <div
-                  className="pizza-builder__countdown"
-                  aria-live="polite"
-                  aria-label={`${countdown} seconds remaining`}
-                >
+                <div className="pizza-builder__countdown" aria-live="polite" aria-label={`${countdown} seconds remaining`}>
                   <span className="pizza-builder__countdown-ring" />
                   <span>{countdown}</span>
                 </div>
@@ -739,68 +756,67 @@ export default function BuildYourPizza({ onAddToCart, onClose }: { onAddToCart: 
         <div className="pizza-builder__dock">
           <div className="pizza-builder__dock-heading">
             <span className="pizza-builder__dock-title">Toppings</span>
-            <span className="pizza-builder__dock-hint">Tap a handful · drag one</span>
+            <span className="pizza-builder__dock-hint">Tap a handful · drag one · − to remove</span>
           </div>
           <div className="pizza-builder__topping-row" aria-label="Pizza toppings">
-            {TOPPINGS.map((topping) => (
-              <button
-                key={topping.id}
-                type="button"
-                disabled={firing}
-                aria-label={`${topping.name}, ${formatPrice(topping.priceKes)} per piece. Tap to add ${topping.piecesPerTap} pieces for ${formatPrice(topping.priceKes * topping.piecesPerTap)}, or hold and drag to place one.${counts[topping.id] ? ` Added ${counts[topping.id]} pieces.` : ""}`}
-                aria-pressed={counts[topping.id] > 0}
-                className="pizza-builder__topping"
-                onPointerDown={(event) => startPress(topping.id, event)}
-                onContextMenu={(event) => event.preventDefault()}
-                onClick={(event) => {
-                  if (event.detail === 0) {
-                    const orb = event.currentTarget
-                      .querySelector(".pizza-builder__topping-orb")
-                      ?.getBoundingClientRect();
-                    const origin = orb
-                      ? { x: orb.left + orb.width / 2, y: orb.top + orb.height / 2 }
-                      : undefined;
-                    addTopping(
-                      topping.id,
-                      origin
-                        ? { origin, count: topping.piecesPerTap }
-                        : { count: topping.piecesPerTap },
-                    );
-                  }
-                }}
-              >
-                <span className="pizza-builder__topping-orb">
-                  <img src={topping.image} alt="" draggable={false} />
-                  {counts[topping.id] > 0 && (
-                    <span className="pizza-builder__count-badge">+{counts[topping.id]}</span>
-                  )}
-                  {counts[topping.id] === 0 && (
-                    <span className="pizza-builder__add-mark">
-                      <Plus size={12} strokeWidth={2.5} aria-hidden="true" />
+            {TOPPINGS.map((topping) => {
+              const batches = batchCounters[topping.id] ?? 0;
+              const maxed = batches >= topping.maxBatches;
+              return (
+                <div className="pizza-builder__topping-cell" key={topping.id}>
+                  <button
+                    type="button"
+                    disabled={firing || maxed}
+                    aria-label={`${topping.name}, ${formatPrice(topping.priceKes)}. Tap to add a handful, or hold and drag to place one.${batches ? ` Added ${batches}.` : ""}`}
+                    aria-pressed={batches > 0}
+                    className="pizza-builder__topping"
+                    data-maxed={maxed}
+                    onPointerDown={(event) => startPress(topping.id, event)}
+                    onContextMenu={(event) => event.preventDefault()}
+                    onClick={(event) => {
+                      if (event.detail !== 0) return;
+                      const orb = event.currentTarget.querySelector(".pizza-builder__topping-orb")?.getBoundingClientRect();
+                      const origin = orb ? { x: orb.left + orb.width / 2, y: orb.top + orb.height / 2 } : undefined;
+                      addTopping(topping.id, origin ? { origin, count: topping.piecesPerTap } : { count: topping.piecesPerTap });
+                    }}
+                  >
+                    <span className="pizza-builder__topping-orb" data-picked={batches > 0}>
+                      <img src={topping.image} alt="" draggable={false} />
+                      {batches > 0 && <span className="pizza-builder__count-badge">+{batches}</span>}
+                      {batches === 0 && (
+                        <span className="pizza-builder__add-mark">
+                          <Plus size={12} strokeWidth={2.5} aria-hidden="true" />
+                        </span>
+                      )}
                     </span>
+                    <span className="pizza-builder__topping-name">{topping.name}</span>
+                    <span className="pizza-builder__topping-price">
+                      <span>+{formatPrice(topping.priceKes)}</span>
+                      <span className="pizza-builder__topping-batch">
+                        {topping.piecesPerTap} pcs · tap {batches}/{topping.maxBatches}
+                      </span>
+                    </span>
+                  </button>
+                  {batches > 0 && (
+                    <button
+                      type="button"
+                      className="pizza-builder__remove-batch"
+                      aria-label={`Remove one handful of ${topping.name}`}
+                      disabled={firing}
+                      onClick={() => removeBatch(topping.id)}
+                    >
+                      <Minus size={13} strokeWidth={2.6} aria-hidden="true" />
+                    </button>
                   )}
-                </span>
-                <span className="pizza-builder__topping-name">{topping.name}</span>
-                <span className="pizza-builder__topping-price">
-                  <span>+{formatPrice(topping.priceKes)} each</span>
-                  <span className="pizza-builder__topping-batch">
-                    {topping.piecesPerTap} pcs · +
-                    {formatPrice(topping.priceKes * topping.piecesPerTap)}
-                  </span>
-                </span>
-              </button>
-            ))}
+                </div>
+              );
+            })}
           </div>
         </div>
 
         <footer className="pizza-builder__footer">
           {firing ? (
-            <button
-              type="button"
-              className="pizza-builder__fire-button"
-              disabled
-              aria-live="polite"
-            >
+            <button type="button" className="pizza-builder__fire-button" disabled aria-live="polite">
               <span className="pizza-builder__button-label">
                 <span className="pizza-builder__spinner" />
                 Firing at 480°
@@ -816,12 +832,7 @@ export default function BuildYourPizza({ onAddToCart, onClose }: { onAddToCart: 
               <span className="pizza-builder__button-price">{formatPrice(visiblePrice)}</span>
             </button>
           ) : (
-            <button
-              type="button"
-              className="pizza-builder__fire-button"
-              onClick={beginFire}
-              disabled={flights.length > 0}
-            >
+            <button type="button" className="pizza-builder__fire-button" onClick={beginFire} disabled={flights.length > 0}>
               <span className="pizza-builder__button-label">
                 <Flame size={18} strokeWidth={2.3} aria-hidden="true" />
                 Fire it
@@ -829,9 +840,7 @@ export default function BuildYourPizza({ onAddToCart, onClose }: { onAddToCart: 
               <span className="pizza-builder__button-price">{formatPrice(visiblePrice)}</span>
             </button>
           )}
-          <span className="pizza-builder__footer-note">
-            Made for the wood fire. Finished your way.
-          </span>
+          <span className="pizza-builder__footer-note">Made for the wood fire. Finished your way.</span>
         </footer>
       </div>
 
@@ -839,7 +848,7 @@ export default function BuildYourPizza({ onAddToCart, onClose }: { onAddToCart: 
         <video
           ref={fireVideoRef}
           className="pizza-builder__fire-video"
-          src="https://raw.githubusercontent.com/johnwilliamsemail22-sudo/barbarmalindi/main/public/oven-fire-loop.mp4"
+          src={fireVideoUrl}
           autoPlay={firing}
           loop
           muted
@@ -857,6 +866,13 @@ export default function BuildYourPizza({ onAddToCart, onClose }: { onAddToCart: 
             playNextOneShot(toppingAudioPoolRef.current, toppingAudioCursorRef);
             if (flight.batchFinal) jigglePizza(stageRef.current);
           }}
+        />
+      ))}
+      {lifting.map((piece) => (
+        <LiftingTopping
+          key={piece.id}
+          placement={piece}
+          onGone={(id) => setLifting((current) => current.filter((item) => item.id !== id))}
         />
       ))}
 

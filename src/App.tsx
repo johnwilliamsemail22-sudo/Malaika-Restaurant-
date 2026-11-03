@@ -1,9 +1,11 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { ArrowDown, ArrowLeft, ArrowRight, MapPin, MessageCircle, ShoppingBag } from 'lucide-react'
+import { ArrowDown, ArrowLeft, ArrowRight, MapPin, MessageCircle, Minus, Plus, ShoppingBag } from 'lucide-react'
 import Lenis from 'lenis'
 import StaffDashboard from './StaffDashboard'
 import BuildYourPizza from './components/BuildYourPizza'
+const BASE = import.meta.env.BASE_URL
 import { menuData } from './menuData'
+import type { MenuCategory } from './menuData'
 
 type Theme = { bg: string; ink: string; muted: string; accent: string }
 type Topping = 'Fior di Latte' | 'Prosciutto' | 'Wild Rocket' | 'Spicy Salami' | 'Coast Prawns' | 'Mushrooms' | 'Chilli Honey' | 'Olives'
@@ -22,28 +24,28 @@ type Dish = {
 }
 
 const toppingAssets: Record<Topping, string> = {
-  'Fior di Latte': '/images/toppings/fior-di-latte.webp',
-  'Prosciutto': '/images/toppings/prosciutto.svg',
-  'Wild Rocket': '/images/toppings/wild-rocket.svg',
-  'Spicy Salami': '/images/toppings/spicy-salami.svg',
-  'Coast Prawns': '/images/toppings/coast-prawns.svg',
-  'Mushrooms': '/images/toppings/mushrooms.svg',
-  'Chilli Honey': '/images/toppings/chilli-honey.svg',
-  'Olives': '/images/toppings/olives.svg',
+  'Fior di Latte': `${BASE}/images/toppings/fior-di-latte.webp`,
+  'Prosciutto': `${BASE}/images/toppings/prosciutto.svg`,
+  'Wild Rocket': `${BASE}/images/toppings/wild-rocket.svg`,
+  'Spicy Salami': `${BASE}/images/toppings/spicy-salami.svg`,
+  'Coast Prawns': `${BASE}/images/toppings/coast-prawns.svg`,
+  'Mushrooms': `${BASE}/images/toppings/mushrooms.svg`,
+  'Chilli Honey': `${BASE}/images/toppings/chilli-honey.svg`,
+  'Olives': `${BASE}/images/toppings/olives.svg`,
 }
 const toppingPrices: Record<Topping, number> = {
   'Fior di Latte': 200, 'Prosciutto': 350, 'Wild Rocket': 120, 'Spicy Salami': 300,
   'Coast Prawns': 450, 'Mushrooms': 150, 'Chilli Honey': 100, 'Olives': 120,
 }
 const availableToppings = Object.keys(toppingPrices) as Topping[];
-const assembledBurgerAsset = '/images/dishes/burger-assembled.webp'
+const assembledBurgerAsset = `${BASE}/images/dishes/burger-assembled.webp`
 
 const dishes: Dish[] = [
-  { number: '01', kind: 'pizza', kicker: 'Italian favourites', title: 'Wood-Fired Pizza', description: 'Slow-fermented dough, rich tomato, creamy mozzarella and fresh toppings, baked until beautifully golden.', price: 'KSh 1,200', asset: '/images/dishes/pizza-base.webp', theme: { bg: '#FAF6EE', ink: '#321B14', muted: '#806E64', accent: '#9A4B32' }, menu: [{ name: 'Margherita', price: 'KSh 450' }, { name: 'Spicy Salami', price: 'KSh 950' }, { name: 'Coast Prawn', price: 'KSh 1,350' }] },
-  { number: '02', kind: 'dessert', kicker: 'Coffee & pastries', title: 'Coffee & Daily Bakes', description: 'A beautifully pulled espresso, creamy cappuccino and fresh pastries for slow Malindi mornings.', price: 'KSh 850', asset: '/images/dishes/artisanal-gelato.webp', theme: { bg: '#F1E7D7', ink: '#321B14', muted: '#806E64', accent: '#9A4B32' }, menu: [{ name: 'Espresso & Cappuccino', price: 'KSh 550' }, { name: 'Iced Coffee', price: 'KSh 700' }, { name: 'Fresh pastries', price: 'KSh 350' }] },
-  { number: '03', kind: 'seafood', kicker: 'A little sfizio', title: 'Mozzarella Tomato Samosas', description: 'A much-loved savoury bite with melted mozzarella and tomato — a signature worth coming back for.', price: 'KSh 1,100', asset: '/images/dishes/seafood-salad.webp', theme: { bg: '#E9D6C1', ink: '#321B14', muted: '#806E64', accent: '#9A4B32' }, menu: [{ name: 'Mozzarella & tomato samosas', price: 'KSh 1,400' }, { name: 'Piadina Romagnola', price: 'KSh 1,250' }, { name: 'Fresh juices', price: 'KSh 1,300' }] },
-  { number: '04', kind: 'pasta', kicker: 'Italian pasta', title: 'Ravioli & Tagliatelle', description: 'Comforting Italian pasta favourites, from delicate ravioli to generous plates of tagliatelle and gnocchi.', price: 'KSh 650', asset: '/images/dishes/lobster-ravioli.webp', theme: { bg: '#FAF0D9', ink: '#321B14', muted: '#806E64', accent: '#9A4B32' }, menu: [{ name: 'Spinach Ravioli', price: 'KSh 500' }, { name: 'Tagliatelle', price: 'KSh 400' }, { name: 'Gnocchi al pomodoro', price: 'KSh 600' }] },
-  { number: '05', kind: 'dessert', kicker: 'Something sweet', title: 'Italian Desserts', description: 'Finish with a little sweetness, from classic tiramisu to a chilled scoop of gelato.', price: 'KSh 700', asset: '/images/dishes/artisanal-gelato.webp', theme: { bg: '#E8E4D9', ink: '#321B14', muted: '#806E64', accent: '#9A4B32' }, menu: [{ name: 'Classic Tiramisu', price: 'KSh 700' }, { name: 'Artisanal Gelato', price: 'KSh 700' }, { name: 'Daily sweet bakes', price: 'KSh 400' }] },
+  { number: '01', kind: 'pizza', kicker: 'Italian favourites', title: 'Wood-Fired Pizza', description: 'Slow-fermented dough, rich tomato, creamy mozzarella and fresh toppings, baked until beautifully golden.', price: 'KSh 1,200', asset: `${BASE}/images/dishes/pizza-base.webp`, theme: { bg: '#FAF6EE', ink: '#321B14', muted: '#806E64', accent: '#9A4B32' }, menu: [{ name: 'Margherita', price: 'KSh 450' }, { name: 'Spicy Salami', price: 'KSh 950' }, { name: 'Coast Prawn', price: 'KSh 1,350' }] },
+  { number: '02', kind: 'dessert', kicker: 'Coffee & pastries', title: 'Coffee & Daily Bakes', description: 'A beautifully pulled espresso, creamy cappuccino and fresh pastries for slow Malindi mornings.', price: 'KSh 850', asset: `${BASE}/images/dishes/artisanal-gelato.webp`, theme: { bg: '#F1E7D7', ink: '#321B14', muted: '#806E64', accent: '#9A4B32' }, menu: [{ name: 'Espresso & Cappuccino', price: 'KSh 550' }, { name: 'Iced Coffee', price: 'KSh 700' }, { name: 'Fresh pastries', price: 'KSh 350' }] },
+  { number: '03', kind: 'seafood', kicker: 'A little sfizio', title: 'Mozzarella Tomato Samosas', description: 'A much-loved savoury bite with melted mozzarella and tomato — a signature worth coming back for.', price: 'KSh 1,100', asset: `${BASE}/images/dishes/seafood-salad.webp`, theme: { bg: '#E9D6C1', ink: '#321B14', muted: '#806E64', accent: '#9A4B32' }, menu: [{ name: 'Mozzarella & tomato samosas', price: 'KSh 1,400' }, { name: 'Piadina Romagnola', price: 'KSh 1,250' }, { name: 'Fresh juices', price: 'KSh 1,300' }] },
+  { number: '04', kind: 'pasta', kicker: 'Italian pasta', title: 'Ravioli & Tagliatelle', description: 'Comforting Italian pasta favourites, from delicate ravioli to generous plates of tagliatelle and gnocchi.', price: 'KSh 650', asset: `${BASE}/images/dishes/lobster-ravioli.webp`, theme: { bg: '#FAF0D9', ink: '#321B14', muted: '#806E64', accent: '#9A4B32' }, menu: [{ name: 'Spinach Ravioli', price: 'KSh 500' }, { name: 'Tagliatelle', price: 'KSh 400' }, { name: 'Gnocchi al pomodoro', price: 'KSh 600' }] },
+  { number: '05', kind: 'dessert', kicker: 'Something sweet', title: 'Italian Desserts', description: 'Finish with a little sweetness, from classic tiramisu to a chilled scoop of gelato.', price: 'KSh 700', asset: `${BASE}/images/dishes/artisanal-gelato.webp`, theme: { bg: '#E8E4D9', ink: '#321B14', muted: '#806E64', accent: '#9A4B32' }, menu: [{ name: 'Classic Tiramisu', price: 'KSh 700' }, { name: 'Artisanal Gelato', price: 'KSh 700' }, { name: 'Daily sweet bakes', price: 'KSh 400' }] },
 ]
 
 const themes = dishes.map((dish) => dish.theme.bg)
@@ -89,6 +91,87 @@ function App() {
   const [reservation, setReservation] = useState<Reservation>({ name: '', date: '', time: '', guests: '2', notes: '' })
   const [reservationSubmitted, setReservationSubmitted] = useState(false)
   const [showPizzaBuilder, setShowPizzaBuilder] = useState(false)
+  const [menuCart, setMenuCart] = useState<Record<string, { item: MenuCategory['items'][number]; category: string; qty: number }>>(() => { try { return JSON.parse(localStorage.getItem('sapori-menu-cart') || '{}') } catch { return {} } })
+  const [toastMsg, setToastMsg] = useState('')
+  const [optionTarget, setOptionTarget] = useState<{ item: MenuCategory['items'][number]; category: string } | null>(null)
+  const [cartName, setCartName] = useState(() => localStorage.getItem('sapori-cart-name') || '')
+  const [cartPhone, setCartPhone] = useState(() => localStorage.getItem('sapori-cart-phone') || '')
+  const [activeCategory, setActiveCategory] = useState(0)
+  const [showMenuCart, setShowMenuCart] = useState(false)
+  const menuSectionRefs = useRef<Record<string, HTMLElement | null>>({})
+  const menuNavRef = useRef<HTMLDivElement>(null)
+  const toastTimer = useRef<number | null>(null)
+
+  const menuCartCount = Object.values(menuCart).reduce((sum, line) => sum + line.qty, 0)
+  const menuCartTotal = Object.values(menuCart).reduce((sum, line) => sum + line.qty * line.item.price, 0)
+
+  const showToast = (msg: string) => {
+    setToastMsg(msg)
+    if (toastTimer.current) window.clearTimeout(toastTimer.current)
+    toastTimer.current = window.setTimeout(() => setToastMsg(''), 2400)
+  }
+
+  const persistMenuCart = (next: Record<string, { item: MenuCategory['items'][number]; category: string; qty: number }>) => {
+    setMenuCart(next)
+    localStorage.setItem('sapori-menu-cart', JSON.stringify(next))
+  }
+
+  const addToMenuCart = (item: MenuCategory['items'][number], category: string, qty = 1) => {
+    const key = `${category}::${item.name}`
+    const current = menuCart[key]
+    persistMenuCart({ ...menuCart, [key]: { item, category, qty: (current?.qty ?? 0) + qty } })
+    showToast(`${item.name} added`)
+    if (navigator.vibrate) navigator.vibrate(8)
+  }
+
+  const stepMenuCart = (key: string, delta: number) => {
+    const line = menuCart[key]
+    if (!line) return
+    const next = { ...menuCart }
+    const qty = line.qty + delta
+    if (qty <= 0) delete next[key]
+    else next[key] = { ...line, qty }
+    persistMenuCart(next)
+  }
+
+  // Items that open an option sheet before adding (THM "See options" behavior)
+  const menuOptions = (item: MenuCategory['items'][number]): { label: string; choices: string[] } | null => {
+    const n = item.name.toUpperCase()
+    if (n.startsWith('QUENELLE')) return { label: 'Flavour', choices: ['Vanilla', 'Chocolate', 'Strawberry'] }
+    if (n.startsWith('FILETTO ALLA GRIGLIA')) return { label: 'Doneness', choices: ['Rare', 'Medium rare', 'Medium', 'Well done'] }
+    if (n.startsWith('FILETTO CON FUNGHI')) return { label: 'Doneness', choices: ['Rare', 'Medium rare', 'Medium', 'Well done'] }
+    if (n.startsWith('RED WINE (DRY) - GLASS')) return { label: 'Serving', choices: ['Glass 150 ml', '1/4 carafe', '1/2 carafe'] }
+    if (n.startsWith('WHITE WINE') && n.includes('GLASS')) return { label: 'Serving', choices: ['Dry glass', 'Sweet glass', 'Sparkling glass', '1/4 carafe', '1/2 carafe'] }
+    return null
+  }
+
+  const menuTap = (item: MenuCategory['items'][number], category: string) => {
+    const opts = menuOptions(item)
+    if (opts) setOptionTarget({ item, category })
+    else addToMenuCart(item, category)
+  }
+
+  const scrollToCategory = (category: string) => {
+    const section = menuSectionRefs.current[category]
+    if (!section) return
+    const y = section.getBoundingClientRect().top + window.scrollY - 118
+    window.scrollTo({ top: y, behavior: 'smooth' })
+  }
+
+  useEffect(() => {
+    if (!showFullMenu) return
+    const observer = new IntersectionObserver((entries) => {
+      for (const entry of entries) if (entry.isIntersecting) {
+        const category = (entry.target as HTMLElement).dataset.category
+        if (category) {
+          const index = menuData.findIndex((c) => c.category === category)
+          if (index >= 0) setActiveCategory(index)
+        }
+      }
+    }, { rootMargin: '-38% 0px -55% 0px' })
+    for (const section of Object.values(menuSectionRefs.current)) if (section) observer.observe(section)
+    return () => observer.disconnect()
+  }, [showFullMenu])
 
   const activeDish = dishes[activeIndex]
   const orderText = useMemo(() => {
@@ -352,37 +435,67 @@ function App() {
             <p>Explore the complete SAPORI menu. Every item and price is from the restaurant menu.</p>
             <button className="sf-build-pizza-button sf-full-menu-pizza-cta" type="button" onClick={() => setShowPizzaBuilder(true)}>🍕 Build your own pizza <ArrowRight size={15}/></button>
           </div>
+          <div className="sapori-menu-chips" ref={menuNavRef} aria-label="Menu sections">
+            {menuData.map((category) => (
+              <button
+                key={category.category}
+                type="button"
+                className={`sapori-chip ${menuData[activeCategory]?.category === category.category ? 'is-active' : ''}`}
+                onClick={() => scrollToCategory(category.category)}
+              >
+                {(() => {
+                  let label = category.category.includes('|') ? category.category.split('|')[0].trim() : category.category
+                  if (label.length > 24 && category.category.includes('|')) label = category.category.split('|')[1].trim()
+                  label = label.replace('BIMONTHLY SPECIALS', 'SPECIALS')
+                  return label
+                })()}
+              </button>
+            ))}
+          </div>
           <div className="sapori-real-menu">
             {menuData.map((category, categoryIndex) => {
               const categoryImage = /PIZZA|PIZZE|FOCACCIA/i.test(category.category)
-                ? '/images/dishes/pizza-base.webp'
+                ? `${BASE}/images/dishes/pizza-base.webp`
                 : /PASTA|RISOTTO|RAVIOLI|GNOCCHI/i.test(category.category)
-                  ? '/images/dishes/lobster-ravioli.webp'
+                  ? `${BASE}/images/dishes/lobster-ravioli.webp`
                   : /PESCE|FISH|SEAFOOD|CEVICHE/i.test(category.category)
-                    ? '/images/dishes/seafood-salad.webp'
+                    ? `${BASE}/images/dishes/seafood-salad.webp`
                     : /DOLCI|DESSERT|GELATO/i.test(category.category)
-                      ? '/images/dishes/artisanal-gelato.webp'
+                      ? `${BASE}/images/dishes/artisanal-gelato.webp`
                       : /BEV|DRINK|COFFEE|WINE|COCKTAIL/i.test(category.category)
-                        ? '/images/dishes/artisanal-gelato.webp'
+                        ? `${BASE}/images/dishes/artisanal-gelato.webp`
                         : /POLLO|CHICKEN|CARNE|BEEF|MANZO|SUINO/i.test(category.category)
-                          ? '/images/dishes/burger-assembled.webp'
-                          : '/images/dishes/seafood-salad.webp'
+                          ? `${BASE}/images/dishes/burger-assembled.webp`
+                          : `${BASE}/images/dishes/seafood-salad.webp`
               const compact = /BEV|DRINK|COFFEE|WINE|COCKTAIL|WATER/i.test(category.category)
-              return <section className={`sapori-menu-category ${compact ? 'is-compact' : ''}`} key={category.category}>
+              return <section className={`sapori-menu-category ${compact ? 'is-compact' : ''}`} key={category.category} data-category={category.category} ref={(el) => { menuSectionRefs.current[category.category] = el }}>
                 <header><span>{String(categoryIndex + 1).padStart(2, '0')}</span><h3>{category.category}</h3><i>{category.items.length} items</i></header>
                 <div className="sapori-menu-items">
                   {category.items.map((item, itemIndex) => {
-                    const orderDish: Dish = {
-                      number: String(categoryIndex + 1).padStart(2, '0'), kind: 'pasta',
-                      kicker: category.category, title: category.category,
-                      description: item.description, price: `KSh ${item.price.toLocaleString('en-KE')}`,
-                      asset: categoryImage, theme: dishes[0].theme,
-                      menu: [{ name: item.name, price: `KSh ${item.price.toLocaleString('en-KE')}` }]
-                    }
+                    const key = `${category.category}::${item.name}`
+                    const qty = menuCart[key]?.qty ?? 0
+                    const hasOptions = menuOptions(item) != null
+                    const isExtraTopping = /EXTRA TOPPING|^DATTERINO TOMATOES$/i.test(item.name)
+                    if (isExtraTopping) return null
                     return <article className="sapori-menu-item" key={item.name + itemIndex}>
-                      {!compact && <div className="sapori-menu-item-photo"><img src={categoryImage} alt="" loading="lazy" /></div>}
+                      {!compact && <div className="sapori-menu-item-photo"><img src={categoryImage} alt="" loading="lazy" decoding="async" /></div>}
                       <div className="sapori-menu-item-copy"><h4>{item.name}</h4>{item.description && <p>{item.description}</p>}<strong>KSh {item.price.toLocaleString('en-KE')}</strong></div>
-                      <button type="button" aria-label={`Order ${item.name}`} onClick={() => openDishOrder(orderDish, item.name)}>+</button>
+                      {qty === 0 ? (
+                        <button
+                          type="button"
+                          className="sapori-add-button"
+                          aria-label={hasOptions ? `Choose options for ${item.name}` : `Add ${item.name}`}
+                          onClick={(event) => { const b = event.currentTarget; b.classList.remove('did-pop'); void b.offsetWidth; b.classList.add('did-pop'); menuTap(item, category.category) }}
+                        >
+                          {hasOptions ? <span className="sapori-add-label">Options</span> : <Plus size={17} strokeWidth={2.6} />}
+                        </button>
+                      ) : (
+                        <div className="sapori-stepper">
+                          <button type="button" aria-label={`One less ${item.name}`} onClick={() => stepMenuCart(key, -1)}>−</button>
+                          <span>{qty}</span>
+                          <button type="button" aria-label={`One more ${item.name}`} onClick={() => { addToMenuCart(item, category.category); }}><Plus size={14} strokeWidth={2.8} /></button>
+                        </div>
+                      )}
                     </article>
                   })}
                 </div>
@@ -400,6 +513,87 @@ function App() {
       {showCart && <div className="sf-order-modal-backdrop" role="presentation" onClick={() => setShowCart(false)}><section className="sf-order-modal sf-cart-modal" role="dialog" aria-modal="true" aria-labelledby="sf-cart-title" onClick={(event) => event.stopPropagation()}><button className="sf-order-modal-close" type="button" aria-label="Close cart" onClick={() => setShowCart(false)}>×</button><p className="eyebrow">SAPORI · PICKUP ORDERS</p><h2 id="sf-cart-title">Your <em>orders.</em></h2><p>Your order references are saved on this device, so you can return after refreshing.</p>{cartOrders.length === 0 ? <div className="sf-cart-empty"><ShoppingBag size={30}/><p>Your cart is waiting for something delicious.</p><button className="whatsapp-button" type="button" onClick={() => { setShowCart(false); setShowFullMenu(true); document.getElementById("menu")?.scrollIntoView({behavior:"smooth"}) }}>Explore menu</button></div> : <div className="sf-cart-orders">{cartOrders.map((order:any) => <article className="sf-cart-order" key={order.id}><div className="sf-cart-order-top"><span>ORDER {order.id}</span><strong>{order.status || 'New'}</strong></div><h3>{order.item}</h3><p>{order.customerName} · Pickup · KSh {Number(order.total || 0).toLocaleString('en-KE')}</p><div className="sf-order-progress"><span className="done"><i/>Received</span><span className={(['Cooking','Ready'].includes(order.status)) ? 'done' : ''}><i/>Preparing</span><span className={order.status === 'Ready' ? 'done' : ''}><i/>Ready for pickup</span></div><small>Keep your order number: {order.id}</small></article>)}</div>}<button className="sf-done-button" type="button" onClick={() => setShowCart(false)}>Close</button></section></div>}
       {orderLocationDish && <div className="sf-order-modal-backdrop" role="presentation" onClick={() => setOrderLocationDish(null)}><section className="sf-order-modal" role="dialog" aria-modal="true" aria-labelledby="sf-order-modal-title" onClick={(event) => event.stopPropagation()}><button className="sf-order-modal-close" type="button" aria-label="Close" onClick={() => setOrderLocationDish(null)}>×</button><p className="eyebrow">SAPORI · PICKUP ONLY</p><h2 id="sf-order-modal-title">Place your <em>order.</em></h2><p>Order online and collect your food fresh from SAPORI. We do not offer delivery.</p><label htmlFor="sf-order-item">Your selection</label><select id="sf-order-item" value={selectedOrderItem} onChange={(event) => setSelectedOrderItem(event.target.value)}>{orderLocationDish.menu.map((item) => <option key={item.name} value={item.name}>{item.name} · {item.price}</option>)}</select><label htmlFor="sf-customer-name">Your name</label><input id="sf-customer-name" value={customerName} onChange={(event) => setCustomerName(event.target.value)} placeholder="Name for collection" autoFocus /><label htmlFor="sf-customer-phone">Phone number</label><input id="sf-customer-phone" type="tel" value={customerPhone} onChange={(event) => setCustomerPhone(event.target.value)} placeholder="+254..." /><div className="sf-pickup-note"><MapPin size={16}/> Collection from SAPORI, Malindi.</div><button className="whatsapp-button" type="button" disabled={!customerName.trim() || !customerPhone.trim()} onClick={submitDishOrder}>Place pickup order <ArrowRight size={16}/></button></section></div>}
       {orderSuccess && <div className="sf-order-modal-backdrop" role="presentation"><section className="sf-order-modal sf-order-success" role="dialog" aria-modal="true" aria-labelledby="sf-order-success-title"><button className="sf-order-modal-close" type="button" aria-label="Close" onClick={() => setOrderSuccess(null)}>×</button><p className="eyebrow">ORDER RECEIVED · PICKUP</p><h2 id="sf-order-success-title">Thank you, <em>{orderSuccess.name}.</em></h2><p>Your order has been placed with SAPORI. Keep this reference handy.</p><div className="sf-order-reference"><span>ORDER NUMBER</span><strong>{orderSuccess.id}</strong><small>{orderSuccess.item} · KSh {orderSuccess.total.toLocaleString('en-KE')}</small></div><p>For order updates, cancellations or any questions, call or WhatsApp our team.</p><a className="whatsapp-button" href="https://wa.me/254715048268" target="_blank" rel="noreferrer"><MessageCircle size={17}/> WhatsApp · +254 715 048 268</a><a className="sf-call-link" href="tel:+254715048268">Call +254 715 048 268</a><button className="sf-done-button" type="button" onClick={() => setOrderSuccess(null)}>Done</button></section></div>}
+      {toastMsg && <div className="sf-toast" role="status">{toastMsg}</div>}
+      {menuCartCount > 0 && !showMenuCart && !showPizzaBuilder && !orderLocationDish && (
+        <button type="button" className="sf-menu-cartbar" onClick={() => setShowMenuCart(true)}>
+          <ShoppingBag size={19} strokeWidth={2.1} />
+          <span>Your order · {menuCartCount} item{menuCartCount === 1 ? '' : 's'}</span>
+          <b>KSh {menuCartTotal.toLocaleString('en-KE')}</b>
+        </button>
+      )}
+      {optionTarget && (() => {
+        const opts = menuOptions(optionTarget.item)!
+        return <div className="sf-order-modal-backdrop" role="presentation" onClick={() => setOptionTarget(null)}>
+          <section className="sf-order-modal sf-options-sheet" role="dialog" aria-modal="true" aria-labelledby="sf-options-title" onClick={(event) => event.stopPropagation()}>
+            <button className="sf-order-modal-close" type="button" aria-label="Close" onClick={() => setOptionTarget(null)}>×</button>
+            <p className="eyebrow">SAPORI · CHOOSE</p>
+            <h2 id="sf-options-title">{optionTarget.item.name.split('(')[0].trim()}</h2>
+            {optionTarget.item.description && <p className="sf-options-desc">{optionTarget.item.description}</p>}
+            <div className="sf-options-group">
+              <span className="sf-options-label">{opts.label}</span>
+              <div className="sf-options-choices">
+                {opts.choices.map((choice) => (
+                  <button key={choice} type="button" className="sf-option-pill" onClick={() => {
+                    const labelled = { ...optionTarget.item, name: `${optionTarget.item.name} · ${choice}` }
+                    addToMenuCart(labelled, optionTarget.category)
+                    setOptionTarget(null)
+                  }}>{choice}</button>
+                ))}
+              </div>
+            </div>
+          </section>
+        </div>
+      })()}
+      {showMenuCart && (
+        <div className="sf-order-modal-backdrop" role="presentation" onClick={() => setShowMenuCart(false)}>
+          <section className="sf-order-modal sf-menu-cart" role="dialog" aria-modal="true" aria-labelledby="sf-menucart-title" onClick={(event) => event.stopPropagation()}>
+            <button className="sf-order-modal-close" type="button" aria-label="Close cart" onClick={() => setShowMenuCart(false)}>×</button>
+            <p className="eyebrow">SAPORI · PICKUP ORDER</p>
+            <h2 id="sf-menucart-title">Your <em>order.</em></h2>
+            <div className="sf-menu-cart-lines">
+              {Object.entries(menuCart).map(([key, line]) => (
+                <div className="sf-menu-cart-line" key={key}>
+                  <div><b>{line.item.name}</b><span>{line.category.split('|')[0].trim()}</span></div>
+                  <div className="sapori-stepper">
+                    <button type="button" aria-label="One less" onClick={() => stepMenuCart(key, -1)}><Minus size={13} strokeWidth={2.8} /></button>
+                    <span>{line.qty}</span>
+                    <button type="button" aria-label="One more" onClick={() => { addToMenuCart(line.item, line.category, 0); persistMenuCart({ ...menuCart, [key]: { ...line, qty: line.qty + 1 } }) }}><Plus size={13} strokeWidth={2.8} /></button>
+                  </div>
+                  <b className="sf-line-total">KSh {(line.qty * line.item.price).toLocaleString('en-KE')}</b>
+                </div>
+              ))}
+            </div>
+            <div className="sf-menu-cart-total"><span>Total</span><b>KSh {menuCartTotal.toLocaleString('en-KE')}</b></div>
+            <label htmlFor="sf-cartc-name">Your name</label>
+            <input id="sf-cartc-name" value={cartName} onChange={(event) => { setCartName(event.target.value); localStorage.setItem('sapori-cart-name', event.target.value) }} placeholder="Name for collection" />
+            <label htmlFor="sf-cartc-phone">Phone number</label>
+            <input id="sf-cartc-phone" type="tel" value={cartPhone} onChange={(event) => { setCartPhone(event.target.value); localStorage.setItem('sapori-cart-phone', event.target.value) }} placeholder="+254..." />
+            <div className="sf-pickup-note"><MapPin size={16}/> Collection from SAPORI, Malindi. Pay on pickup.</div>
+            <button
+              className="whatsapp-button"
+              type="button"
+              disabled={!cartName.trim() || !cartPhone.trim()}
+              onClick={() => {
+                const lines = Object.values(menuCart)
+                const summary = lines.map((line) => `${line.qty} × ${line.item.name} (KSh ${(line.qty * line.item.price).toLocaleString('en-KE')})`).join('\n')
+                const id = `SP-${Date.now().toString().slice(-6)}`
+                const order = { id, customerName: cartName.trim(), customerPhone: cartPhone.trim(), item: lines.map((l) => `${l.qty}x ${l.item.name}`).join(', '), category: 'Menu order', total: menuCartTotal, status: 'New', type: 'Pickup', createdAt: new Date().toISOString() }
+                const current = JSON.parse(localStorage.getItem('sapori-orders') || '[]')
+                const updated = [order, ...current]
+                localStorage.setItem('sapori-orders', JSON.stringify(updated))
+                window.dispatchEvent(new CustomEvent('sapori-order', { detail: order }))
+                setStaffOrders(updated); setCartOrders(updated)
+                const message = `Hello SAPORI, order ${id}:\n${summary}\nTotal: KSh ${menuCartTotal.toLocaleString('en-KE')}\nName: ${cartName.trim()}\nPhone: ${cartPhone.trim()}\nPickup`
+                window.open(`https://wa.me/254715048268?text=${encodeURIComponent(message)}`, '_blank', 'noopener,noreferrer')
+                persistMenuCart({})
+                setShowMenuCart(false)
+                setOrderSuccess({ id, name: cartName.trim(), item: `${lines.length} items`, total: menuCartTotal })
+              }}
+            >Place pickup order <ArrowRight size={16} /></button>
+            <p className="sf-cart-hint">We confirm every order on WhatsApp before the kitchen starts.</p>
+          </section>
+        </div>
+      )}
       {showStaff && <StaffDashboard onClose={() => setShowStaff(false)} />}
       <footer className="footer"><a className="wordmark footer-mark" href="#top">sapori<span>·</span></a><div className="footer-meta"><span>Lamu Road, after the Casino, towards Mambrui</span><span>Italian cuisine · Ethiopian flavours · Good company</span><span>© 2026 SAPORI</span><button className="sf-staff-entry" type="button" onClick={() => { setStaffOrders(JSON.parse(localStorage.getItem('sapori-orders') || '[]')); setShowStaff(true) }}>Staff order desk ↗</button></div><a className="footer-top" href="#top">Back to top <ArrowDown size={15} /></a></footer>
     </main>
