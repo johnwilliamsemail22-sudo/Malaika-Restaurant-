@@ -724,7 +724,7 @@ export default function BuildYourPizza({
         <div className="pizza-builder__stage-area">
           <div className="pizza-builder__stage-frame" data-size={size}>
             <div className="pizza-builder__fire-ring" aria-hidden="true" />
-            <div ref={stageRef} className="pizza-builder__pizza-stage" data-drop-ready={dragOver}>
+            <div ref={stageRef} className="pizza-builder__pizza-stage" data-drop-ready={dragOver} data-baked={baked} data-finished={fired}>
               <img
                 src={baked ? bakedImage : baseImage}
                 alt="Pizza dough spread with glossy tomato sauce"
