@@ -1081,3 +1081,30 @@ html, body { background:#FAF6EE; color:#321B14; }
   z-index:3;
   filter:drop-shadow(0 2px 3px rgba(47,20,8,.48)) saturate(1.12) contrast(1.08);
 }
+
+
+/* Final bake layer is a persistent overlay, not a temporary oven-video effect. */
+.sf-pizza-builder-overlay .pizza-builder__pizza-stage[data-baked="true"]{
+  background:#a9582c;
+}
+.sf-pizza-builder-overlay .pizza-builder__pizza-stage[data-baked="true"] .pizza-builder__base{
+  filter:sepia(1) saturate(2.1) hue-rotate(350deg) contrast(1.22) brightness(.76) !important;
+  transition:filter 1.4s ease;
+}
+.sf-pizza-builder-overlay .pizza-builder__pizza-stage[data-baked="true"]::after{
+  content:"";position:absolute;inset:0;z-index:1;pointer-events:none;border-radius:50%;
+  background:
+    radial-gradient(ellipse at 50% 50%,rgba(226,139,61,.28) 0 43%,rgba(160,77,31,.24) 61%,rgba(76,34,16,.62) 100%),
+    radial-gradient(ellipse at 18% 25%,rgba(69,27,10,.72) 0 1.5%,transparent 6%),
+    radial-gradient(ellipse at 76% 19%,rgba(69,27,10,.68) 0 1.8%,transparent 6.5%),
+    radial-gradient(ellipse at 84% 67%,rgba(69,27,10,.7) 0 2%,transparent 7%),
+    radial-gradient(ellipse at 29% 82%,rgba(69,27,10,.64) 0 1.8%,transparent 6%),
+    radial-gradient(ellipse at 52% 9%,rgba(69,27,10,.58) 0 1.6%,transparent 5.5%);
+  mix-blend-mode:multiply;opacity:1;
+}
+.sf-pizza-builder-overlay .pizza-builder__pizza-stage[data-baked="true"] .pizza-builder__cheese-melt{
+  position:absolute;inset:0;z-index:2;opacity:1;filter:saturate(1.35) brightness(1.08);
+}
+.sf-pizza-builder-overlay .pizza-builder__pizza-stage[data-baked="true"] .pizza-builder__dropped-ingredient{
+  z-index:3;filter:drop-shadow(0 2px 3px rgba(47,20,8,.5)) saturate(1.2) contrast(1.12);
+}
