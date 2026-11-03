@@ -119,8 +119,6 @@ const SPRING_STIFFNESS = 400;
 const SPRING_DAMPING = 25;
 const BASE_PRICE_KES = 1600;
 const BATCH_PIECE_SCALE = 1.35;
-const ORDER_PHONE = "254743898575";
-const ORDER_PHONE_DISPLAY = "+254 743 898 575";
 
 function playOneShot(sound: HTMLAudioElement | null) {
   if (!sound) return;
@@ -657,16 +655,11 @@ export default function BuildYourPizza({ onAddToCart, onClose }: { onAddToCart: 
     .map((topping) => `${topping.name} x${counts[topping.id]}`)
     .join(", ");
   const placeCustomPizzaOrder = () => {
-    const id = "BB-" + Date.now().toString().slice(-6);
-    const description = size + " custom pizza" + (toppingSummary ? " — " + toppingSummary : "");
-    const order = { id, customer: { name: "", phone: "", location: "", notes: "Custom pizza order — please contact customer for details." }, items: [{ name: description, qty: 1, price: totalPrice }], total: totalPrice, status: "New", createdAt: new Date().toISOString() };
-    try { const existing = JSON.parse(localStorage.getItem("barbar-demo-orders") || "[]"); localStorage.setItem("barbar-demo-orders", JSON.stringify([order, ...existing])); window.dispatchEvent(new Event("barbar-demo-order")); }
-    catch (error) { console.error("Could not save custom pizza order", error); }
-    setCustomOrderNumber(id); setOrderPlaced(true);
+    const description = size + " SAPORI custom pizza" + (toppingSummary ? " — " + toppingSummary : "");
+    onAddToCart({ name: description, total: totalPrice, details: toppingSummary });
   };
-  const whatsappUrl = "https://wa.me/" + ORDER_PHONE + "?text=" + encodeURIComponent("Hi Bar Bar, I would like to track my order " + customOrderNumber + ".");
   const status = firing
-    ? "Wood fire, 90 seconds"
+    ? "Wood fire, 8 seconds"
     : fired
       ? "Oven's hot. Your pizza is ready to send."
       : helperText;
