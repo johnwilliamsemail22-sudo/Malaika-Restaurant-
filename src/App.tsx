@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { ArrowDown, ArrowLeft, ArrowRight, MapPin, MessageCircle } from 'lucide-react'
 import Lenis from 'lenis'
 import StaffDashboard from './StaffDashboard'
+import { menuData } from './menuData'
 
 type Theme = { bg: string; ink: string; muted: string; accent: string }
 type Topping = 'Fior di Latte' | 'Prosciutto' | 'Wild Rocket' | 'Spicy Salami' | 'Coast Prawns' | 'Mushrooms' | 'Chilli Honey' | 'Olives'
@@ -178,17 +179,7 @@ function App() {
     return () => window.clearTimeout(settleTimer)
   }, [activeIndex, reducedMotion])
 
-  useEffect(() => {
-    if (showFullMenu || reducedMotion) return
-    const carousel = carouselRef.current
-    if (!carousel) return
-    const timer = window.setInterval(() => {
-      if (document.hidden || carousel.matches(':hover') || carousel.matches(':focus-within')) return
-      const next = (activeIndex + 1) % dishes.length
-      scrollToDish(next)
-    }, 2500)
-    return () => window.clearInterval(timer)
-  }, [activeIndex, showFullMenu, reducedMotion])
+
 
   const handleCarouselScroll = () => {
     const carousel = carouselRef.current
@@ -332,9 +323,48 @@ function App() {
           </div>
           <div className="sf-menu-bottom-cta"><span>Looking for something specific?</span><button type="button" onClick={() => setShowFullMenu(true)}>See the complete menu <ArrowRight size={16}/></button></div>
         </> : <>
-          <div className="sf-full-menu-heading"><button className="sf-back-menu" type="button" onClick={() => setShowFullMenu(false)}><ArrowLeft size={16}/> Back to the experience</button><p className="eyebrow">Welcome · SAPORI, Malindi</p><h2 id="menu-title">The full <em>menu.</em></h2><p>Take your time. Find your favourite.</p></div>
-          <div className="sf-full-menu-grid">{dishes.map((dish) => <article className="sf-full-menu-card" key={dish.number}><div className="sf-full-menu-photo"><img src={dish.asset} alt={dish.title} loading="lazy" /></div><div className="sf-full-menu-copy"><p className="sf-card-kicker">{dish.kicker}</p><h3>{dish.title}</h3><p>{dish.description}</p><ul>{dish.menu.map((item) => <li key={item.name}><span>{item.name}</span><span>{item.price}</span><button className="sf-item-order" type="button" onClick={() => openDishOrder(dish, item.name)}>Order <ArrowRight size={13}/></button></li>)}</ul><button className="sf-card-order sf-primary-button" type="button" onClick={() => openDishOrder(dish, dish.menu[0]?.name)}><span>Order Now</span><span className="sf-card-order-price">{dish.price}</span></button></div></article>)}</div>
-          <p className="sf-menu-note">Demo menu and illustrative prices for presentation only. Final items and prices will be confirmed by SAPORI.</p>
+          <div className="sf-full-menu-heading">
+            <button className="sf-back-menu" type="button" onClick={() => setShowFullMenu(false)}><ArrowLeft size={16}/> Back to the experience</button>
+            <p className="eyebrow">Welcome · SAPORI, Malindi</p><h2 id="menu-title">The full <em>menu.</em></h2>
+            <p>Explore the complete SAPORI menu. Every item and price is from the restaurant menu.</p>
+          </div>
+          <div className="sapori-real-menu">
+            {menuData.map((category, categoryIndex) => {
+              const categoryImage = /PIZZA|PIZZE|FOCACCIA/i.test(category.category)
+                ? '/images/dishes/pizza-base.webp'
+                : /PASTA|RISOTTO|RAVIOLI|GNOCCHI/i.test(category.category)
+                  ? '/images/dishes/lobster-ravioli.webp'
+                  : /PESCE|FISH|SEAFOOD|CEVICHE/i.test(category.category)
+                    ? '/images/dishes/seafood-salad.webp'
+                    : /DOLCI|DESSERT|GELATO/i.test(category.category)
+                      ? '/images/dishes/artisanal-gelato.webp'
+                      : /BEV|DRINK|COFFEE|WINE|COCKTAIL/i.test(category.category)
+                        ? '/images/dishes/artisanal-gelato.webp'
+                        : /POLLO|CHICKEN|CARNE|BEEF|MANZO|SUINO/i.test(category.category)
+                          ? '/images/dishes/burger-assembled.webp'
+                          : '/images/dishes/seafood-salad.webp'
+              const compact = /BEV|DRINK|COFFEE|WINE|COCKTAIL|WATER/i.test(category.category)
+              return <section className={`sapori-menu-category ${compact ? 'is-compact' : ''}`} key={category.category}>
+                <header><span>{String(categoryIndex + 1).padStart(2, '0')}</span><h3>{category.category}</h3><i>{category.items.length} items</i></header>
+                <div className="sapori-menu-items">
+                  {category.items.map((item, itemIndex) => {
+                    const orderDish: Dish = {
+                      number: String(categoryIndex + 1).padStart(2, '0'), kind: 'pasta',
+                      kicker: category.category, title: category.category,
+                      description: item.description, price: `KSh ${item.price.toLocaleString('en-KE')}`,
+                      asset: categoryImage, theme: dishes[0].theme,
+                      menu: [{ name: item.name, price: `KSh ${item.price.toLocaleString('en-KE')}` }]
+                    }
+                    return <article className="sapori-menu-item" key={item.name + itemIndex}>
+                      {!compact && <div className="sapori-menu-item-photo"><img src={categoryImage} alt="" loading="lazy" /></div>}
+                      <div className="sapori-menu-item-copy"><h4>{item.name}</h4>{item.description && <p>{item.description}</p>}<strong>KSh {item.price.toLocaleString('en-KE')}</strong></div>
+                      <button type="button" aria-label={`Order ${item.name}`} onClick={() => openDishOrder(orderDish, item.name)}>+</button>
+                    </article>
+                  })}
+                </div>
+              </section>
+            })}
+          </div>
         </>}
       </section>
 
