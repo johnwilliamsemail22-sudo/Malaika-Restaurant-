@@ -7,7 +7,6 @@ const withBase = (p: string) => (p.startsWith("/") ? (BASE.endsWith("/") ? BASE.
 
 // Vendored assets (no network dependency, instant animations)
 const baseImage = `${withBase("/images/pizza/base.webp")}`;
-const bakedImage = `${withBase("/images/pizza/baked.webp")}`;
 const cheeseMeltImage = `${withBase("/images/pizza/cheese.webp")}`;
 const toppingDropUrl = `${withBase("/audio/topping-drop.mp3")}`;
 const ovenIgnitionUrl = `${withBase("/audio/oven-ignition.mp3")}`;
@@ -398,6 +397,8 @@ export default function BuildYourPizza({
     };
   }, []);
 
+  // A completed fire is always baked, even after the countdown/fire overlay is removed.
+  const isBaked = baked || fired;
   const basePrice = SIZES.find((candidate) => candidate.id === size)!.priceKes;
   const totalPrice =
     basePrice +
@@ -726,21 +727,21 @@ export default function BuildYourPizza({
         <div className="pizza-builder__stage-area">
           <div className="pizza-builder__stage-frame" data-size={size}>
             <div className="pizza-builder__fire-ring" aria-hidden="true" />
-            <div ref={stageRef} className="pizza-builder__pizza-stage" data-drop-ready={dragOver} data-baked={baked} data-finished={fired}>
+            <div ref={stageRef} className="pizza-builder__pizza-stage" data-drop-ready={dragOver} data-baked={isBaked} data-finished={fired}>
               <img
-                src={baked ? bakedImage : baseImage}
+                src={baseImage}
                 alt="Pizza dough spread with glossy tomato sauce"
                 className="pizza-builder__base"
-                data-baked={baked}
+                data-baked={isBaked}
                 draggable={false}
               />
-              {baked && (
+              {isBaked && (
                 <img src={cheeseMeltImage} alt="" aria-hidden="true" draggable={false} className="pizza-builder__cheese-melt" />
               )}
               {placed
                 .filter((piece) => !flights.some((flight) => flight.id === piece.id))
                 .map((piece) => (
-                  <DroppedIngredient key={piece.id} placement={piece} baked={baked} />
+                  <DroppedIngredient key={piece.id} placement={piece} baked={isBaked} />
                 ))}
               {firing && (
                 <div className="pizza-builder__countdown" aria-live="polite" aria-label={`${countdown} seconds remaining`}>
