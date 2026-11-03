@@ -893,3 +893,45 @@ html, body { background:#FAF6EE; color:#321B14; }
 @media(max-width:520px){.sf-topbar .topbar-right{gap:8px}.sf-topbar .sf-order{padding:11px 13px;font-size:9px}.sf-cart-button{width:42px;height:42px}.sf-hero-actions{width:100%;gap:9px}.sf-hero-actions button{padding:0 16px;min-height:50px;font-size:12px}.sf-order-progress span{font-size:8px;gap:3px}.sf-cart-order{padding:13px}}
 
 .sf-reservation-check{display:grid;place-items:center;width:58px;height:58px;margin:0 auto 18px;border-radius:50%;background:#e4f0df;color:#397448;font-size:30px;font-weight:700;box-shadow:0 8px 24px rgba(57,116,72,.14);animation:sf-success-pop .48s cubic-bezier(.2,.8,.25,1.25) both}@keyframes sf-success-pop{0%{transform:scale(.35);opacity:0}70%{transform:scale(1.12)}100%{transform:scale(1);opacity:1}}.sf-order-success p{line-height:1.7}.sf-order-success .sf-done-button{width:100%;margin-top:14px}
+
+/* SAPORI interactive pizza builder */
+.sf-pizza-builder-overlay{position:fixed;inset:0;z-index:150;overflow:auto;background:rgba(20,14,10,.94);backdrop-filter:blur(16px);overscroll-behavior:contain}
+.sf-pizza-builder-overlay .pizza-builder{min-height:100vh;background:#f7f0e5;color:#302018;padding:24px 18px 40px}
+.sf-pizza-builder-overlay .pizza-builder__shell{width:min(1120px,100%);margin:0 auto}
+.sf-pizza-builder-overlay .pizza-builder__header{display:flex;align-items:center;gap:18px;justify-content:space-between;flex-wrap:wrap;padding:8px 0 22px;border-bottom:1px solid rgba(48,32,24,.14)}
+.sf-pizza-builder-overlay .pizza-builder__title{font-family:Georgia,serif;font-size:clamp(27px,4vw,42px);font-weight:500;margin:0;flex:1}
+.sf-pizza-builder-overlay .pizza-builder__back,.sf-pizza-builder-overlay .pizza-builder__size{border:1px solid rgba(48,32,24,.2);border-radius:50%;width:44px;height:44px;display:grid;place-items:center;color:#302018;background:#fffaf3}
+.sf-pizza-builder-overlay .pizza-builder__sizes{display:flex;gap:8px}
+.sf-pizza-builder-overlay .pizza-builder__size[data-active=true]{background:#39231a;color:#fff}
+.sf-pizza-builder-overlay .pizza-builder__stage-area{display:grid;justify-items:center;padding:28px 0 12px}
+.sf-pizza-builder-overlay .pizza-builder__stage-frame{position:relative;width:min(460px,78vw);aspect-ratio:1;border-radius:50%;padding:4%;background:radial-gradient(circle,#e9b76d 0 68%,#a95727 69% 72%,transparent 73%);box-shadow:0 20px 60px #59351b2b}
+.sf-pizza-builder-overlay .pizza-builder__pizza-stage{position:relative;width:100%;height:100%;border-radius:50%;overflow:hidden;touch-action:pan-y}
+.sf-pizza-builder-overlay .pizza-builder__base{width:100%;height:100%;object-fit:contain;display:block}
+.sf-pizza-builder-overlay .pizza-builder__status{font-size:13px;letter-spacing:.04em;color:#806e64;text-align:center;min-height:22px;margin:16px 0 0}
+.sf-pizza-builder-overlay .pizza-builder__dock{margin:20px auto 0;max-width:980px}
+.sf-pizza-builder-overlay .pizza-builder__dock-heading{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:12px}
+.sf-pizza-builder-overlay .pizza-builder__dock-title{font:600 15px Georgia,serif;text-transform:uppercase;letter-spacing:.13em}
+.sf-pizza-builder-overlay .pizza-builder__dock-hint{font-size:12px;color:#8b7768}
+.sf-pizza-builder-overlay .pizza-builder__topping-row{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.sf-pizza-builder-overlay .pizza-builder__topping{min-width:0;display:grid;justify-items:center;gap:5px;border:1px solid rgba(48,32,24,.12);border-radius:16px;padding:10px 6px;background:#fffaf3;color:#302018;touch-action:pan-y;transition:transform .2s,border-color .2s,box-shadow .2s}
+.sf-pizza-builder-overlay .pizza-builder__topping:active{transform:scale(.96)}
+.sf-pizza-builder-overlay .pizza-builder__topping-orb{width:54px;height:54px;position:relative;display:grid;place-items:center;border-radius:50%;background:#f0e4d5}
+.sf-pizza-builder-overlay .pizza-builder__topping-orb img{width:82%;height:82%;object-fit:contain}
+.sf-pizza-builder-overlay .pizza-builder__topping-name{font-size:12px;font-weight:700;text-align:center}
+.sf-pizza-builder-overlay .pizza-builder__topping-price{font-size:10px;color:#806e64;text-align:center}
+.sf-pizza-builder-overlay .pizza-builder__topping-batch{display:block;margin-top:2px}
+.sf-pizza-builder-overlay .pizza-builder__count-badge{position:absolute;right:-4px;top:-5px;border-radius:20px;background:#9b4d31;color:white;padding:2px 6px;font-size:10px}
+.sf-pizza-builder-overlay .pizza-builder__add-mark{position:absolute;right:-3px;bottom:-3px;width:18px;height:18px;display:grid;place-items:center;border-radius:50%;background:#39231a;color:#fff}
+.sf-pizza-builder-overlay .pizza-builder__footer{position:sticky;bottom:10px;z-index:3;display:grid;justify-items:center;gap:8px;padding-top:18px}
+.sf-pizza-builder-overlay .pizza-builder__fire-button{width:min(520px,100%);display:flex;justify-content:space-between;align-items:center;gap:16px;border:0;border-radius:999px;padding:17px 24px;background:#a8492e;color:#fff;font-weight:700;box-shadow:0 12px 32px #a8492e45}
+.sf-pizza-builder-overlay .pizza-builder__button-label{display:flex;align-items:center;gap:10px}
+.sf-pizza-builder-overlay .pizza-builder__button-price{font-size:17px}
+.sf-pizza-builder-overlay .pizza-builder__footer-note{font-size:11px;color:#806e64}
+.sf-pizza-builder-overlay .pizza-builder__fire-backdrop{position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:0;transition:opacity .3s}
+.sf-pizza-builder-overlay .pizza-builder[data-firing=true] .pizza-builder__fire-backdrop{opacity:.22}
+.sf-pizza-builder-overlay .pizza-builder__fire-video{width:100%;height:100%;object-fit:cover}
+.sf-pizza-builder-overlay .pizza-builder__drag-preview{position:fixed;z-index:200;width:64px;height:64px;pointer-events:none;left:0;top:0}
+.sf-pizza-builder-overlay .pizza-builder__countdown{position:absolute;inset:0;z-index:5;display:grid;place-items:center;color:#fff;font-size:48px;font-weight:800;text-shadow:0 2px 20px #000;background:#a9492d30}
+.sf-build-pizza-button{width:100%;display:flex;align-items:center;justify-content:center;gap:10px;margin-top:10px;padding:13px 16px;border:1px solid #9a4b32;border-radius:999px;background:#fff8ef;color:#713b28;font-size:12px;font-weight:700;letter-spacing:.04em;transition:background .2s,transform .2s}
+.sf-build-pizza-button:hover{background:#f1dfcb;transform:translateY(-2px)}
+@media(max-width:520px){.sf-pizza-builder-overlay .pizza-builder{padding:14px 12px 28px}.sf-pizza-builder-overlay .pizza-builder__header{gap:10px}.sf-pizza-builder-overlay .pizza-builder__title{font-size:26px}.sf-pizza-builder-overlay .pizza-builder__stage-frame{width:min(370px,86vw)}.sf-pizza-builder-overlay .pizza-builder__topping-row{grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}.sf-pizza-builder-overlay .pizza-builder__topping{padding:8px 3px}.sf-pizza-builder-overlay .pizza-builder__topping-orb{width:44px;height:44px}.sf-pizza-builder-overlay .pizza-builder__topping-name{font-size:10px}.sf-pizza-builder-overlay .pizza-builder__topping-price{font-size:9px}.sf-pizza-builder-overlay .pizza-builder__dock-hint{font-size:10px}}
