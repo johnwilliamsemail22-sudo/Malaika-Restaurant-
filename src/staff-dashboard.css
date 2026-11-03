@@ -63,3 +63,19 @@
 .sf-full-menu-open .sf-menu-note{color:#80746f!important}
 .sf-full-menu-open .sapori-real-menu,
 .sf-full-menu-open .sapori-real-menu *{text-shadow:none}
+
+
+/* SAPORI PIN screen contrast and customer pizza checkout selection */
+.sd-login-card{background:#fffdf8;color:#3e2723;border:1px solid #e8dfd3;border-radius:18px;padding:30px 26px;box-shadow:0 18px 55px rgba(0,0,0,.22)}
+.sd-login-card .sd-logo{color:#3e2723}
+.sd-login-card>small{color:#75665d}
+.sd-login-card h1{color:#3e2723}
+.sd-login-card p{color:#6f625c}
+.sd-login .sd-close{color:#fffdf8}
+.sd-login-card .sd-dots{color:#c8bbae}
+.sd-login-card .sd-dots .on{color:#9a4b32}
+.sd-login-card .sd-keypad button{background:#eee7de;color:#3e2723;border-color:#d8ccbd}
+.sd-login-card .sd-keypad button:active{background:#9a4b32;color:#fffdf8}
+.sf-order-selection{display:flex;align-items:center;justify-content:space-between;gap:12px;border:1px solid #e7ded2;background:#f8f3eb;border-radius:9px;padding:13px 14px;color:#3e2723;font-size:13px}
+.sf-order-selection strong{font-weight:700}
+.sf-order-selection span{white-space:nowrap;font-weight:700;color:#6b4438}
