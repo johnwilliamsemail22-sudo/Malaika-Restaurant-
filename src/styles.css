@@ -1053,3 +1053,31 @@ html, body { background:#FAF6EE; color:#321B14; }
   opacity:1;animation:pz-melt .8s .15s ease both;
 }
 .sf-pizza-builder-overlay .pizza-builder__pizza-stage[data-finished="true"] .pizza-builder__countdown{display:none}
+
+
+/* Strong, persistent baked finish: visibly toast the dough after the oven closes. */
+.sf-pizza-builder-overlay .pizza-builder__pizza-stage[data-baked="true"]{
+  background:radial-gradient(ellipse at 50% 48%,#b96b32 0%,#d9954e 54%,#8e4727 73%,#5b2c1b 100%);
+}
+.sf-pizza-builder-overlay .pizza-builder__pizza-stage[data-baked="true"] .pizza-builder__base{
+  filter:sepia(.82) saturate(1.75) hue-rotate(350deg) contrast(1.13) brightness(.88) !important;
+  transition:filter 1.15s cubic-bezier(.2,.7,.2,1);
+}
+.sf-pizza-builder-overlay .pizza-builder__pizza-stage[data-baked="true"]::after{
+  z-index:1;
+  background:
+    radial-gradient(ellipse at 15% 24%,rgba(91,39,14,.55) 0 2.5%,transparent 8%),
+    radial-gradient(ellipse at 72% 17%,rgba(101,43,13,.48) 0 2.4%,transparent 8%),
+    radial-gradient(ellipse at 85% 61%,rgba(89,37,13,.5) 0 3%,transparent 9%),
+    radial-gradient(ellipse at 27% 82%,rgba(112,49,16,.46) 0 2.5%,transparent 8%),
+    radial-gradient(ellipse at 54% 8%,rgba(91,39,14,.35) 0 2%,transparent 7%),
+    radial-gradient(circle at 50% 50%,transparent 48%,rgba(74,31,12,.2) 72%,rgba(60,25,10,.48) 100%);
+  mix-blend-mode:multiply;opacity:1;
+}
+.sf-pizza-builder-overlay .pizza-builder__pizza-stage[data-baked="true"] .pizza-builder__cheese-melt{
+  z-index:2;opacity:1;filter:saturate(1.2) brightness(1.05);
+}
+.sf-pizza-builder-overlay .pizza-builder__pizza-stage[data-baked="true"] .pizza-builder__dropped-ingredient{
+  z-index:3;
+  filter:drop-shadow(0 2px 3px rgba(47,20,8,.48)) saturate(1.12) contrast(1.08);
+}
