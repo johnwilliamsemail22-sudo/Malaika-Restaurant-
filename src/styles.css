@@ -891,3 +891,5 @@ html, body { background:#FAF6EE; color:#321B14; }
 .sf-cart-empty p{margin:0}
 .sf-cart-empty .whatsapp-button{width:auto}
 @media(max-width:520px){.sf-topbar .topbar-right{gap:8px}.sf-topbar .sf-order{padding:11px 13px;font-size:9px}.sf-cart-button{width:42px;height:42px}.sf-hero-actions{width:100%;gap:9px}.sf-hero-actions button{padding:0 16px;min-height:50px;font-size:12px}.sf-order-progress span{font-size:8px;gap:3px}.sf-cart-order{padding:13px}}
+
+.sf-reservation-check{display:grid;place-items:center;width:58px;height:58px;margin:0 auto 18px;border-radius:50%;background:#e4f0df;color:#397448;font-size:30px;font-weight:700;box-shadow:0 8px 24px rgba(57,116,72,.14);animation:sf-success-pop .48s cubic-bezier(.2,.8,.25,1.25) both}@keyframes sf-success-pop{0%{transform:scale(.35);opacity:0}70%{transform:scale(1.12)}100%{transform:scale(1);opacity:1}}.sf-order-success p{line-height:1.7}.sf-order-success .sf-done-button{width:100%;margin-top:14px}
