@@ -7,7 +7,7 @@ const withBase = (p: string) => (p.startsWith("/") ? (BASE.endsWith("/") ? BASE.
 
 // Vendored assets (no network dependency, instant animations)
 const baseImage = `${withBase("/images/pizza/base.webp")}`;
-const bakedCheeseImage = `${withBase("/images/pizza/baked-done.webp")}`;
+const bakedCheeseImage = `${withBase("/images/pizza/baked-final.webp")}`;
 const toppingDropUrl = `${withBase("/audio/topping-drop.mp3")}`;
 const ovenIgnitionUrl = `${withBase("/audio/oven-ignition.mp3")}`;
 const fireVideoUrl = `${withBase("/oven-fire-loop.mp4")}`;
@@ -55,14 +55,14 @@ type Topping = {
 
 // Every SAPORI extra topping, exact menu prices, each mapped to a sprite.
 const TOPPINGS: Topping[] = [
-  { id: "chicken", name: "Chicken", priceKes: 300, piecesPerTap: 9, image: `${withBase("/images/pizza/t-chicken.webp")}`, width: 21, maxBatches: 2 },
+  { id: "chicken", name: "Chicken", priceKes: 300, piecesPerTap: 7, image: `${withBase("/images/pizza/t-chicken.webp")}`, width: 17, maxBatches: 2 },
   { id: "corn", name: "Corn", priceKes: 300, piecesPerTap: 10, image: `${withBase("/images/pizza/t-corn.webp")}`, width: 17, maxBatches: 2 },
   { id: "datterino", name: "Datterino tomatoes", priceKes: 300, piecesPerTap: 8, image: `${withBase("/images/pizza/t-tomato.webp")}`, width: 20, maxBatches: 2 },
   { id: "mozzarella", name: "Mozzarella", priceKes: 300, piecesPerTap: 10, image: `${withBase("/images/pizza/t-mozz-shreds.webp")}`, width: 21, maxBatches: 2 },
   { id: "pineapple", name: "Pineapple", priceKes: 300, piecesPerTap: 9, image: `${withBase("/images/pizza/t-pineapple.webp")}`, width: 19, maxBatches: 2 },
   { id: "anchovies", name: "Anchovies", priceKes: 400, piecesPerTap: 8, image: `${withBase("/images/pizza/t-anchovy.webp")}`, width: 18, maxBatches: 2 },
   { id: "capers", name: "Capers", priceKes: 400, piecesPerTap: 12, image: `${withBase("/images/pizza/t-capers.webp")}`, width: 14, maxBatches: 2 },
-  { id: "sausage", name: "Italian sausage", priceKes: 400, piecesPerTap: 10, image: `${withBase("/images/pizza/t-salami.webp")}`, width: 20, maxBatches: 2 },
+  { id: "sausage", name: "Italian sausage", priceKes: 400, piecesPerTap: 6, image: `${withBase("/images/pizza/t-salami.webp")}`, width: 13, maxBatches: 2 },
   { id: "mushrooms", name: "Mushrooms", priceKes: 400, piecesPerTap: 9, image: `${withBase("/images/pizza/t-mushroom.webp")}`, width: 20, maxBatches: 2 },
   { id: "olives", name: "Olives", priceKes: 400, piecesPerTap: 12, image: `${withBase("/images/pizza/t-olive.webp")}`, width: 15, maxBatches: 2 },
   { id: "tuna", name: "Tuna", priceKes: 400, piecesPerTap: 9, image: `${withBase("/images/pizza/t-tuna.webp")}`, width: 20, maxBatches: 2 },
