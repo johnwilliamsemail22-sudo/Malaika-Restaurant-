@@ -80,6 +80,7 @@ function App() {
   const [reducedMotion, setReducedMotion] = useState(false)
   const [burgerOpen, setBurgerOpen] = useState(false)
   const [orderLocationDish, setOrderLocationDish] = useState<Dish | null>(null)
+  const [customPizzaCheckout, setCustomPizzaCheckout] = useState<{ name: string; total: number; details: string } | null>(null)
   const [customerName, setCustomerName] = useState('')
   const [customerPhone, setCustomerPhone] = useState('')
   const [selectedOrderItem, setSelectedOrderItem] = useState('')
@@ -329,13 +330,16 @@ function App() {
     setPizzaToppings((current) => [...current, ...newPieces])
     setLastAddedTopping(topping)
   }
-  const openDishOrder = (dish: Dish, itemName = dish.menu[0]?.name ?? dish.title) => { setCustomerName(''); setCustomerPhone(''); setSelectedOrderItem(itemName); setOrderSuccess(null); setOrderLocationDish(dish) }
+  const openDishOrder = (dish: Dish, itemName = dish.menu[0]?.name ?? dish.title) => { setCustomerName(''); setCustomerPhone(''); setSelectedOrderItem(itemName); setOrderSuccess(null); setCustomPizzaCheckout(null); setOrderLocationDish(dish) }
   const submitDishOrder = () => {
-    if (!customerName.trim() || !customerPhone.trim() || !orderLocationDish) return
-    const item = orderLocationDish.menu.find((entry) => entry.name === selectedOrderItem) ?? orderLocationDish.menu[0]
-    const total = Number(item.price.replace(/[^0-9.]/g, '')) || 0
+    if (!customerName.trim() || !customerPhone.trim() || (!orderLocationDish && !customPizzaCheckout)) return
+    const customPizza = customPizzaCheckout
+    const dishItem = orderLocationDish?.menu.find((entry) => entry.name === selectedOrderItem) ?? orderLocationDish?.menu[0]
+    const itemName = customPizza?.name ?? dishItem?.name ?? ''
+    const total = customPizza?.total ?? (Number(dishItem?.price.replace(/[^0-9.]/g, '')) || 0)
+    const price = customPizza ? `KSh ${total.toLocaleString('en-KE')}` : dishItem?.price ?? `KSh ${total.toLocaleString('en-KE')}`
     const id = `SP-${Date.now().toString().slice(-6)}`
-    const order = { id, customerName: customerName.trim(), customerPhone: customerPhone.trim(), item: item.name, category: orderLocationDish.title, price: item.price, total, status: 'New', type: 'Pickup', createdAt: new Date().toISOString() }
+    const order = { id, customerName: customerName.trim(), customerPhone: customerPhone.trim(), phone: customerPhone.trim(), item: itemName, category: customPizza ? 'Custom pizza' : orderLocationDish?.title ?? 'Menu order', price, total, status: 'New', type: 'Pickup', notes: customPizza?.details ?? '', details: customPizza?.details ? customPizza.details.split(', ').filter(Boolean) : [itemName], createdAt: new Date().toISOString() }
     const current = JSON.parse(localStorage.getItem('sapori-orders') || '[]')
     const updated = [order, ...current]
     localStorage.setItem('sapori-orders', JSON.stringify(updated))
@@ -343,21 +347,15 @@ function App() {
     setStaffOrders(updated)
     setCartOrders(updated)
     setFlyingToCart(true)
-    window.setTimeout(() => { setFlyingToCart(false); setOrderLocationDish(null); setOrderSuccess({ id, name: customerName.trim(), item: item.name, total }) }, 850)
+    window.setTimeout(() => { setFlyingToCart(false); setOrderLocationDish(null); setCustomPizzaCheckout(null); setOrderSuccess({ id, name: customerName.trim(), item: itemName, total }) }, 850)
   }
   const addCustomPizzaToCart = (pizza: { name: string; total: number; details: string }) => {
-    const id = `SP-${Date.now().toString().slice(-6)}`
-    const order = { id, customerName: 'Guest', customerPhone: '', item: pizza.name, category: 'Custom pizza', price: `KSh ${pizza.total.toLocaleString('en-KE')}`, total: pizza.total, status: 'New', type: 'Pickup', notes: pizza.details, createdAt: new Date().toISOString() }
-    const existing = JSON.parse(localStorage.getItem('sapori-orders') || '[]')
-    const updated = [order, ...existing]
-    localStorage.setItem('sapori-orders', JSON.stringify(updated))
-    window.dispatchEvent(new CustomEvent('sapori-order', { detail: order }))
-    setCartOrders(updated)
-    setStaffOrders(updated)
+    setCustomerName('')
+    setCustomerPhone('')
+    setOrderSuccess(null)
+    setOrderLocationDish(null)
+    setCustomPizzaCheckout(pizza)
     setShowPizzaBuilder(false)
-    setFlyingToCart(true)
-    window.setTimeout(() => setFlyingToCart(false), 1100)
-    setShowCart(true)
   }
   const openWhatsApp = (message = orderText) => {
     const currentY = window.scrollY; const url = `https://wa.me/254715048268?text=${encodeURIComponent(message)}`
@@ -512,7 +510,7 @@ function App() {
       {showPizzaBuilder && <div className="sf-pizza-builder-overlay"><BuildYourPizza onAddToCart={addCustomPizzaToCart} onClose={() => setShowPizzaBuilder(false)} /></div>}
       {flyingToCart && <div className="sf-fly-to-cart" aria-hidden="true"><ShoppingBag size={25}/><span>Added to your orders</span></div>}
       {showCart && <div className="sf-order-modal-backdrop" role="presentation" onClick={() => setShowCart(false)}><section className="sf-order-modal sf-cart-modal" role="dialog" aria-modal="true" aria-labelledby="sf-cart-title" onClick={(event) => event.stopPropagation()}><button className="sf-order-modal-close" type="button" aria-label="Close cart" onClick={() => setShowCart(false)}>×</button><p className="eyebrow">SAPORI · PICKUP ORDERS</p><h2 id="sf-cart-title">Your <em>orders.</em></h2><p>Your order references are saved on this device, so you can return after refreshing.</p>{cartOrders.length === 0 ? <div className="sf-cart-empty"><ShoppingBag size={30}/><p>Your cart is waiting for something delicious.</p><button className="whatsapp-button" type="button" onClick={() => { setShowCart(false); setShowFullMenu(true); document.getElementById("menu")?.scrollIntoView({behavior:"smooth"}) }}>Explore menu</button></div> : <div className="sf-cart-orders">{cartOrders.map((order:any) => <article className="sf-cart-order" key={order.id}><div className="sf-cart-order-top"><span>ORDER {order.id}</span><strong>{order.status || 'New'}</strong></div><h3>{order.item}</h3><p>{order.customerName} · Pickup · KSh {Number(order.total || 0).toLocaleString('en-KE')}</p><div className="sf-order-progress"><span className="done"><i/>Received</span><span className={(['Cooking','Ready'].includes(order.status)) ? 'done' : ''}><i/>Preparing</span><span className={order.status === 'Ready' ? 'done' : ''}><i/>Ready for pickup</span></div><small>Keep your order number: {order.id}</small></article>)}</div>}<button className="sf-done-button" type="button" onClick={() => setShowCart(false)}>Close</button></section></div>}
-      {orderLocationDish && <div className="sf-order-modal-backdrop" role="presentation" onClick={() => setOrderLocationDish(null)}><section className="sf-order-modal" role="dialog" aria-modal="true" aria-labelledby="sf-order-modal-title" onClick={(event) => event.stopPropagation()}><button className="sf-order-modal-close" type="button" aria-label="Close" onClick={() => setOrderLocationDish(null)}>×</button><p className="eyebrow">SAPORI · PICKUP ONLY</p><h2 id="sf-order-modal-title">Place your <em>order.</em></h2><p>Order online and collect your food fresh from SAPORI. We do not offer delivery.</p><label htmlFor="sf-order-item">Your selection</label><select id="sf-order-item" value={selectedOrderItem} onChange={(event) => setSelectedOrderItem(event.target.value)}>{orderLocationDish.menu.map((item) => <option key={item.name} value={item.name}>{item.name} · {item.price}</option>)}</select><label htmlFor="sf-customer-name">Your name</label><input id="sf-customer-name" value={customerName} onChange={(event) => setCustomerName(event.target.value)} placeholder="Name for collection" autoFocus /><label htmlFor="sf-customer-phone">Phone number</label><input id="sf-customer-phone" type="tel" value={customerPhone} onChange={(event) => setCustomerPhone(event.target.value)} placeholder="+254..." /><div className="sf-pickup-note"><MapPin size={16}/> Collection from SAPORI, Malindi.</div><button className="whatsapp-button" type="button" disabled={!customerName.trim() || !customerPhone.trim()} onClick={submitDishOrder}>Place pickup order <ArrowRight size={16}/></button></section></div>}
+      {(orderLocationDish || customPizzaCheckout) && <div className="sf-order-modal-backdrop" role="presentation" onClick={() => { setOrderLocationDish(null); setCustomPizzaCheckout(null) }}><section className="sf-order-modal" role="dialog" aria-modal="true" aria-labelledby="sf-order-modal-title" onClick={(event) => event.stopPropagation()}><button className="sf-order-modal-close" type="button" aria-label="Close" onClick={() => { setOrderLocationDish(null); setCustomPizzaCheckout(null) }}>×</button><p className="eyebrow">SAPORI · PICKUP ONLY</p><h2 id="sf-order-modal-title">Place your <em>order.</em></h2><p>Order online and collect your food fresh from SAPORI. We do not offer delivery.</p><label htmlFor="sf-order-item">Your selection</label>{customPizzaCheckout ? <div className="sf-order-selection"><strong>{customPizzaCheckout.name}</strong><span>KSh {customPizzaCheckout.total.toLocaleString('en-KE')}</span></div> : <select id="sf-order-item" value={selectedOrderItem} onChange={(event) => setSelectedOrderItem(event.target.value)}>{orderLocationDish?.menu.map((item) => <option key={item.name} value={item.name}>{item.name} · {item.price}</option>)}</select>}<label htmlFor="sf-customer-name">Your name</label><input id="sf-customer-name" value={customerName} onChange={(event) => setCustomerName(event.target.value)} placeholder="Name for collection" autoFocus /><label htmlFor="sf-customer-phone">Phone number</label><input id="sf-customer-phone" type="tel" value={customerPhone} onChange={(event) => setCustomerPhone(event.target.value)} placeholder="+254..." /><div className="sf-pickup-note"><MapPin size={16}/> Collection from SAPORI, Malindi.</div><button className="whatsapp-button" type="button" disabled={!customerName.trim() || !customerPhone.trim()} onClick={submitDishOrder}>Place pickup order <ArrowRight size={16}/></button></section></div>}
       {orderSuccess && <div className="sf-order-modal-backdrop" role="presentation"><section className="sf-order-modal sf-order-success" role="dialog" aria-modal="true" aria-labelledby="sf-order-success-title"><button className="sf-order-modal-close" type="button" aria-label="Close" onClick={() => setOrderSuccess(null)}>×</button><p className="eyebrow">ORDER RECEIVED · PICKUP</p><h2 id="sf-order-success-title">Thank you, <em>{orderSuccess.name}.</em></h2><p>Your order has been placed with SAPORI. Keep this reference handy.</p><div className="sf-order-reference"><span>ORDER NUMBER</span><strong>{orderSuccess.id}</strong><small>{orderSuccess.item} · KSh {orderSuccess.total.toLocaleString('en-KE')}</small></div><p>For order updates, cancellations or any questions, call or WhatsApp our team.</p><a className="whatsapp-button" href="https://wa.me/254715048268" target="_blank" rel="noreferrer"><MessageCircle size={17}/> WhatsApp · +254 715 048 268</a><a className="sf-call-link" href="tel:+254715048268">Call +254 715 048 268</a><button className="sf-done-button" type="button" onClick={() => setOrderSuccess(null)}>Done</button></section></div>}
       {toastMsg && <div className="sf-toast" role="status">{toastMsg}</div>}
       {menuCartCount > 0 && !showMenuCart && !showPizzaBuilder && !orderLocationDish && (
