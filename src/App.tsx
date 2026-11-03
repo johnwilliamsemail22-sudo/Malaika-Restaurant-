@@ -350,6 +350,7 @@ function App() {
             <button className="sf-back-menu" type="button" onClick={() => setShowFullMenu(false)}><ArrowLeft size={16}/> Back to the experience</button>
             <p className="eyebrow">Welcome · SAPORI, Malindi</p><h2 id="menu-title">The full <em>menu.</em></h2>
             <p>Explore the complete SAPORI menu. Every item and price is from the restaurant menu.</p>
+            <button className="sf-build-pizza-button sf-full-menu-pizza-cta" type="button" onClick={() => setShowPizzaBuilder(true)}>🍕 Build your own pizza <ArrowRight size={15}/></button>
           </div>
           <div className="sapori-real-menu">
             {menuData.map((category, categoryIndex) => {
