@@ -7,7 +7,7 @@ const withBase = (p: string) => (p.startsWith("/") ? (BASE.endsWith("/") ? BASE.
 
 // Vendored assets (no network dependency, instant animations)
 const baseImage = `${withBase("/images/pizza/base.webp")}`;
-const cheeseMeltImage = `${withBase("/images/pizza/cheese.webp")}`;
+const bakedCheeseImage = `${withBase("/images/pizza/baked-cheese.webp")}`;
 const toppingDropUrl = `${withBase("/audio/topping-drop.mp3")}`;
 const ovenIgnitionUrl = `${withBase("/audio/oven-ignition.mp3")}`;
 const fireVideoUrl = `${withBase("/oven-fire-loop.mp4")}`;
@@ -729,15 +729,13 @@ export default function BuildYourPizza({
             <div className="pizza-builder__fire-ring" aria-hidden="true" />
             <div ref={stageRef} className="pizza-builder__pizza-stage" data-drop-ready={dragOver} data-baked={isBaked} data-finished={fired}>
               <img
-                src={baseImage}
+                src={isBaked ? bakedCheeseImage : baseImage}
                 alt="Pizza dough spread with glossy tomato sauce"
                 className="pizza-builder__base"
                 data-baked={isBaked}
                 draggable={false}
               />
-              {isBaked && (
-                <img src={cheeseMeltImage} alt="" aria-hidden="true" draggable={false} className="pizza-builder__cheese-melt" />
-              )}
+
               {placed
                 .filter((piece) => !flights.some((flight) => flight.id === piece.id))
                 .map((piece) => (
