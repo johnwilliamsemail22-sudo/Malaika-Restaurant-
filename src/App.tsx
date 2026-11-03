@@ -6,6 +6,7 @@ import BuildYourPizza from './components/BuildYourPizza'
 const BASE = import.meta.env.BASE_URL
 const withBase = (p: string) => (p.startsWith("/") ? (BASE.endsWith("/") ? BASE.slice(0, -1) : BASE) + p : p)
 import { menuData } from './menuData'
+import { menuImageFor } from './menuImages'
 import type { MenuCategory } from './menuData'
 
 type Theme = { bg: string; ink: string; muted: string; accent: string }
@@ -453,19 +454,6 @@ function App() {
           </div>
           <div className="sapori-real-menu">
             {menuData.map((category, categoryIndex) => {
-              const categoryImage = /PIZZA|PIZZE|FOCACCIA/i.test(category.category)
-                ? `${withBase("/images/dishes/pizza-base.webp")}`
-                : /PASTA|RISOTTO|RAVIOLI|GNOCCHI/i.test(category.category)
-                  ? `${withBase("/images/dishes/lobster-ravioli.webp")}`
-                  : /PESCE|FISH|SEAFOOD|CEVICHE/i.test(category.category)
-                    ? `${withBase("/images/dishes/seafood-salad.webp")}`
-                    : /DOLCI|DESSERT|GELATO/i.test(category.category)
-                      ? `${withBase("/images/dishes/artisanal-gelato.webp")}`
-                      : /BEV|DRINK|COFFEE|WINE|COCKTAIL/i.test(category.category)
-                        ? `${withBase("/images/dishes/artisanal-gelato.webp")}`
-                        : /POLLO|CHICKEN|CARNE|BEEF|MANZO|SUINO/i.test(category.category)
-                          ? `${withBase("/images/dishes/burger-assembled.webp")}`
-                          : `${withBase("/images/dishes/seafood-salad.webp")}`
               const compact = /BEV|DRINK|COFFEE|WINE|COCKTAIL|WATER/i.test(category.category)
               return <section className={`sapori-menu-category ${compact ? 'is-compact' : ''}`} key={category.category} data-category={category.category} ref={(el) => { menuSectionRefs.current[category.category] = el }}>
                 <header><span>{String(categoryIndex + 1).padStart(2, '0')}</span><h3>{category.category}</h3><i>{category.items.length} items</i></header>
@@ -477,7 +465,7 @@ function App() {
                     const isExtraTopping = /EXTRA TOPPING|^DATTERINO TOMATOES$/i.test(item.name)
                     if (isExtraTopping) return null
                     return <article className="sapori-menu-item" key={item.name + itemIndex}>
-                      {!compact && <div className="sapori-menu-item-photo"><img src={categoryImage} alt="" loading="lazy" decoding="async" /></div>}
+                      {!compact && <div className="sapori-menu-item-photo"><img src={menuImageFor(item.name, category.category)} alt={item.name} loading="lazy" decoding="async" /></div>}
                       <div className="sapori-menu-item-copy"><h4>{item.name}</h4>{item.description && <p>{item.description}</p>}<strong>KSh {item.price.toLocaleString('en-KE')}</strong></div>
                       {qty === 0 ? (
                         <button
