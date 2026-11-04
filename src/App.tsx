@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { ArrowDown, ArrowLeft, ArrowRight, MapPin, MessageCircle, Minus, Plus, ShoppingBag } from 'lucide-react'
+import { AlertCircle, ArrowDown, ArrowLeft, ArrowRight, Copy, MapPin, MessageCircle, Minus, Phone, Plus, ShoppingBag } from 'lucide-react'
 import Lenis from 'lenis'
 import StaffDashboard from './StaffDashboard'
 import BuildYourPizza from './components/BuildYourPizza'
@@ -90,6 +90,7 @@ function App() {
   const [showCart, setShowCart] = useState(false)
   const [cartOrders, setCartOrders] = useState<any[]>(() => { try { return JSON.parse(localStorage.getItem('sapori-orders') || '[]') } catch { return [] } })
   const [flyingToCart, setFlyingToCart] = useState(false)
+  const [flyToCartDot, setFlyToCartDot] = useState(false)
   const [staffOrders, setStaffOrders] = useState<any[]>([])
   const [reservation, setReservation] = useState<Reservation>({ name: '', date: '', time: '', guests: '2', notes: '' })
   const [reservationSubmitted, setReservationSubmitted] = useState(false)
@@ -347,8 +348,10 @@ function App() {
     window.dispatchEvent(new CustomEvent('sapori-order', { detail: order }))
     setStaffOrders(updated)
     setCartOrders(updated)
+    setFlyToCartDot(true)
+    window.setTimeout(() => setFlyToCartDot(false), 900)
     setFlyingToCart(true)
-    window.setTimeout(() => { setFlyingToCart(false); setOrderLocationDish(null); setCustomPizzaCheckout(null); setOrderSuccess({ id, name: customerName.trim(), item: itemName, total }) }, 850)
+    window.setTimeout(() => { setFlyingToCart(false); setOrderLocationDish(null); setCustomPizzaCheckout(null); setOrderSuccess({ id, name: customerName.trim(), item: itemName, total }) }, 950)
   }
   const addCustomPizzaToCart = (pizza: { name: string; total: number; details: string }) => {
     setCustomerName('')
@@ -395,7 +398,7 @@ function App() {
           <div className="sf-hero-actions"><button className="sf-primary-button" type="button" onClick={scrollToReservation}>Reserve a Table</button><button className="sf-secondary-button" type="button" onClick={() => { setShowFullMenu(true); window.setTimeout(() => document.getElementById("menu")?.scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth" }), 40) }}>Explore Menu</button></div>
         </div>
         <div className="sf-hero-photo-card">
-          <img src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=1800&q=88" alt="Warm, welcoming café interior" width="1800" height="1200" fetchPriority="high" />
+          <img src={`${BASE}images/restaurant-real.jpg`} alt="The SAPORI garden at dusk: candle-lit tables beneath the baobab trees" width="1200" height="900" fetchPriority="high" />
           <div className="sf-float-card sf-float-coffee"><span>☕</span><small>MADE WITH CARE</small><strong>Italian Coffee</strong></div>
           <div className="sf-float-card sf-float-pasta"><span>🍝</span><small>FAVOURITE FLAVOURS</small><strong>Fresh Pasta</strong></div>
         </div>
@@ -497,9 +500,50 @@ function App() {
       <section className="closing" aria-labelledby="closing-title"><div className="closing-quote"><p className="eyebrow">After the last course</p><h2 id="closing-title">Leave a little<br /><em>room for wonder.</em></h2></div><div className="closing-aside"><p><span className="sf-live-dot" aria-hidden="true"></span>Open daily from 12 noon to 10 PM. Walk-ins are welcome; contact us on WhatsApp to enquire or reserve your table.</p><button className="whatsapp-button" type="button" onClick={scrollToReservation}><MessageCircle size={17} strokeWidth={1.8} /> Reserve a table</button></div></section>
       {showPizzaBuilder && <div className="sf-pizza-builder-overlay"><BuildYourPizza onAddToCart={addCustomPizzaToCart} onClose={() => setShowPizzaBuilder(false)} /></div>}
       {flyingToCart && <div className="sf-fly-to-cart" aria-hidden="true"><ShoppingBag size={25}/><span>Added to your orders</span></div>}
+      {flyToCartDot && <div className="sf-fly-dot" aria-hidden="true"><ShoppingBag size={22} strokeWidth={2}/></div>}
+      {flyToCartDot && <div className="sf-fly-dot" aria-hidden="true"><ShoppingBag size={22} strokeWidth={2}/></div>}
       {showCart && <div className="sf-order-modal-backdrop" role="presentation" onClick={() => setShowCart(false)}><section className="sf-order-modal sf-cart-modal" role="dialog" aria-modal="true" aria-labelledby="sf-cart-title" onClick={(event) => event.stopPropagation()}><button className="sf-order-modal-close" type="button" aria-label="Close cart" onClick={() => setShowCart(false)}>×</button><p className="eyebrow">SAPORI · PICKUP ORDERS</p><h2 id="sf-cart-title">Your <em>orders.</em></h2><p>Your order references are saved on this device, so you can return after refreshing.</p>{cartOrders.length === 0 ? <div className="sf-cart-empty"><ShoppingBag size={30}/><p>Your cart is waiting for something delicious.</p><button className="whatsapp-button" type="button" onClick={() => { setShowCart(false); setShowFullMenu(true); document.getElementById("menu")?.scrollIntoView({behavior:"smooth"}) }}>Explore menu</button></div> : <div className="sf-cart-orders">{cartOrders.map((order:any) => <article className="sf-cart-order" key={order.id}><div className="sf-cart-order-top"><span>ORDER {order.id}</span><strong>{order.status || 'New'}</strong></div><h3>{order.item}</h3><p>{order.customerName} · Pickup · KSh {Number(order.total || 0).toLocaleString('en-KE')}</p><div className="sf-order-progress"><span className="done"><i/>Received</span><span className={(['Cooking','Ready'].includes(order.status)) ? 'done' : ''}><i/>Preparing</span><span className={order.status === 'Ready' ? 'done' : ''}><i/>Ready for pickup</span></div><small>Keep your order number: {order.id}</small></article>)}</div>}<button className="sf-done-button" type="button" onClick={() => setShowCart(false)}>Close</button></section></div>}
       {(orderLocationDish || customPizzaCheckout) && <div className="sf-order-modal-backdrop" role="presentation" onClick={() => { setOrderLocationDish(null); setCustomPizzaCheckout(null) }}><section className="sf-order-modal" role="dialog" aria-modal="true" aria-labelledby="sf-order-modal-title" onClick={(event) => event.stopPropagation()}><button className="sf-order-modal-close" type="button" aria-label="Close" onClick={() => { setOrderLocationDish(null); setCustomPizzaCheckout(null) }}>×</button><p className="eyebrow">SAPORI · PICKUP ONLY</p><h2 id="sf-order-modal-title">Place your <em>order.</em></h2><p>Order online and collect your food fresh from SAPORI. We do not offer delivery.</p><label htmlFor="sf-order-item">Your selection</label>{customPizzaCheckout ? <div className="sf-order-selection"><strong>{customPizzaCheckout.name}</strong><span>KSh {customPizzaCheckout.total.toLocaleString('en-KE')}</span></div> : <select id="sf-order-item" value={selectedOrderItem} onChange={(event) => setSelectedOrderItem(event.target.value)}>{orderLocationDish?.menu.map((item) => <option key={item.name} value={item.name}>{item.name} · {item.price}</option>)}</select>}<label htmlFor="sf-customer-name">Your name</label><input id="sf-customer-name" value={customerName} onChange={(event) => setCustomerName(event.target.value)} placeholder="Name for collection" autoFocus /><label htmlFor="sf-customer-phone">Phone number</label><input id="sf-customer-phone" type="tel" value={customerPhone} onChange={(event) => setCustomerPhone(event.target.value)} placeholder="+254..." /><div className="sf-pickup-note"><MapPin size={16}/> Collection from SAPORI, Malindi.</div><button className="whatsapp-button" type="button" disabled={!customerName.trim() || !customerPhone.trim()} onClick={submitDishOrder}>Place pickup order <ArrowRight size={16}/></button></section></div>}
-      {orderSuccess && <div className="sf-order-modal-backdrop" role="presentation"><section className="sf-order-modal sf-order-success" role="dialog" aria-modal="true" aria-labelledby="sf-order-success-title"><button className="sf-order-modal-close" type="button" aria-label="Close" onClick={() => setOrderSuccess(null)}>×</button><p className="eyebrow">ORDER RECEIVED · PICKUP</p><h2 id="sf-order-success-title">Thank you, <em>{orderSuccess.name}.</em></h2><p>Your order has been placed with SAPORI. Keep this reference handy.</p><div className="sf-order-reference"><span>ORDER NUMBER</span><strong>{orderSuccess.id}</strong><small>{orderSuccess.item} · KSh {orderSuccess.total.toLocaleString('en-KE')}</small></div><p>For order updates, cancellations or any questions, call or WhatsApp our team.</p><a className="whatsapp-button" href="https://wa.me/254715048268" target="_blank" rel="noreferrer"><MessageCircle size={17}/> WhatsApp · +254 715 048 268</a><a className="sf-call-link" href="tel:+254715048268">Call +254 715 048 268</a><button className="sf-done-button" type="button" onClick={() => setOrderSuccess(null)}>Done</button></section></div>}
+      {orderSuccess && (() => {
+        const code = orderSuccess.id
+        return <div className="sf-order-modal-backdrop" role="presentation">
+          <section className="sf-order-modal sf-order-success" role="dialog" aria-modal="true" aria-labelledby="sf-order-success-title">
+            <div className="sf-reservation-check sf-success-pop" aria-hidden="true">✓</div>
+            <p className="eyebrow">ORDER RECEIVED · PICKUP</p>
+            <h2 id="sf-order-success-title">We got your order, <em>{orderSuccess.name}!</em></h2>
+            <p>Our kitchen is on it. We will call you to let you know when it is ready, then you can come pick it up.</p>
+            <div className="sf-order-code-box">
+              <div>
+                <span>YOUR PICKUP CODE</span>
+                <strong>{code}</strong>
+              </div>
+              <button
+                type="button"
+                className="sf-copy-code"
+                aria-label={`Copy pickup code ${code}`}
+                onClick={(event) => {
+                  navigator.clipboard?.writeText(code).then(() => {
+                    const b = event.currentTarget
+                    b.classList.add('copied')
+                    const label = b.querySelector('span')
+                    if (label) { label.textContent = 'Copied!'; window.setTimeout(() => { label.textContent = 'Copy'; b.classList.remove('copied') }, 1600) }
+                  })
+                }}
+              >
+                <Copy size={15} strokeWidth={2.2} aria-hidden="true" />
+                <span>Copy</span>
+              </button>
+            </div>
+            <p className="sf-code-warning"><AlertCircle size={15} strokeWidth={2.1} /> Bring this code with you. It is how we find your order at the counter.</p>
+            <p className="sf-contact-label">Questions or changes? Reach the SAPORI hotline:</p>
+            <div className="sf-contact-row">
+              <a className="sf-contact-btn call" href="tel:+254715048268"><Phone size={17} strokeWidth={2}/> Call · +254 715 048 268</a>
+              <a className="sf-contact-btn wa" href="https://wa.me/254715048268?text=${encodeURIComponent('Hello SAPORI, about order ')}{encodeURIComponent('Hello SAPORI, about order ' + code)}" target="_blank" rel="noreferrer"><MessageCircle size={17} strokeWidth={2}/> WhatsApp us</a>
+            </div>
+            <button className="sf-done-button" type="button" onClick={() => setOrderSuccess(null)}>Done</button>
+          </section>
+        </div>
+      })()}
       {toastMsg && <div className="sf-toast" role="status">{toastMsg}</div>}
       {menuCartCount > 0 && !showMenuCart && !showPizzaBuilder && !orderLocationDish && (
         <button type="button" className="sf-menu-cartbar" onClick={() => setShowMenuCart(true)}>
@@ -572,6 +616,8 @@ function App() {
                 setStaffOrders(updated); setCartOrders(updated)
                 const message = `Hello SAPORI, order ${id}:\n${summary}\nTotal: KSh ${menuCartTotal.toLocaleString('en-KE')}\nName: ${cartName.trim()}\nPhone: ${cartPhone.trim()}\nPickup`
                 window.open(`https://wa.me/254715048268?text=${encodeURIComponent(message)}`, '_blank', 'noopener,noreferrer')
+                setFlyToCartDot(true)
+    window.setTimeout(() => setFlyToCartDot(false), 900)
                 persistMenuCart({})
                 setShowMenuCart(false)
                 setOrderSuccess({ id, name: cartName.trim(), item: `${lines.length} items`, total: menuCartTotal })
