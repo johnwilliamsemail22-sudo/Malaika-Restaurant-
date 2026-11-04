@@ -6,10 +6,10 @@ import './staff-dashboard.css'
 
 type Order={id:string;name:string;item:string;phone:string;total:number;status:string;minutes:number;paid:boolean;details:string[]}
 const seed:Order[]=[
-{id:'SP-1048',name:'Amina Hassan',item:'Linguine al Gambero Piccante × 1',phone:'+254 712 345 678',total:2000,status:'New',minutes:8,paid:false,details:['Fresh homemade linguine','Prawns, ginger and garlic','Datterino tomatoes · mild chilli']},
-{id:'SP-1047',name:'Daniel Mwangi',item:'Pizza Margherita × 2',phone:'+254 722 456 789',total:2600,status:'Cooking',minutes:14,paid:true,details:['Tomato sauce','Mozzarella · fresh basil']},
-{id:'SP-1046',name:'Fatma Ali',item:'Risotto Gamberi Zafferano × 1',phone:'+254 733 567 890',total:2200,status:'Ready',minutes:22,paid:false,details:['Saffron risotto','Sautéed prawns']},
-{id:'SP-1045',name:'Peter Kimani',item:'Tiramisu × 1',phone:'+254 711 222 333',total:600,status:'Done',minutes:32,paid:true,details:['Classic Italian dessert']}
+{id:'SP1048',name:'Amina Hassan',item:'Linguine al Gambero Piccante × 1',phone:'+254 712 345 678',total:2000,status:'New',minutes:8,paid:false,details:['Fresh homemade linguine','Prawns, ginger and garlic','Datterino tomatoes · mild chilli']},
+{id:'SP1047',name:'Daniel Mwangi',item:'Pizza Margherita × 2',phone:'+254 722 456 789',total:2600,status:'Cooking',minutes:14,paid:true,details:['Tomato sauce','Mozzarella · fresh basil']},
+{id:'SP1046',name:'Fatma Ali',item:'Risotto Gamberi Zafferano × 1',phone:'+254 733 567 890',total:2200,status:'Ready',minutes:22,paid:false,details:['Saffron risotto','Sautéed prawns']},
+{id:'SP1045',name:'Peter Kimani',item:'Tiramisu × 1',phone:'+254 711 222 333',total:600,status:'Done',minutes:32,paid:true,details:['Classic Italian dessert']}
 ]
 const cash=(n:number)=>'KSh '+n.toLocaleString('en-KE')
 const imageFor=(name:string,cat:string)=>menuImageFor(name,cat)

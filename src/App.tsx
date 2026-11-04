@@ -340,7 +340,7 @@ function App() {
     const itemName = customPizza?.name ?? dishItem?.name ?? ''
     const total = customPizza?.total ?? (Number(dishItem?.price.replace(/[^0-9.]/g, '')) || 0)
     const price = customPizza ? `KSh ${total.toLocaleString('en-KE')}` : dishItem?.price ?? `KSh ${total.toLocaleString('en-KE')}`
-    const id = `SP-${Date.now().toString().slice(-6)}`
+    const id = `SP${Date.now().toString().slice(-6)}`
     const order = { id, customerName: customerName.trim(), customerPhone: customerPhone.trim(), phone: customerPhone.trim(), item: itemName, category: customPizza ? 'Custom pizza' : orderLocationDish?.title ?? 'Menu order', price, total, status: 'New', type: 'Pickup', notes: customPizza?.details ?? '', details: customPizza?.details ? customPizza.details.split(', ').filter(Boolean) : [itemName], createdAt: new Date().toISOString() }
     const current = JSON.parse(localStorage.getItem('sapori-orders') || '[]')
     const updated = [order, ...current]
@@ -607,7 +607,7 @@ function App() {
               onClick={() => {
                 const lines = Object.values(menuCart)
                 const summary = lines.map((line) => `${line.qty} × ${line.item.name} (KSh ${(line.qty * line.item.price).toLocaleString('en-KE')})`).join('\n')
-                const id = `SP-${Date.now().toString().slice(-6)}`
+                const id = `SP${Date.now().toString().slice(-6)}`
                 const order = { id, customerName: cartName.trim(), customerPhone: cartPhone.trim(), item: lines.map((l) => `${l.qty}x ${l.item.name}`).join(', '), category: 'Menu order', total: menuCartTotal, status: 'New', type: 'Pickup', createdAt: new Date().toISOString() }
                 const current = JSON.parse(localStorage.getItem('sapori-orders') || '[]')
                 const updated = [order, ...current]
