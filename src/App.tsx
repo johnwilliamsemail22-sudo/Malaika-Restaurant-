@@ -96,6 +96,8 @@ function App() {
   const [reservationSubmitted, setReservationSubmitted] = useState(false)
   const [showPizzaBuilder, setShowPizzaBuilder] = useState(false)
   const [menuCart, setMenuCart] = useState<Record<string, { item: MenuCategory['items'][number]; category: string; qty: number }>>(() => { try { return JSON.parse(localStorage.getItem('sapori-menu-cart') || '{}') } catch { return {} } })
+  const [soldOutMenu,setSoldOutMenu] = useState<Record<string,boolean>>(()=>{try{return JSON.parse(localStorage.getItem('sapori-menu-sold-out')||'{}')}catch{return {}}})
+  useEffect(()=>{const refresh=()=>{try{setSoldOutMenu(JSON.parse(localStorage.getItem('sapori-menu-sold-out')||'{}'))}catch{setSoldOutMenu({})}};window.addEventListener('sapori-menu-availability',refresh);window.addEventListener('storage',refresh);return()=>{window.removeEventListener('sapori-menu-availability',refresh);window.removeEventListener('storage',refresh)}},[])
   const [toastMsg, setToastMsg] = useState('')
   const [optionTarget, setOptionTarget] = useState<{ item: MenuCategory['items'][number]; category: string } | null>(null)
   const [cartName, setCartName] = useState(() => localStorage.getItem('sapori-cart-name') || '')
@@ -467,13 +469,14 @@ function App() {
                   {category.items.map((item, itemIndex) => {
                     const key = `${category.category}::${item.name}`
                     const qty = menuCart[key]?.qty ?? 0
+                    const isSoldOut = Boolean(soldOutMenu[key])
                     const hasOptions = menuOptions(item) != null
                     const isExtraTopping = /EXTRA TOPPING|^DATTERINO TOMATOES$/i.test(item.name)
                     if (isExtraTopping) return null
-                    return <article className="sapori-menu-item" key={item.name + itemIndex}>
+                    return <article className={'sapori-menu-item '+(isSoldOut?'is-sold-out':'')} key={item.name + itemIndex}>
                       {!compact && <div className="sapori-menu-item-photo"><img src={menuImageFor(item.name, category.category)} alt={item.name} loading="lazy" decoding="async" /></div>}
-                      <div className="sapori-menu-item-copy"><h4>{item.name}</h4>{item.description && <p>{item.description}</p>}<strong>KSh {item.price.toLocaleString('en-KE')}</strong></div>
-                      {qty === 0 ? (
+                      <div className="sapori-menu-item-copy"><h4>{item.name}</h4>{item.description && <p>{item.description}</p>}<strong>KSh {item.price.toLocaleString('en-KE')}</strong>{isSoldOut&&<span className="sapori-sold-out-label">Sold out</span>}</div>
+                      {isSoldOut ? <span className="sapori-unavailable">Unavailable</span> : qty === 0 ? (
                         <button
                           type="button"
                           className="sapori-add-button"
