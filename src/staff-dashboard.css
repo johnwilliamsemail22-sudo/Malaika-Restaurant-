@@ -79,3 +79,48 @@
 .sf-order-selection{display:flex;align-items:center;justify-content:space-between;gap:12px;border:1px solid #e7ded2;background:#f8f3eb;border-radius:9px;padding:13px 14px;color:#3e2723;font-size:13px}
 .sf-order-selection strong{font-weight:700}
 .sf-order-selection span{white-space:nowrap;font-weight:700;color:#6b4438}
+
+/* Simple staff order, reservation, table and archive workflow */
+.sd-live-count{font-size:11px;color:#827464;margin-right:14px}
+.sd-wide-search{display:flex;align-items:center;gap:10px;width:min(100%,620px);background:#fffdf8;border:1px solid #e6dbce;border-radius:12px;padding:0 14px;color:#8c7d6b;margin:0 0 20px}
+.sd-wide-search input{border:0!important;outline:0!important;background:transparent!important;flex:1;min-width:0;padding:15px 0!important;font:13px 'DM Sans'!important}
+.sd-wide-search button{border:0;background:transparent;color:#887969;font-size:22px}
+.sd-simple-stats{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 18px}
+.sd-simple-stats span{background:#fffdf8;border:1px solid #e8dfd3;border-radius:10px;padding:10px 15px;color:#827464;font-size:11px}
+.sd-simple-stats b{font:700 18px 'Playfair Display';color:#3e2723;margin-right:5px}
+.sd-simple-board{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;align-items:start}
+.sd-simple-column{background:#eee8df;border:1px solid #e4d9ca;border-radius:13px;padding:13px;min-width:0;min-height:220px}
+.sd-simple-column>header{display:flex;align-items:center;justify-content:space-between;margin:2px 2px 12px}
+.sd-simple-column>header h2{font:600 16px 'Playfair Display';margin:0;color:#3e2723}
+.sd-simple-column>header>b{background:#fffdf8;border-radius:20px;padding:4px 9px;font-size:11px}
+.sd-empty-stage{font-size:12px;color:#978777;padding:16px 4px}
+.sd-simple-order{background:#fffdf8;border:1px solid #e7ddd1;border-radius:11px;padding:14px;margin-bottom:11px;box-shadow:0 3px 12px #33281c08}
+.sd-order-code{display:flex;justify-content:space-between;align-items:center;color:#987f6b;font-size:10px}
+.sd-order-code b{color:#a34d2f;letter-spacing:.06em}
+.sd-simple-order h3{font:600 17px 'Playfair Display';margin:10px 0 2px;color:#3e2723}
+.sd-order-phone{font-size:11px;color:#88796a;margin:0 0 10px}
+.sd-order-item{font-size:12px;line-height:1.5;color:#57483b;margin:0 0 8px}
+.sd-simple-order details{font-size:11px;color:#75675b;margin:8px 0}
+.sd-simple-order summary{cursor:pointer;color:#956044;font-weight:700}
+.sd-simple-order ul{padding-left:17px;line-height:1.7}
+.sd-order-total{display:flex;justify-content:space-between;align-items:center;border-top:1px solid #eee6dc;padding:11px 0 9px;margin-top:9px}
+.sd-order-total strong{font-size:14px;color:#3e2723}
+.sd-order-total span{font-size:10px;color:#958574}
+.sd-simple-next{width:100%;border:0;border-radius:8px;padding:12px;background:#3e2723;color:#fff9f1;font:700 12px 'DM Sans';cursor:pointer}
+.sd-simple-next:active{transform:scale(.985)}
+.sd-booking-list,.sd-history-list{display:grid;gap:10px}
+.sd-booking-card,.sd-history-card{display:grid;grid-template-columns:minmax(180px,1.4fr) minmax(90px,.6fr) minmax(130px,.8fr) auto;gap:14px;align-items:center;background:#fffdf8;border:1px solid #e8dfd3;border-radius:12px;padding:15px 18px}
+.sd-booking-card small,.sd-history-card small{font-size:9px;letter-spacing:1px;color:#a28e7a}
+.sd-booking-card h3,.sd-history-card h3{font:600 16px 'Playfair Display';margin:4px 0;color:#3e2723}
+.sd-booking-card p,.sd-history-card p{font-size:11px;color:#88796a;margin:0}
+.sd-booking-table{display:grid;gap:4px}.sd-booking-table span{font-size:9px;letter-spacing:1px;color:#a28e7a}.sd-booking-table strong{font:700 22px 'Playfair Display';color:#9a4b32}
+.sd-booking-time{display:grid;gap:4px;font-size:11px;color:#6f6257}.sd-booking-card>em{font-style:normal;font-size:10px;color:#477b50;background:#eef5ec;border-radius:20px;padding:7px 10px}
+.sd-table-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.sd-table-card{display:grid;justify-items:start;gap:6px;text-align:left;padding:20px;border-radius:13px;border:1px solid #e5dbcf;background:#fffdf8;cursor:pointer}
+.sd-table-card>span{font-size:9px;letter-spacing:1.5px;color:#8f7e6d}.sd-table-card>strong{font:600 34px 'Playfair Display';color:#3e2723}.sd-table-card>em{font-style:normal;font-size:11px;font-weight:700}.sd-table-card>small{font-size:9px;color:#9a8c7d}
+.sd-table-card.available{border-color:#d9e6d8}.sd-table-card.available>em{color:#43804d}.sd-table-card.reserved{background:#fff5ed;border-color:#e7c6ae}.sd-table-card.reserved>em{color:#b35427}
+.sd-table-note{font-size:11px;color:#88796a;margin-top:18px}
+.sd-history-card{grid-template-columns:1.5fr 1fr 1fr}.sd-history-card>div:nth-child(2){display:grid;gap:5px}.sd-history-card>div:nth-child(2) strong{font-size:14px;color:#3e2723}.sd-history-card>div:nth-child(2) span,.sd-history-card time{font-size:10px;color:#897a6a}.sd-history-card>div:nth-child(3){display:grid;gap:5px;font-size:11px;color:#478153}
+.sd-payment-modal>p{font-size:12px;color:#88796a;line-height:1.6}.sd-payment-options{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:8px 0 12px}.sd-payment-options button{padding:15px;border:1px solid #e5d9ca;border-radius:9px;background:#f7f2ea;color:#3e2723;font-weight:700;cursor:pointer}.sd-payment-options button.selected{border:2px solid #9a4b32;background:#f5e9dd;color:#7b3c29}.sd-confirm-pickup{justify-content:center;width:100%}
+@media(max-width:900px){.sd-simple-board{grid-template-columns:1fr}.sd-simple-column{min-height:0}.sd-table-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.sd-booking-card{grid-template-columns:1fr 90px;gap:10px}.sd-booking-time{grid-column:1}.sd-booking-card>em{grid-column:2;grid-row:2;justify-self:start}.sd-history-card{grid-template-columns:1fr 1fr}.sd-history-card>div:last-child{grid-column:1/-1}}
+@media(max-width:600px){.sd-content{padding:22px 13px 85px}.sd-table-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.sd-booking-card{grid-template-columns:1fr 76px;padding:13px}.sd-booking-card h3{font-size:15px}.sd-history-card{grid-template-columns:1fr;gap:10px}.sd-history-card>div:last-child{grid-column:auto}.sd-simple-stats{gap:6px}.sd-simple-stats span{padding:9px 10px;font-size:10px}.sd-top{gap:6px}.sd-live-count{font-size:9px;margin-right:0}}
