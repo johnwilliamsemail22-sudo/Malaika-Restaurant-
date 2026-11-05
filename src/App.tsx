@@ -11,7 +11,7 @@ import type { MenuCategory } from './menuData'
 
 type Theme = { bg: string; ink: string; muted: string; accent: string }
 type Topping = 'Fior di Latte' | 'Prosciutto' | 'Wild Rocket' | 'Spicy Salami' | 'Coast Prawns' | 'Mushrooms' | 'Chilli Honey' | 'Olives'
-type Reservation = { name: string; date: string; time: string; guests: string; notes: string }
+type Reservation = { name: string; phone: string; date: string; time: string; guests: string; table: string; notes: string }
 
 type Dish = {
   number: string
@@ -92,7 +92,7 @@ function App() {
   const [flyingToCart, setFlyingToCart] = useState(false)
   const [flyToCartDot, setFlyToCartDot] = useState(false)
   const [staffOrders, setStaffOrders] = useState<any[]>([])
-  const [reservation, setReservation] = useState<Reservation>({ name: '', date: '', time: '', guests: '2', notes: '' })
+  const [reservation, setReservation] = useState<Reservation>({ name: '', phone: '', date: '', time: '', guests: '2', table: '', notes: '' })
   const [reservationSubmitted, setReservationSubmitted] = useState(false)
   const [showPizzaBuilder, setShowPizzaBuilder] = useState(false)
   const [menuCart, setMenuCart] = useState<Record<string, { item: MenuCategory['items'][number]; category: string; qty: number }>>(() => { try { return JSON.parse(localStorage.getItem('sapori-menu-cart') || '{}') } catch { return {} } })
@@ -368,10 +368,13 @@ function App() {
   const updateReservation = (field: keyof Reservation, value: string) => setReservation((current) => ({ ...current, [field]: value }))
   const submitReservation = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    const request = { ...reservation, reference: `RS-${Date.now().toString().slice(-6)}`, submittedAt: new Date().toISOString(), status: 'Pending availability' }
+    const request = { ...reservation, reference: 'RS-' + Date.now().toString().slice(-6), submittedAt: new Date().toISOString(), status: 'Reserved' }
     try {
       const saved = JSON.parse(localStorage.getItem('sapori-reservations') || '[]')
       localStorage.setItem('sapori-reservations', JSON.stringify([request, ...saved]))
+      const tables = JSON.parse(localStorage.getItem('sapori-tables') || 'null') || Array.from({ length: 12 }, (_, index) => ({ number: index + 1, status: 'Available' }))
+      localStorage.setItem('sapori-tables', JSON.stringify(tables.map((table: any) => String(table.number) === reservation.table ? { ...table, status: 'Reserved' } : table)))
+      window.dispatchEvent(new CustomEvent('sapori-reservation', { detail: request }))
     } catch (error) { console.error('Could not save reservation request', error) }
     setReservationSubmitted(true)
   }
@@ -495,7 +498,14 @@ function App() {
         </>}
       </section>
 
-      <section className="reservation" id="reserve" aria-labelledby="reserve-title"><div className="reservation-intro"><p className="eyebrow">A seat by the garden</p><h2 id="reserve-title">Reserve<br /><em>your table.</em></h2><p>Tell us when you are coming. We will confirm the best table for your evening on WhatsApp.</p></div><form className="reservation-form" onSubmit={submitReservation}><label>Name<input required value={reservation.name} onChange={(event) => updateReservation('name', event.target.value)} placeholder="Your name" /></label><div className="form-row"><label>Date<input required type="date" value={reservation.date} onChange={(event) => updateReservation('date', event.target.value)} /></label><label>Time<input required type="time" value={reservation.time} onChange={(event) => updateReservation('time', event.target.value)} /></label></div><label>Guests<select value={reservation.guests} onChange={(event) => updateReservation('guests', event.target.value)}>{['1', '2', '3', '4', '5', '6+'].map((count) => <option key={count} value={count}>{count} guest{count === '1' ? '' : 's'}</option>)}</select></label><label>Notes <span>(optional)</span><textarea rows={3} value={reservation.notes} onChange={(event) => updateReservation('notes', event.target.value)} placeholder="A birthday, a favourite table, anything we should know" /></label><button className="whatsapp-button reservation-submit" type="submit"><MessageCircle size={17} strokeWidth={1.8} /> Send reservation request</button></form>{reservationSubmitted && <div className="sf-order-modal-backdrop" role="presentation"><section className="sf-order-modal sf-order-success" role="dialog" aria-modal="true" aria-labelledby="sf-reservation-success-title"><div className="sf-reservation-check" aria-hidden="true">✓</div><p className="eyebrow">REQUEST RECEIVED</p><h2 id="sf-reservation-success-title">Thank you, <em>{reservation.name}.</em></h2><p>Your reservation request has been received. Our team is checking table availability for {reservation.date} at {reservation.time} for {reservation.guests} guest{reservation.guests === "1" ? "" : "s"}.</p><p>We’ll get back to you to confirm whether your table is available. Your table is not confirmed yet.</p><button className="sf-done-button" type="button" onClick={() => { setReservationSubmitted(false); setReservation({ name: "", date: "", time: "", guests: "2", notes: "" }) }}>Done</button></section></div>}</section>
+      <section className="reservation" id="reserve" aria-labelledby="reserve-title"><div className="reservation-intro"><p className="eyebrow">A seat by the garden</p><h2 id="reserve-title">Reserve<br /><em>your table.</em></h2><p>Tell us when you are coming. We will confirm the best table for your evening on WhatsApp.</p></div><form className="reservation-form" onSubmit={submitReservation}>
+<label>Name<input required value={reservation.name} onChange={(event) => updateReservation('name', event.target.value)} placeholder="Your name" /></label>
+<label>Phone number<input required type="tel" value={reservation.phone} onChange={(event) => updateReservation('phone', event.target.value)} placeholder="+254..." /></label>
+<div className="form-row"><label>Date<input required type="date" min={new Date().toISOString().slice(0,10)} value={reservation.date} onChange={(event) => updateReservation('date', event.target.value)} /></label><label>Time<input required type="time" value={reservation.time} onChange={(event) => updateReservation('time', event.target.value)} /></label></div>
+<label>Guests<select value={reservation.guests} onChange={(event) => updateReservation('guests', event.target.value)}>{['1', '2', '3', '4', '5', '6+'].map((count) => <option key={count} value={count}>{count} guest{count === '1' ? '' : 's'}</option>)}</select></label>
+<label>Choose your table<select required value={reservation.table} onChange={(event) => updateReservation('table', event.target.value)}><option value="">Select an available table</option>{Array.from({length:12},(_,index)=>String(index+1)).map((number)=>{const tables=JSON.parse(localStorage.getItem('sapori-tables')||'null')||Array.from({length:12},(_,index)=>({number:index+1,status:'Available'}));const booked=JSON.parse(localStorage.getItem('sapori-reservations')||'[]').some((booking:any)=>String(booking.table)===number&&booking.date===reservation.date&&booking.status!=='Cancelled');const status=tables.find((table:any)=>String(table.number)===number)?.status||'Available';const available=status!=='Reserved'&&!booked;return <option key={number} value={number} disabled={!available}>Table {number} · {available?'Available':'Reserved'}</option>})}</select></label>
+<label>Notes <span>(optional)</span><textarea rows={3} value={reservation.notes} onChange={(event) => updateReservation('notes', event.target.value)} placeholder="A birthday, a favourite table, anything we should know" /></label>
+<button className="whatsapp-button reservation-submit" type="submit"><MessageCircle size={17} strokeWidth={1.8} /> Send reservation request</button></form>{reservationSubmitted && <div className="sf-order-modal-backdrop" role="presentation"><section className="sf-order-modal sf-order-success" role="dialog" aria-modal="true" aria-labelledby="sf-reservation-success-title"><div className="sf-reservation-check" aria-hidden="true">✓</div><p className="eyebrow">REQUEST RECEIVED</p><h2 id="sf-reservation-success-title">Thank you, <em>{reservation.name}.</em></h2><p>Your reservation request has been received. Your request is for Table {reservation.table} on {reservation.date} at {reservation.time} for {reservation.guests} guest{reservation.guests === "1" ? "" : "s"}. We have your phone number: {reservation.phone}.</p><p>We’ll get back to you to confirm whether your table is available. Your table is not confirmed yet.</p><button className="sf-done-button" type="button" onClick={() => { setReservationSubmitted(false); setReservation({ name: "", phone: "", date: "", time: "", guests: "2", table: "", notes: "" }) }}>Done</button></section></div>}</section>
 
       <section className="closing" aria-labelledby="closing-title"><div className="closing-quote"><p className="eyebrow">After the last course</p><h2 id="closing-title">Leave a little<br /><em>room for wonder.</em></h2></div><div className="closing-aside"><p><span className="sf-live-dot" aria-hidden="true"></span>Open daily from 12 noon to 10 PM. Walk-ins are welcome; contact us on WhatsApp to enquire or reserve your table.</p><button className="whatsapp-button" type="button" onClick={scrollToReservation}><MessageCircle size={17} strokeWidth={1.8} /> Reserve a table</button></div></section>
       {showPizzaBuilder && <div className="sf-pizza-builder-overlay"><BuildYourPizza onAddToCart={addCustomPizzaToCart} onClose={() => setShowPizzaBuilder(false)} /></div>}
