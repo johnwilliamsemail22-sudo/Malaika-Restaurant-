@@ -650,7 +650,7 @@ function App() {
         </div>
       )}
       {showStaff && <StaffDashboard onClose={() => setShowStaff(false)} />}
-      <footer className="footer"><a className="wordmark footer-mark" href="#top">sapori<span>·</span></a><div className="footer-meta"><span>Lamu Road, after the Casino, towards Mambrui</span><span>Italian cuisine · Ethiopian flavours · Good company</span><span>© 2026 SAPORI</span><button className="sf-staff-entry" type="button" onClick={() => { setStaffOrders(JSON.parse(localStorage.getItem('sapori-orders') || '[]')); setShowStaff(true) }}>Staff order desk ↗</button></div><a className="footer-top" href="#top">Back to top <ArrowDown size={15} /></a></footer>
+      <footer className="footer"><a className="wordmark footer-mark" href="#top">sapori<span>·</span></a><div className="footer-meta"><span>Lamu Road, after the Casino, towards Mambrui</span><span>Italian cuisine · Ethiopian flavours · Good company</span><span>© 2026 SAPORI</span><button className="sf-staff-entry" type="button" onClick={() => { setStaffOrders(JSON.parse(localStorage.getItem('sapori-orders') || '[]')); setShowStaff(true) }}>Staff dashboard ↗</button></div><a className="footer-top" href="#top">Back to top <ArrowDown size={15} /></a></footer>
     </main>
   )
 }
