@@ -1146,3 +1146,30 @@ html, body { background:#FAF6EE; color:#321B14; }
 .sf-events-empty { width:min(520px,100%); margin:auto; padding:36px 20px; text-align:center; border:1px dashed rgba(50,27,20,.22); border-radius:22px; color:#806e64; }
 .sf-events-empty>span { color:#9a4b32; font-size:30px; }
 .sf-events-empty p { margin:10px 0 5px; color:#321b14; font:500 21px 'Playfair Display',Georgia,serif; }
+
+
+/* Dedicated SAPORI Events page — Events is a top navigation destination, not a landing-page section. */
+.site-shell:not(.sf-events-page) .sf-events-section { display:none !important; }
+.site-shell.sf-events-page > section:not(.sf-events-section) { display:none !important; }
+.site-shell.sf-events-page .sf-events-section {
+  display:block !important;
+  min-height:calc(100svh - 100px);
+  padding-top:clamp(125px,15vw,175px);
+}
+.sf-topbar .sf-events-link {
+  display:inline-flex !important;
+  align-items:center;
+  justify-content:center;
+  padding:12px 18px;
+  border-radius:999px;
+  color:#321b14 !important;
+  font-size:13px;
+  font-weight:700;
+  text-decoration:none;
+  transition:background .2s ease,transform .2s ease;
+}
+.sf-topbar .sf-events-link:hover { background:rgba(50,27,20,.07); transform:translateY(-1px); }
+@media(max-width:699px) {
+  .sf-topbar .sf-events-link { padding:10px 11px; font-size:12px; }
+  .sf-topbar .topbar-right { gap:7px; }
+}
