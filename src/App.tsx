@@ -420,8 +420,7 @@ function App() {
       </section>
 
       <section className="sf-events-section" id="events" aria-labelledby="sf-events-title">
-        <div className="sf-events-heading"><p className="eyebrow">WHAT'S HAPPENING AT SAPORI</p><h2 id="sf-events-title">Gather for <em>something special.</em></h2><p>Discover music, special evenings and memorable moments at SAPORI.</p></div>
-        {events.filter((event:any)=>event.published!==false).length ? <div className="sf-events-grid">{events.filter((event:any)=>event.published!==false).map((event:any)=><article className="sf-event-card" key={event.id}>{event.image&&<img src={event.image} alt={event.title} loading="lazy" decoding="async"/>}<div className="sf-event-copy"><span>{event.date || "COMING UP AT SAPORI"}{event.time ? " · "+event.time : ""}</span><h3>{event.title}</h3><p>{event.description}</p></div></article>)}</div> : <div className="sf-events-empty"><span>✳</span><p>New experiences are coming soon.</p><small>Check back for our upcoming events.</small></div>}
+        {events.filter((event:any)=>event.published!==false).length > 0 && <div className="sf-events-grid">{events.filter((event:any)=>event.published!==false).map((event:any)=><article className="sf-event-card" key={event.id}>{event.image&&<img src={event.image} alt={event.title} loading="lazy" decoding="async"/>}<div className="sf-event-copy"><span>{event.date || "COMING UP AT SAPORI"}{event.time ? " · "+event.time : ""}</span><h3>{event.title}</h3><p>{event.description}</p></div></article>)}</div>}
       </section>
 
       <section className={`menu-stage sf-menu-stage ${showFullMenu ? 'sf-full-menu-open' : ''}`} id="menu" aria-labelledby="menu-title">
@@ -510,7 +509,7 @@ function App() {
         </>}
       </section>
 
-      <section className="reservation" id="reserve" aria-labelledby="reserve-title"><div className="reservation-intro"><p className="eyebrow">A seat by the garden</p><h2 id="reserve-title">Reserve<br /><em>your table.</em></h2><p>Tell us when you are coming. We will confirm the best table for your evening on WhatsApp.</p></div><form className="reservation-form" onSubmit={submitReservation}>
+      <section className="reservation" id="reserve" aria-labelledby="reserve-title"><div className="reservation-intro"><h2 id="reserve-title">Reserve<br /><em>your table.</em></h2><p>Tell us when you are coming. We will confirm the best table for your evening on WhatsApp.</p></div><form className="reservation-form" onSubmit={submitReservation}>
 <label>Name<input required value={reservation.name} onChange={(event) => updateReservation('name', event.target.value)} placeholder="Your name" /></label>
 <label>Phone number<input required type="tel" value={reservation.phone} onChange={(event) => updateReservation('phone', event.target.value)} placeholder="+254..." /></label>
 <div className="form-row"><label>Date<input required type="date" min={new Date().toISOString().slice(0,10)} value={reservation.date} onChange={(event) => updateReservation('date', event.target.value)} /></label><label>Time<input required type="time" value={reservation.time} onChange={(event) => updateReservation('time', event.target.value)} /></label></div>
