@@ -3,6 +3,10 @@
     {
       "source": "/menu",
       "destination": "/"
+    },
+    {
+      "source": "/events",
+      "destination": "/"
     }
   ]
 }
