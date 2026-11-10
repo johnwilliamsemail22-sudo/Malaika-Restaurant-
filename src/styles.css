@@ -1102,3 +1102,47 @@ html, body { background:#FAF6EE; color:#321B14; }
   text-decoration: none;
   cursor: pointer;
 }
+
+
+/* SAPORI handwritten wordmark: keep the final i and its circular dot fully visible. */
+.sf-hero h1 {
+  width: max-content;
+  max-width: calc(100vw - 28px);
+  overflow: visible;
+  padding: .08em .07em 0;
+  font-size: clamp(100px, 26vw, 158px);
+  line-height: 1.08;
+  letter-spacing: -.045em;
+}
+.sf-final-i { position:relative; display:inline-block; }
+.sf-final-i::before {
+  content:"";
+  position:absolute;
+  width:.135em;
+  height:.135em;
+  border-radius:50%;
+  background:currentColor;
+  top:.045em;
+  left:50%;
+  transform:translateX(-50%);
+}
+@media(max-width:699px) {
+  .sf-hero h1 { font-size:clamp(100px,26vw,158px); line-height:1.08; }
+  .sf-topbar .toplink[href="#events"] { display:inline-flex; font-size:12px; font-weight:700; }
+  .sf-topbar .topbar-right { gap:9px; }
+}
+.sf-events-section { padding:clamp(56px,8vw,110px) clamp(20px,7vw,100px); background:#f2e9dc; color:#321b14; }
+.sf-events-heading { max-width:760px; margin:0 auto 34px; text-align:center; }
+.sf-events-heading h2 { margin:8px 0 12px; font:500 clamp(34px,5vw,58px)/1.08 'Playfair Display',Georgia,serif; }
+.sf-events-heading h2 em { color:#9a4b32; }
+.sf-events-heading>p:last-child { color:#806e64; line-height:1.7; }
+.sf-events-grid { width:min(1120px,100%); margin:auto; display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr)); gap:22px; }
+.sf-event-card { overflow:hidden; border-radius:24px; background:#fffaf3; box-shadow:0 16px 40px rgba(50,27,20,.08); }
+.sf-event-card>img { display:block; width:100%; aspect-ratio:16/10; object-fit:cover; }
+.sf-event-copy { padding:22px 24px 26px; }
+.sf-event-copy>span { color:#9a4b32; font:700 10px/1.5 var(--mono); letter-spacing:.12em; text-transform:uppercase; }
+.sf-event-copy h3 { margin:9px 0; font:600 25px/1.2 'Playfair Display',Georgia,serif; }
+.sf-event-copy p { margin:0; color:#806e64; line-height:1.65; white-space:pre-wrap; }
+.sf-events-empty { width:min(520px,100%); margin:auto; padding:36px 20px; text-align:center; border:1px dashed rgba(50,27,20,.22); border-radius:22px; color:#806e64; }
+.sf-events-empty>span { color:#9a4b32; font-size:30px; }
+.sf-events-empty p { margin:10px 0 5px; color:#321b14; font:500 21px 'Playfair Display',Georgia,serif; }
