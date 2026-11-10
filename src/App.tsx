@@ -88,6 +88,7 @@ function App() {
   const [orderSuccess, setOrderSuccess] = useState<{ id: string; name: string; item: string; total: number } | null>(null)
   const [showStaff, setShowStaff] = useState(false)
   const [events, setEvents] = useState<any[]>(() => { try { return JSON.parse(localStorage.getItem("sapori-events") || "[]") } catch { return [] } })
+  useEffect(() => { const syncEvents = () => { try { setEvents(JSON.parse(localStorage.getItem("sapori-events") || "[]")) } catch { setEvents([]) } }; window.addEventListener("sapori-events-updated", syncEvents); window.addEventListener("storage", syncEvents); return () => { window.removeEventListener("sapori-events-updated", syncEvents); window.removeEventListener("storage", syncEvents) } }, [])
   const [showCart, setShowCart] = useState(false)
   const [cartOrders, setCartOrders] = useState<any[]>(() => { try { return JSON.parse(localStorage.getItem('sapori-orders') || '[]') } catch { return [] } })
   const [flyingToCart, setFlyingToCart] = useState(false)
