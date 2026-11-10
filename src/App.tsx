@@ -75,7 +75,7 @@ function App() {
   const scrollRafRef = useRef<number | null>(null)
   const lastTouchAtRef = useRef(0)
   const [activeIndex, setActiveIndex] = useState(0)
-  const [showFullMenu, setShowFullMenu] = useState(false)
+  const [showFullMenu, setShowFullMenu] = useState(() => window.location.pathname.replace(/\/$/, '') === '/menu')
   const [pizzaToppings, setPizzaToppings] = useState<{ topping: Topping; id: number; x: number; y: number; flyX: number; flyY: number; size: number; rotation: number }[]>([])
   const [pizzaInstructions, setPizzaInstructions] = useState('')
   const [reducedMotion, setReducedMotion] = useState(false)
@@ -384,12 +384,12 @@ function App() {
   const resetDishPointer = (event: React.PointerEvent<HTMLElement>) => { event.currentTarget.style.setProperty('--pointer-x', '0'); event.currentTarget.style.setProperty('--pointer-y', '0') }
 
   return (
-    <main className="site-shell" style={{ backgroundColor: activeDish.theme.bg }}>
+    <main className={`site-shell ${showFullMenu ? "sf-menu-page" : ""}`} style={{ backgroundColor: activeDish.theme.bg }}>
       <div className="sf-cursor" aria-hidden="true"><span>VIEW</span></div>
       <header className="topbar sf-topbar">
         <a className="wordmark sf-wordmark" href="#top" aria-label="sapori home">sapori<span>·</span></a>
         <div className="topbar-right">
-          <a className="toplink" href="#menu">Menu</a>
+          <a className="toplink" href="/menu">Menu</a>
           <button className="top-order sf-order" type="button" onClick={() => { setCartOrders(JSON.parse(localStorage.getItem('sapori-orders') || '[]')); setShowCart(true) }}>Order Now</button>
           <button className="sf-cart-button" type="button" aria-label="Open order cart and tracking" onClick={() => { setCartOrders(JSON.parse(localStorage.getItem('sapori-orders') || '[]')); setShowCart(true) }}><ShoppingBag size={19}/><span>{cartOrders.length}</span></button>
         </div>
@@ -400,7 +400,7 @@ function App() {
           <h1 id="hero-title">sapori</h1>
           <p className="sf-hero-ranking">#1 restaurant in Malindi</p>
           <p className="sf-hero-subtitle">Discover contemporary Italian cuisine with a distinctive Ethiopian touch, warm hospitality and relaxed open-air dining beneath Malindi’s majestic baobab trees.</p>
-          <div className="sf-hero-actions"><button className="sf-primary-button" type="button" onClick={scrollToReservation}>Reserve a Table</button><button className="sf-secondary-button" type="button" onClick={() => { setShowFullMenu(true); window.setTimeout(() => document.getElementById("menu")?.scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth" }), 40) }}>Explore Menu</button></div>
+          <div className="sf-hero-actions"><button className="sf-primary-button" type="button" onClick={scrollToReservation}>Reserve a Table</button><button className="sf-secondary-button" type="button" onClick={() => { window.location.assign("/menu") }}>See Menu</button></div>
         </div>
         <div className="sf-hero-photo-card">
           <img src={`${BASE}images/restaurant-real.jpg`} alt="The SAPORI garden at dusk: candle-lit tables beneath the baobab trees" width="1200" height="900" fetchPriority="high" />
@@ -438,7 +438,7 @@ function App() {
           <div className="sf-menu-bottom-cta"><span>Looking for something specific?</span><button type="button" onClick={() => setShowFullMenu(true)}>See the complete menu <ArrowRight size={16}/></button></div>
         </> : <>
           <div className="sf-full-menu-heading">
-            <button className="sf-back-menu" type="button" onClick={() => setShowFullMenu(false)}><ArrowLeft size={16}/> Back to the experience</button>
+            <a className="sf-back-menu" href="/"><ArrowLeft size={16}/> Back to the experience</a>
             <p className="eyebrow">Welcome · SAPORI, Malindi</p><h2 id="menu-title">The full <em>menu.</em></h2>
             <p>Explore the complete SAPORI menu. Every item and price is from the restaurant menu.</p>
             <button className="sf-build-pizza-button sf-full-menu-pizza-cta" type="button" onClick={() => setShowPizzaBuilder(true)}>🍕 Build your own pizza <ArrowRight size={15}/></button>
