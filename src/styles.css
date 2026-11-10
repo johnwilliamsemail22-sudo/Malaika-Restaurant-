@@ -1072,3 +1072,33 @@ html, body { background:#FAF6EE; color:#321B14; }
 .sf-contact-btn.call{background:#eff4fa;color:#1c5fa8;border:1.5px solid #c9dcef}
 .sf-contact-btn.wa{background:#eff7f1;color:#157a44;border:1.5px solid #bfe3ce}
 @media (max-width:520px){.sf-contact-row{grid-template-columns:1fr}}
+
+
+/* SAPORI navigation: the landing page has no menu preview; /menu is the complete menu. */
+.site-shell:not(.sf-menu-page) > .sf-menu-stage {
+  display: none !important;
+}
+.site-shell.sf-menu-page > section:not(.sf-menu-stage) {
+  display: none !important;
+}
+.site-shell.sf-menu-page > .sf-menu-stage {
+  display: block !important;
+  min-height: calc(100vh - 76px);
+  padding-top: clamp(28px, 5vw, 64px);
+}
+.site-shell.sf-menu-page .sf-full-menu-heading {
+  max-width: 1180px;
+  margin-inline: auto;
+}
+.site-shell.sf-menu-page .sapori-menu-chips,
+.site-shell.sf-menu-page .sapori-real-menu {
+  max-width: 1180px;
+  margin-inline: auto;
+}
+.site-shell.sf-menu-page .sf-back-menu {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  cursor: pointer;
+}
