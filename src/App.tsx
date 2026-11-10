@@ -87,6 +87,7 @@ function App() {
   const [selectedOrderItem, setSelectedOrderItem] = useState('')
   const [orderSuccess, setOrderSuccess] = useState<{ id: string; name: string; item: string; total: number } | null>(null)
   const [showStaff, setShowStaff] = useState(false)
+  const [events, setEvents] = useState<any[]>(() => { try { return JSON.parse(localStorage.getItem("sapori-events") || "[]") } catch { return [] } })
   const [showCart, setShowCart] = useState(false)
   const [cartOrders, setCartOrders] = useState<any[]>(() => { try { return JSON.parse(localStorage.getItem('sapori-orders') || '[]') } catch { return [] } })
   const [flyingToCart, setFlyingToCart] = useState(false)
@@ -389,6 +390,7 @@ function App() {
       <header className="topbar sf-topbar">
         <a className="wordmark sf-wordmark" href="#top" aria-label="sapori home">sapori<span>·</span></a>
         <div className="topbar-right">
+          <a className="toplink" href="#events">Events</a>
           <a className="toplink" href="/menu">Menu</a>
           <button className="top-order sf-order" type="button" onClick={() => { setCartOrders(JSON.parse(localStorage.getItem('sapori-orders') || '[]')); setShowCart(true) }}>Order Now</button>
           <button className="sf-cart-button" type="button" aria-label="Open order cart and tracking" onClick={() => { setCartOrders(JSON.parse(localStorage.getItem('sapori-orders') || '[]')); setShowCart(true) }}><ShoppingBag size={19}/><span>{cartOrders.length}</span></button>
@@ -397,7 +399,7 @@ function App() {
       <section className="sf-hero" id="top" aria-labelledby="hero-title">
         <div className="sf-hero-copy">
           <p className="sf-kicker">ITALIAN CUISINE · ETHIOPIAN FLAVOURS · MALINDI</p>
-          <h1 id="hero-title">sapori</h1>
+          <h1 id="hero-title">sapor<span className="sf-final-i">ı</span></h1>
           <p className="sf-hero-ranking">#1 restaurant in Malindi</p>
           <p className="sf-hero-subtitle">Discover contemporary Italian cuisine with a distinctive Ethiopian touch, warm hospitality and relaxed open-air dining beneath Malindi’s majestic baobab trees.</p>
           <div className="sf-hero-actions"><button className="sf-primary-button" type="button" onClick={scrollToReservation}>Reserve a Table</button><button className="sf-secondary-button" type="button" onClick={() => { window.location.assign("/menu") }}>See Menu</button></div>
@@ -413,6 +415,11 @@ function App() {
         <div className="intro-mark" aria-hidden="true">L</div>
         <div className="intro-copy"><p className="eyebrow">Welcome to SAPORI</p><h2 id="intro-title">Italian flavour.<br /><em>Coastal soul.</em></h2><p className="intro-body">Thoughtfully prepared Italian favourites and vibrant Ethiopian flavours, served with genuine hospitality on Lamu Road in Malindi. Settle in beneath the baobab trees and enjoy good food and good company.</p></div>
         <div className="intro-location"><MapPin size={16} strokeWidth={1.5} /><span>Lamu Road, after the Casino<br />Towards Mambrui, Malindi</span></div>
+      </section>
+
+      <section className="sf-events-section" id="events" aria-labelledby="sf-events-title">
+        <div className="sf-events-heading"><p className="eyebrow">WHAT'S HAPPENING AT SAPORI</p><h2 id="sf-events-title">Gather for <em>something special.</em></h2><p>Discover music, special evenings and memorable moments at SAPORI.</p></div>
+        {events.filter((event:any)=>event.published!==false).length ? <div className="sf-events-grid">{events.filter((event:any)=>event.published!==false).map((event:any)=><article className="sf-event-card" key={event.id}>{event.image&&<img src={event.image} alt={event.title} loading="lazy" decoding="async"/>}<div className="sf-event-copy"><span>{event.date || "COMING UP AT SAPORI"}{event.time ? " · "+event.time : ""}</span><h3>{event.title}</h3><p>{event.description}</p></div></article>)}</div> : <div className="sf-events-empty"><span>✳</span><p>New experiences are coming soon.</p><small>Check back for our upcoming events.</small></div>}
       </section>
 
       <section className={`menu-stage sf-menu-stage ${showFullMenu ? 'sf-full-menu-open' : ''}`} id="menu" aria-labelledby="menu-title">
