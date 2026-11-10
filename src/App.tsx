@@ -76,6 +76,7 @@ function App() {
   const lastTouchAtRef = useRef(0)
   const [activeIndex, setActiveIndex] = useState(0)
   const [showFullMenu, setShowFullMenu] = useState(() => window.location.pathname.replace(/\/$/, '') === '/menu')
+  const [showEventsPage] = useState(() => window.location.pathname.replace(/\/$/, '') === '/events')
   const [pizzaToppings, setPizzaToppings] = useState<{ topping: Topping; id: number; x: number; y: number; flyX: number; flyY: number; size: number; rotation: number }[]>([])
   const [pizzaInstructions, setPizzaInstructions] = useState('')
   const [reducedMotion, setReducedMotion] = useState(false)
@@ -386,12 +387,12 @@ function App() {
   const resetDishPointer = (event: React.PointerEvent<HTMLElement>) => { event.currentTarget.style.setProperty('--pointer-x', '0'); event.currentTarget.style.setProperty('--pointer-y', '0') }
 
   return (
-    <main className={`site-shell ${showFullMenu ? "sf-menu-page" : ""}`} style={{ backgroundColor: activeDish.theme.bg }}>
+    <main className={`site-shell ${showFullMenu ? "sf-menu-page" : ""} ${showEventsPage ? "sf-events-page" : ""}`} style={{ backgroundColor: activeDish.theme.bg }}>
       <div className="sf-cursor" aria-hidden="true"><span>VIEW</span></div>
       <header className="topbar sf-topbar">
         <a className="wordmark sf-wordmark" href="#top" aria-label="sapori home">sapori<span>·</span></a>
         <div className="topbar-right">
-          <a className="toplink" href="#events">Events</a>
+          <a className="toplink sf-events-link" href="/events" aria-label="View upcoming SAPORI events">Events</a>
           <a className="toplink" href="/menu">Menu</a>
           <button className="top-order sf-order" type="button" onClick={() => { setCartOrders(JSON.parse(localStorage.getItem('sapori-orders') || '[]')); setShowCart(true) }}>Order Now</button>
           <button className="sf-cart-button" type="button" aria-label="Open order cart and tracking" onClick={() => { setCartOrders(JSON.parse(localStorage.getItem('sapori-orders') || '[]')); setShowCart(true) }}><ShoppingBag size={19}/><span>{cartOrders.length}</span></button>
