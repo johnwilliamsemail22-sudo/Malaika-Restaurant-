@@ -124,3 +124,30 @@
 .sd-payment-modal>p{font-size:12px;color:#88796a;line-height:1.6}.sd-payment-options{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:8px 0 12px}.sd-payment-options button{padding:15px;border:1px solid #e5d9ca;border-radius:9px;background:#f7f2ea;color:#3e2723;font-weight:700;cursor:pointer}.sd-payment-options button.selected{border:2px solid #9a4b32;background:#f5e9dd;color:#7b3c29}.sd-confirm-pickup{justify-content:center;width:100%}
 @media(max-width:900px){.sd-simple-board{grid-template-columns:1fr}.sd-simple-column{min-height:0}.sd-table-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.sd-booking-card{grid-template-columns:1fr 90px;gap:10px}.sd-booking-time{grid-column:1}.sd-booking-card>em{grid-column:2;grid-row:2;justify-self:start}.sd-history-card{grid-template-columns:1fr 1fr}.sd-history-card>div:last-child{grid-column:1/-1}}
 @media(max-width:600px){.sd-content{padding:22px 13px 85px}.sd-table-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.sd-booking-card{grid-template-columns:1fr 76px;padding:13px}.sd-booking-card h3{font-size:15px}.sd-history-card{grid-template-columns:1fr;gap:10px}.sd-history-card>div:last-child{grid-column:auto}.sd-simple-stats{gap:6px}.sd-simple-stats span{padding:9px 10px;font-size:10px}.sd-top{gap:6px}.sd-live-count{font-size:9px;margin-right:0}}
+
+
+/* Staff Events manager */
+.sd-event-editor { max-width:780px; display:grid; gap:16px; padding:26px; border:1px solid #e8ded1; border-radius:18px; background:#fffdf8; box-shadow:0 12px 30px rgba(62,39,35,.04); }
+.sd-event-editor>div:first-child h2 { margin:7px 0; font:600 27px 'Playfair Display',serif; color:#3e2723; }
+.sd-event-editor>div:first-child h2 span { color:#9a4b32; }
+.sd-event-editor>div:first-child p,.sd-event-list-heading p { color:#88796a; font-size:12px; line-height:1.6; }
+.sd-event-editor label { display:grid; gap:7px; color:#6f6257; font-size:11px; font-weight:700; }
+.sd-event-editor input:not([type=file]),.sd-event-editor textarea { width:100%; border:1px solid #e5d9ca; border-radius:10px; background:#fff; padding:12px 13px; color:#3e2723; font:400 13px inherit; outline:none; }
+.sd-event-editor input:focus,.sd-event-editor textarea:focus { border-color:#9a4b32; box-shadow:0 0 0 3px rgba(154,75,50,.1); }
+.sd-event-fields { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.sd-event-upload { padding:15px; border:1px dashed #d9c9b7; border-radius:12px; background:#faf6ee; }
+.sd-event-upload input { font-size:11px; }
+.sd-event-upload small { color:#9a8c7d; font-weight:400; }
+.sd-event-preview { display:flex; align-items:center; gap:14px; }
+.sd-event-preview img { width:130px; height:90px; object-fit:cover; border-radius:10px; }
+.sd-event-preview button,.sd-event-row>button { border:0; border-radius:9px; padding:9px 13px; color:#8c402e; background:#f7eae1; font-weight:700; cursor:pointer; }
+.sd-event-editor>.sd-primary:disabled { opacity:.45; cursor:not-allowed; }
+.sd-event-list-heading { margin:34px 0 15px; }
+.sd-event-list-heading h2 { color:#3e2723; font:600 22px 'Playfair Display',serif; }
+.sd-event-list-heading h2 span { display:inline-grid; place-items:center; min-width:24px; height:24px; border-radius:20px; background:#f1e4d8; color:#9a4b32; font:700 11px sans-serif; }
+.sd-event-row { display:grid; grid-template-columns:120px 1fr auto; align-items:center; gap:16px; padding:14px; margin-bottom:12px; border:1px solid #e8ded1; border-radius:14px; background:#fffdf8; }
+.sd-event-row>img { width:120px; height:84px; object-fit:cover; border-radius:9px; }
+.sd-event-row small { color:#9a4b32; font-size:9px; letter-spacing:.08em; }
+.sd-event-row h3 { margin:5px 0; color:#3e2723; font:600 17px 'Playfair Display',serif; }
+.sd-event-row p { margin:0; color:#88796a; font-size:11px; line-height:1.5; }
+@media(max-width:600px) { .sd-event-editor { padding:18px; } .sd-event-row { grid-template-columns:76px 1fr; gap:10px; } .sd-event-row>img { width:76px; height:76px; } .sd-event-row>button { grid-column:2; justify-self:start; } .sd-event-fields { grid-template-columns:1fr; } }
