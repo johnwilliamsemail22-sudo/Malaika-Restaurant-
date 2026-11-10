@@ -775,10 +775,12 @@ html, body { background:#FAF6EE; color:#321B14; }
 @media(max-width:520px) { .sf-order-modal { padding:29px 23px; } }
 
 
-/* sapori handwritten hero wordmark */
+/* sapori handwritten hero wordmark.
+   The size is capped at (viewport / 3.15) so the six-letter handwritten name
+   always fits on screen — the final i must never be sliced off at the edge. */
 .sf-hero h1 {
   font-family: 'Kalam', cursive;
-  font-size: clamp(190px, 30vw, 420px);
+  font-size: min(clamp(96px, 30vw, 420px), calc((100vw - 44px) / 3.15));
   font-weight: 700;
   line-height: .98;
   letter-spacing: -.045em;
@@ -793,7 +795,7 @@ html, body { background:#FAF6EE; color:#321B14; }
 }
 .sf-wordmark { font-family: 'Kalam', cursive!important; font-size: clamp(30px, 3vw, 42px)!important; font-weight: 700!important; letter-spacing: -.055em!important; }
 @media(max-width:699px) {
-  .sf-hero h1 { font-size: clamp(140px, 32vw, 230px); line-height: 1; }
+  .sf-hero h1 { line-height: 1; }
   .sf-wordmark { font-size: 32px!important; }
 }
 @media(prefers-reduced-motion:reduce) {
@@ -1108,9 +1110,9 @@ html, body { background:#FAF6EE; color:#321B14; }
 .sf-hero h1 {
   width: max-content;
   max-width: calc(100vw - 28px);
+  margin-inline: auto;
   overflow: visible;
   padding: .08em .07em 0;
-  font-size: clamp(100px, 26vw, 158px);
   line-height: 1.08;
   letter-spacing: -.045em;
 }
@@ -1127,7 +1129,7 @@ html, body { background:#FAF6EE; color:#321B14; }
   transform:translateX(-50%);
 }
 @media(max-width:699px) {
-  .sf-hero h1 { font-size:clamp(100px,26vw,158px); line-height:1.08; }
+  .sf-hero h1 { line-height:1.08; }
   .sf-topbar .toplink[href="#events"] { display:inline-flex; font-size:12px; font-weight:700; }
   .sf-topbar .topbar-right { gap:9px; }
 }
@@ -1146,6 +1148,7 @@ html, body { background:#FAF6EE; color:#321B14; }
 .sf-events-empty { width:min(520px,100%); margin:auto; padding:36px 20px; text-align:center; border:1px dashed rgba(50,27,20,.22); border-radius:22px; color:#806e64; }
 .sf-events-empty>span { color:#9a4b32; font-size:30px; }
 .sf-events-empty p { margin:10px 0 5px; color:#321b14; font:500 21px 'Playfair Display',Georgia,serif; }
+.sf-events-empty small { color:#806e64; font-size:13px; letter-spacing:.02em; }
 
 
 /* Dedicated SAPORI Events page — Events is a top navigation destination, not a landing-page section. */
@@ -1169,6 +1172,7 @@ html, body { background:#FAF6EE; color:#321B14; }
   transition:background .2s ease,transform .2s ease;
 }
 .sf-topbar .sf-events-link:hover { background:rgba(50,27,20,.07); transform:translateY(-1px); }
+.sf-events-page .sf-topbar .sf-events-link { background:rgba(50,27,20,.09); }
 @media(max-width:699px) {
   .sf-topbar .sf-events-link { padding:10px 11px; font-size:12px; }
   .sf-topbar .topbar-right { gap:7px; }

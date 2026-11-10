@@ -420,7 +420,12 @@ function App() {
       </section>
 
       <section className="sf-events-section" id="events" aria-labelledby="sf-events-title">
-        {events.filter((event:any)=>event.published!==false).length > 0 && <div className="sf-events-grid">{events.filter((event:any)=>event.published!==false).map((event:any)=><article className="sf-event-card" key={event.id}>{event.image&&<img src={event.image} alt={event.title} loading="lazy" decoding="async"/>}<div className="sf-event-copy"><span>{event.date || "COMING UP AT SAPORI"}{event.time ? " · "+event.time : ""}</span><h3>{event.title}</h3><p>{event.description}</p></div></article>)}</div>}
+        <div className="sf-events-heading">
+          <p className="eyebrow">SAPORI · MALINDI</p>
+          <h2 id="sf-events-title">Evenings to <em>remember.</em></h2>
+          <p>Live music, special dinners and celebrations under the baobab trees. Everything coming up at SAPORI lives here.</p>
+        </div>
+        {events.filter((event:any)=>event.published!==false).length > 0 ? <div className="sf-events-grid">{events.filter((event:any)=>event.published!==false).map((event:any)=><article className="sf-event-card" key={event.id}>{event.image&&<img src={event.image} alt={event.title} loading="lazy" decoding="async"/>}<div className="sf-event-copy"><span>{event.date || "COMING UP AT SAPORI"}{event.time ? " · "+event.time : ""}</span><h3>{event.title}</h3><p>{event.description}</p></div></article>)}</div> : <div className="sf-events-empty"><span>✳</span><p>Nothing on the calendar right now.</p><small>The next event will appear here the moment our team adds it.</small></div>}
       </section>
 
       <section className={`menu-stage sf-menu-stage ${showFullMenu ? 'sf-full-menu-open' : ''}`} id="menu" aria-labelledby="menu-title">
